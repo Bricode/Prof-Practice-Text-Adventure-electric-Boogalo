@@ -1,0 +1,59 @@
+﻿Console.WriteLine("X and Y axis (Ariel View)\n");
+
+for (int i = 0; i < 8; i++)
+{
+    for (int x = 0; x < 8; x++)
+    {
+        if (world[i, x, 0] == "X")
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+        }
+        Console.Write(world[i,x,0].PadRight(5).PadLeft(5));
+    }
+    Console.WriteLine();
+    Console.WriteLine();
+}
+
+Console.WriteLine("X and Z axis (View Looking North)\n");
+
+for (int i = 2; i >= 0; i--)
+{
+    for (int x = 0; x < 8; x++)
+    {
+        if (world[x, 2, i] == "X")
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+        }
+        Console.Write(world[x, 2, i].PadRight(5).PadLeft(5));
+    }
+    Console.WriteLine();
+    Console.WriteLine();
+}
+
+Console.WriteLine("\nX and Z axis (View Looking East)\n");
+
+for (int i = 2; i >= 0; i--)
+{
+    for (int x = 0; x < 8; x++)
+    {
+        if (world[2, x, i] == "X")
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+        }
+        Console.Write(world[2, x, i].PadRight(5).PadLeft(5));
+    }
+    Console.WriteLine();
+    Console.WriteLine();
+}

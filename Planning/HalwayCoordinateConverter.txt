@@ -1,0 +1,12 @@
+for (int i = 0; i < coordinates.Length; i++)
+{
+	string[] halwayStrings = coordinates[i].Split(',');
+	int[] halway = new int[halwayStrings.Length];
+
+	for (int n = 0; n < halwayStrings.Length; n++)
+	{
+		halway[n] = Convert.ToInt32(halwayStrings[n]);
+	}
+	
+	halways.Add(halway);
+}

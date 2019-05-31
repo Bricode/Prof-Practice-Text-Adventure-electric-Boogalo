@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace InfectionInjection
 {
-    class Program
+    public class Room
     {
-        static void Main(string[] args)
-        {
-
-        }
+        public string Name { get; set; }
+        public int[] Coor { get; set; } = new int[3];
+        public string[] Items { get; set; }
     }
 }

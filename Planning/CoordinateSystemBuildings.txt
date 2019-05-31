@@ -1,0 +1,55 @@
+3D array of the world
+builings are a section of the 3D array
+location class
+room class
+hallway class
+for all the rooms listed in the location add a room to the list property of the location class
+everything goes from left to right top to bottom, lower to higher
+
+Seperate text file_________________________
+
+Location Name: 	Hospital
+(x,y,z,xl,yl,zl): {2,2,0,3,3,2}
+hallway: {{3,3,0},{4,3,0},{3,4,0},{4,4,0}}
+rooms: 12
+entries: 2
+entry point: {{2,3,0},{2,4,0}}
+
+Seperate text file__________________________
+
+Room Name: Waiting Room
+x,y,z: {3,2,0}
+items: bandage,book,lollipop
+Room Name: Emergency Room
+x,y,z: {4,2,0}
+items: scissors,bandage,first aid kit
+Room Name: Pharmacy
+x,y,z: {5,3,0}
+items: antibiotics,vitamins,paper
+Room Name: Intensive Care Unit
+x,y,z: {5,4,0}
+items: surgical kit,bandage,blood bag
+Room Name: Delivery Room
+x,y,z: {3,5,0}
+items: cloth,gloves
+Room Name: Nursery
+x,y,z: {4,5,0}
+items: blanket,dummy,stuffed bear
+Room Name: Operating Room
+x,y,z: {3,2,1}
+items: scalpel,scissors,face mask
+Room Name: Sick Ward
+x,y,z: {4,2,1}
+items: vaccine
+Room Name: Ward 1
+x,y,z: {5,3,1}
+items: hospital food,sheet
+Room Name: Ward 2
+x,y,z: {5,4,1}
+items: hospital food,sheet
+Room Name: Ward 3
+x,y,z: {3,5,1}
+items: hospital food,sheet
+Room Name: Ward 4
+x,y,z: {4,5,1}
+items: hospital food,sheet
