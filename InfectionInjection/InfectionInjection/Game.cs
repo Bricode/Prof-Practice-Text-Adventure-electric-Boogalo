@@ -20,9 +20,9 @@ namespace InfectionInjection
                     }
                 }
             }
-            int[,,] playerCoor = new int[8, 8, 3];
-            playerCoor[0, 0, 0] = 1;
-            int[] playerLocation = { 0, 0, 0 };
+            int[,,] playerPos = new int[8, 8, 3];
+            playerPos[0, 0, 0] = 1;
+            int[] playerCoor = { 0, 0, 0 };
             List<Location> locations = new List<Location>();
             LoadData(locations);
             UpdateWorld(locations, world);
@@ -30,44 +30,44 @@ namespace InfectionInjection
             while (true)
             {
                 Console.Clear();
-                Map(world, playerCoor);
+                Map(world, playerPos);
 
                 char input = Console.ReadKey().KeyChar;
 
                 if (input == 'w')
                 {
-                    playerCoor[playerLocation[0], playerLocation[1], playerLocation[2]] = 0;
-                    playerLocation[1]--;
-                    playerCoor[playerLocation[0], playerLocation[1], playerLocation[2]] = 1;
+                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 0;
+                    playerCoor[1]--;
+                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 1;
                 }
                 if (input == 's')
                 {
-                    playerCoor[playerLocation[0], playerLocation[1], playerLocation[2]] = 0;
-                    playerLocation[1]++;
-                    playerCoor[playerLocation[0], playerLocation[1], playerLocation[2]] = 1;
+                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 0;
+                    playerCoor[1]++;
+                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 1;
                 }
                 if (input == 'a')
                 {
-                    playerCoor[playerLocation[0], playerLocation[1], playerLocation[2]] = 0;
-                    playerLocation[0]--;
-                    playerCoor[playerLocation[0], playerLocation[1], playerLocation[2]] = 1;
+                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 0;
+                    playerCoor[0]--;
+                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 1;
                 }
                 if (input == 'd')
                 {
-                    playerCoor[playerLocation[0], playerLocation[1], playerLocation[2]] = 0;
-                    playerLocation[0]++;
-                    playerCoor[playerLocation[0], playerLocation[1], playerLocation[2]] = 1;
+                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 0;
+                    playerCoor[0]++;
+                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 1;
                 }
             }
         }
 
-        static void Map(string[,,] world, int[,,] playerCoor)
+        static void Map(string[,,] world, int[,,] playerPos)
         {
             for (int y = 0; y < 8; y++)
             {
                 for (int x = 0; x < 8; x++)
                 {
-                    if (playerCoor[x, y, 0] == 1)
+                    if (playerPos[x, y, 0] == 1)
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                     }
@@ -80,13 +80,13 @@ namespace InfectionInjection
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
 
-                    if (playerCoor[x, y, 0] == 1)
+                    if (playerPos[x, y, 0] == 1)
                     {
-                        Console.Write("1".PadRight(5).PadLeft(5));
+                        Console.Write("1".PadRight(15).PadLeft(15));
                     }
                     else
                     {
-                        Console.Write(world[x, y, 0].PadRight(5).PadLeft(5));
+                        Console.Write(world[x, y, 0].PadRight(15).PadLeft(15));
                     }
                 }
                 Console.WriteLine();
@@ -118,33 +118,19 @@ namespace InfectionInjection
                 string[] coordinates = locationTextData.ReadLine().Split('.');
                 for (int x = 0; x < coordinates.Length; x++)
                 {
-                    string[] halwayStrings = coordinates[x].Split(',');
-                    int[] halway = new int[halwayStrings.Length];
+                    string[] hallwayStrings = coordinates[x].Split(',');
+                    int[] hallway = new int[hallwayStrings.Length];
 
-                    for (int n = 0; n < halwayStrings.Length; n++)
+                    for (int n = 0; n < hallwayStrings.Length; n++)
                     {
-                        halway[n] = Convert.ToInt32(halwayStrings[n]);
+                        hallway[n] = Convert.ToInt32(hallwayStrings[n]);
                     }
 
-                    loadLocation.HalwayCoor.Add(halway);
+                    loadLocation.HallwayCoor.Add(hallway);
                 }
 
                 loadLocation.RoomCount = Convert.ToInt32(locationTextData.ReadLine());
-                loadLocation.EntryCount = Convert.ToInt32(locationTextData.ReadLine());
-
-                string[] entryCoordinates = locationTextData.ReadLine().Split('.');
-                for (int x = 0; x < entryCoordinates.Length; x++)
-                {
-                    string[] entryCoordinateStrings = entryCoordinates[x].Split(',');
-                    int[] entryCoordinate = new int[entryCoordinateStrings.Length];
-
-                    for (int n = 0; n < entryCoordinateStrings.Length; n++)
-                    {
-                        entryCoordinate[n] = Convert.ToInt32(entryCoordinateStrings[n]);
-                    }
-
-                    loadLocation.EntryCoor.Add(entryCoordinate);
-                }
+                loadLocation.HallwayCount = Convert.ToInt32(locationTextData.ReadLine());
 
                 locationTextData.Close();
 
@@ -174,13 +160,13 @@ namespace InfectionInjection
         {
             for (int i = 0; i < locations.Count; i++)
             {
-                for (int x = locations[i].Dimensions[0]; x <= locations[i].Dimensions[0] + locations[i].Dimensions[3]; x++)
+                for (int x = locations[i].Dimensions[0]; x < locations[i].Dimensions[0] + locations[i].Dimensions[3]; x++)
                 {
-                    for (int y = locations[i].Dimensions[1]; y <= locations[i].Dimensions[1] + locations[i].Dimensions[4]; y++)
+                    for (int y = locations[i].Dimensions[1]; y < locations[i].Dimensions[1] + locations[i].Dimensions[4]; y++)
                     {
-                        for (int z = locations[i].Dimensions[2]; z <= locations[i].Dimensions[2] + locations[i].Dimensions[5]; z++)
+                        for (int z = locations[i].Dimensions[2]; z < locations[i].Dimensions[2] + locations[i].Dimensions[5]; z++)
                         {
-                            world[x, y, z] = locations[i].Name[0].ToString();
+                            world[x, y, z] = locations[i].Name;
                         }
                     }
                 }
