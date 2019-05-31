@@ -11,5 +11,6 @@ namespace InfectionInjection
         public int RoomCount { get; set; }
         public int HallwayCount { get; set; }
         public List<Room> Rooms { get; set; } = new List<Room>();
+        public string[,,] LocationMap { get; set; }
     }
 }
