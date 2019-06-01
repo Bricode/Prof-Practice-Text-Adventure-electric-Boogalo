@@ -33,8 +33,10 @@ namespace InfectionInjection
                 Console.WriteLine("Map of World\n");
                 Map(world, playerPos);
                 Console.ResetColor();
-                Console.WriteLine("Map of inside Hospital\n");
-                LocationMap(locations);
+                int floor = 0;
+                int locationNum = 1;
+                Console.WriteLine($"Map of inside {locations[locationNum].Name}\n");
+                LocationMap(locations, floor, locationNum);
 
                 char input = Console.ReadKey().KeyChar;
 
@@ -98,17 +100,17 @@ namespace InfectionInjection
             }
         }
 
-        static void LocationMap(List<Location> locations)
+        static void LocationMap(List<Location> locations, int floor, int locationNum)
         {
-            for (int y = 0; y < 4; y++)
+            for (int y = 0; y < locations[locationNum].Dimensions[4]; y++)
             {
-                for (int x = 0; x < 4; x++)
+                for (int x = 0; x < locations[locationNum].Dimensions[3]; x++)
                 {
-                    if (locations[0].LocationMap[x, y, 0] == "X")
+                    if (locations[locationNum].LocationMap[x, y, floor] == "X")
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
                     }
-                    else if (locations[0].LocationMap[x, y, 0] == "Hallway")
+                    else if (locations[locationNum].LocationMap[x, y, floor] == "Hallway")
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                     }
@@ -116,7 +118,7 @@ namespace InfectionInjection
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
-                    Console.Write(locations[0].LocationMap[x, y, 0].PadRight(15).PadLeft(15));
+                    Console.Write(locations[locationNum].LocationMap[x, y, floor].PadRight(15).PadLeft(15));
                 }
                 Console.WriteLine();
                 Console.WriteLine();
@@ -174,7 +176,7 @@ namespace InfectionInjection
                         loadRoom.Coor[x] = Convert.ToInt32(coorString[x]);
                     }
 
-                    loadRoom.Items = roomTextData.ReadLine().Split(',');
+                    loadRoom.Items = roomTextData.ReadLine().Split(',');//This needs an exception for if there is only one item in the room
 
                     loadLocation.Rooms.Add(loadRoom);
                 }
