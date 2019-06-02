@@ -34,9 +34,9 @@ namespace InfectionInjection
                 Map(world, playerPos);
                 Console.ResetColor();
                 int floor = 0;
-                int locationNum = 1;
+                int locationNum = 0;
                 Console.WriteLine($"Map of inside {locations[locationNum].Name}\n");
-                LocationMap(locations, floor, locationNum);
+                LocationMap(locations, floor, locationNum, world, playerCoor);
 
                 char input = Console.ReadKey().KeyChar;
 
@@ -100,7 +100,7 @@ namespace InfectionInjection
             }
         }
 
-        static void LocationMap(List<Location> locations, int floor, int locationNum)
+        static void LocationMap(List<Location> locations, int floor, int locationNum, string[,,] world, int[] playerCoor)
         {
             for (int y = 0; y < locations[locationNum].Dimensions[4]; y++)
             {
@@ -118,7 +118,14 @@ namespace InfectionInjection
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
-                    Console.Write(locations[locationNum].LocationMap[x, y, floor].PadRight(15).PadLeft(15));
+                    if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] == locations[locationNum].Name) && (playerCoor[0]-locations[locationNum].Dimensions[0] == x) && (playerCoor[1] - locations[locationNum].Dimensions[1] == y))
+                    {
+                        Console.Write("1".PadRight(15).PadLeft(15));
+                    }
+                    else
+                    {
+                        Console.Write(locations[locationNum].LocationMap[x, y, floor].PadRight(15).PadLeft(15));
+                    }
                 }
                 Console.WriteLine();
                 Console.WriteLine();
