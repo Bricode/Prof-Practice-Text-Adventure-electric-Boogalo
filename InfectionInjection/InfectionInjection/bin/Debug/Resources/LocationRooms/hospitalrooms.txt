@@ -1,30 +1,24 @@
 Waiting Room
-1,0,0
+0,0,0
 bandage,book,lollipop
 Emergency Room
-2,0,0
+1,0,0
 scissors,bandage,first aid kit
 Pharmacy
-2,1,0
+1,1,0
 antibiotics,vitamins,paper
-Intensive Care Unit
-2,2,0
+ICU
+0,1,0
 surgical kit,bandage,blood bag
-Nursery
-1,2,0
-blanket,dummy,stuffed bear
 Operating Room
-1,0,1
+0,0,1
 scalpel,scissors,face mask
 Sick Ward
-2,0,1
+1,0,1
 vaccine
 Ward 1
-2,1,1
+0,1,1
 hospital food,sheet
 Ward 2
-2,2,1
-hospital food,sheet
-Ward 3
-1,2,1
+1,1,1
 hospital food,sheet
