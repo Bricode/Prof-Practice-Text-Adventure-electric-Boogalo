@@ -7,6 +7,84 @@ namespace InfectionInjection
 {
     class Game
     {
+        public static string[] Inventory = new string[10];
+        public static string Found_Item;
+        public static void Inventory_Check()
+        {
+            bool space_found = false;
+            bool STOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP = false;
+            for (int i = 0; i < 10; i++)
+            {
+                if ((Inventory[i] == null)&&(STOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP!=true))
+                {
+                    space_found = true;
+                    Inventory[i] = Found_Item;
+                    STOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP = true;
+                }
+            }
+            if (space_found == false)
+            {
+                bool loop = true;
+                do
+                {
+                    Console.WriteLine("Which item slot would you like to replace? (1,2,3,4,5,6,7,8,9,0)");
+                    for (int i = 0; i < 10; i++)
+                    {
+                        Console.WriteLine(i + "|" + Inventory[i]);
+                    }
+                    string Temp = Console.ReadLine();
+                    switch (Temp)
+                    {
+                        case "1":
+                            Inventory[1] = Found_Item;
+                            loop = false;
+                            break;
+                        case "2":
+                            Inventory[1] = Found_Item;
+                            loop = false;
+                            break;
+                        case "3":
+                            Inventory[1] = Found_Item;
+                            loop = false;
+                            break;
+                        case "4":
+                            Inventory[1] = Found_Item;
+                            loop = false;
+                            break;
+                        case "5":
+                            Inventory[1] = Found_Item;
+                            loop = false;
+                            break;
+                        case "6":
+                            Inventory[1] = Found_Item;
+                            loop = false;
+                            break;
+                        case "7":
+                            Inventory[1] = Found_Item;
+                            loop = false;
+                            break;
+                        case "8":
+                            Inventory[1] = Found_Item;
+                            loop = false;
+                            break;
+                        case "9":
+                            Inventory[1] = Found_Item;
+                            loop = false;
+                            break;
+                        case "0":
+                            Inventory[1] = Found_Item;
+                            loop = false;
+                            break;
+                        default:
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Clear();
+                            Console.WriteLine("Sorry, I do not understand.\nPlease try again!");
+                            Console.ForegroundColor = ConsoleColor.Gray;
+                            break;
+                    }
+                } while (loop==true);
+            }
+        }
         static void Main(string[] args)
         {
             string[,,] world = new string[8, 8, 3];
