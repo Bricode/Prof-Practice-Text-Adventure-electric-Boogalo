@@ -25,7 +25,7 @@ namespace InfectionInjection
             LoadData(locations);
             UpdateWorld(locations, world);
 
-            Console.Clear();
+            
             //Console.WriteLine("Map of World\n");
             //Map(world);
             Console.ResetColor();
@@ -33,6 +33,7 @@ namespace InfectionInjection
             int locationNum = 0;
             Console.WriteLine($"Map of inside {locations[locationNum].Name}\n");
             LocationMap(locations, floor, locationNum, world, playerCoor);
+
             Console.ReadLine();
         }
 
@@ -95,7 +96,8 @@ namespace InfectionInjection
             string locationRoomDir = Directory.GetCurrentDirectory() + @"\Resources\LocationRooms\";
             string[] locationFilePaths = Directory.GetFiles(locationDir);
             string[] roomFilePaths = Directory.GetFiles(locationRoomDir);
-
+            string[] mapX = { "8", "7", "6" };
+            string[] mapy = { "1", "2", "3" };
             for (int i = 0; i < locationFilePaths.Length; i++)
             {
                 StreamReader locationTextData = new StreamReader(locationFilePaths[i]);
@@ -167,6 +169,9 @@ namespace InfectionInjection
                 roomTextData.Close();
 
                 locations.Add(loadLocation);
+                StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"\locationData.txt");
+                string[] openingText = { sr.ReadLine() };
+                Console.WriteLine(openingText[0]);
             }
         }
 
