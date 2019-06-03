@@ -10,6 +10,6 @@ namespace InfectionInjection
     {
         public string Name { get; set; }
         public int[] Coor { get; set; } = new int[3];
-        public string[] Items { get; set; }
+        public List<string> Items { get; set; } = new List<string>();
     }
 }

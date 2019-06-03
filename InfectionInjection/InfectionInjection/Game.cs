@@ -20,63 +20,28 @@ namespace InfectionInjection
                     }
                 }
             }
-            int[,,] playerPos = new int[8, 8, 3];
-            playerPos[0, 0, 0] = 1;
             int[] playerCoor = { 0, 0, 0 };
             List<Location> locations = new List<Location>();
             LoadData(locations);
             UpdateWorld(locations, world);
 
-            while (true)
-            {
-                Console.Clear();
-                Console.WriteLine("Map of World\n");
-                Map(world, playerPos);
-                Console.ResetColor();
-                int floor = 0;
-                int locationNum = 0;
-                Console.WriteLine($"Map of inside {locations[locationNum].Name}\n");
-                LocationMap(locations, floor, locationNum, world, playerCoor);
-
-                char input = Console.ReadKey().KeyChar;
-
-                if (input == 'w')
-                {
-                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 0;
-                    playerCoor[1]--;
-                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 1;
-                }
-                if (input == 's')
-                {
-                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 0;
-                    playerCoor[1]++;
-                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 1;
-                }
-                if (input == 'a')
-                {
-                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 0;
-                    playerCoor[0]--;
-                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 1;
-                }
-                if (input == 'd')
-                {
-                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 0;
-                    playerCoor[0]++;
-                    playerPos[playerCoor[0], playerCoor[1], playerCoor[2]] = 1;
-                }
-            }
+            Console.Clear();
+            //Console.WriteLine("Map of World\n");
+            //Map(world);
+            Console.ResetColor();
+            int floor = 0;
+            int locationNum = 0;
+            Console.WriteLine($"Map of inside {locations[locationNum].Name}\n");
+            LocationMap(locations, floor, locationNum, world, playerCoor);
+            Console.ReadLine();
         }
 
-        static void Map(string[,,] world, int[,,] playerPos)
+        static void Map(string[,,] world)
         {
             for (int y = 0; y < 8; y++)
             {
                 for (int x = 0; x < 8; x++)
                 {
-                    if (playerPos[x, y, 0] == 1)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                    }
                     if (world[x, y, 0] == "X")
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
@@ -85,15 +50,7 @@ namespace InfectionInjection
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
-
-                    if (playerPos[x, y, 0] == 1)
-                    {
-                        Console.Write("1".PadRight(15).PadLeft(15));
-                    }
-                    else
-                    {
-                        Console.Write(world[x, y, 0].PadRight(15).PadLeft(15));
-                    }
+                    Console.Write(world[x, y, 0].PadRight(15).PadLeft(15));
                 }
                 Console.WriteLine();
                 Console.WriteLine();
@@ -183,7 +140,14 @@ namespace InfectionInjection
                         loadRoom.Coor[x] = Convert.ToInt32(coorString[x]);
                     }
 
-                    loadRoom.Items = roomTextData.ReadLine().Split(',');//This needs an exception for if there is only one item in the room
+                    string[] temp = roomTextData.ReadLine().Split(',');
+                    for (int z = 0; z < temp.Length; z++)
+                    {
+                        if (temp[z] != "")
+                        {
+                            loadRoom.Items.Add(temp[z]);
+                        }
+                    }
 
                     loadLocation.Rooms.Add(loadRoom);
                 }
@@ -210,16 +174,7 @@ namespace InfectionInjection
         {
             for (int i = 0; i < locations.Count; i++)
             {
-                for (int x = locations[i].Dimensions[0]; x < locations[i].Dimensions[0] + locations[i].Dimensions[3]; x++)
-                {
-                    for (int y = locations[i].Dimensions[1]; y < locations[i].Dimensions[1] + locations[i].Dimensions[4]; y++)
-                    {
-                        for (int z = locations[i].Dimensions[2]; z < locations[i].Dimensions[2] + locations[i].Dimensions[5]; z++)
-                        {
-                            world[x, y, z] = locations[i].Name;
-                        }
-                    }
-                }
+                world[locations[i].Dimensions[0], locations[i].Dimensions[1], locations[i].Dimensions[2]] = locations[i].Name;
 
                 for (int x = 0; x < locations[i].Dimensions[3]; x++)
                 {
