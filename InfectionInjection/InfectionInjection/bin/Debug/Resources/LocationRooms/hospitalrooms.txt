@@ -1,6 +1,6 @@
 Waiting Room
 0,0,0
-bandage,book,lollipop
+bandage,book
 Emergency Room
 1,0,0
 scissors,bandage,first aid kit

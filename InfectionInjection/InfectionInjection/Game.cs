@@ -89,10 +89,10 @@ namespace InfectionInjection
 
         static void Main(string[] args)
         {
-            string[,,] world = new string[8, 8, 3];
-            for (int a = 0; a < 8; a++)
+            string[,,] world = new string[5, 5, 3];
+            for (int a = 0; a < 5; a++)
             {
-                for (int b = 0; b < 8; b++)
+                for (int b = 0; b < 5; b++)
                 {
                     for (int c = 0; c < 3; c++)
                     {
@@ -100,7 +100,7 @@ namespace InfectionInjection
                     }
                 }
             }
-            int[] playerCoor = { 0, 0, 0 };
+            int[] playerCoor = { 3, 3, 0 };
             int[] playerCoorLocation = { 0, 0, 0 };
             List<Location> locations = new List<Location>();
             LoadData(locations);
@@ -113,6 +113,7 @@ namespace InfectionInjection
             Console.ResetColor();
             int index = 0;
             string input = "";
+            bool firstTime = true;
 
             do
             {
@@ -125,21 +126,28 @@ namespace InfectionInjection
                 {
                     for (int i = 0; i < locations.Count; i++)
                     {
-                        if (world[playerCoor[0] + 1, playerCoor[1], playerCoor[2]] == locations[i].Name)
+                        if (world[playerCoor[0], playerCoor[1], playerCoor[2]] == locations[i].Name)
                         {
                             index = i;
                         }
+                    }
+                    if (firstTime)
+                    {
+                        playerCoorLocation[0] = locations[index].StartPos[0];
+                        playerCoorLocation[1] = locations[index].StartPos[1];
+                        playerCoorLocation[2] = locations[index].StartPos[2];
+
+                        firstTime = false;
                     }
                     LocationText(locations, world, playerCoorLocation, index);
                 }
                 else
                 {
                     Console.WriteLine("You are outside somewhere");
+                    LocationCheck(playerCoor, world, locations);
                 }
 
                 Console.ResetColor();
-
-                LocationCheck(playerCoor, world, locations);
 
                 Console.WriteLine("\nWhat do you want to do next?");
                 input = Console.ReadLine().ToLower();
@@ -147,28 +155,28 @@ namespace InfectionInjection
                 switch (input)
                 {
                     case "n":
-                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index, ref input);
+                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index, ref input, ref firstTime);
                         break;
                     case "w":
-                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index, ref input);
+                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index, ref input, ref firstTime);
                         break;
                     case "e":
-                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index, ref input);
+                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index, ref input, ref firstTime);
                         break;
                     case "s":
-                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4]-1, playerCoorLocation[1], 1, 1, locations, index, ref input);
+                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4]-1, playerCoorLocation[1], 1, 1, locations, index, ref input, ref firstTime);
                         break;
                     case "up":
-                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[5] - 1, playerCoorLocation[2], 1, 2, locations, index, ref input);
+                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[5] - 1, playerCoorLocation[2], 1, 2, locations, index, ref input, ref firstTime);
                         break;
                     case "down":
-                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[2], 0, -1, 2, locations, index, ref input);
+                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[2], 0, -1, 2, locations, index, ref input, ref firstTime);
                         break;
                 }
             } while (input != "quit");
         }
 
-        static void Movement(string[,,] world, int[] playerCoor, int[] playerCoorLocation, int condition1, int condition2, int num, int index, List<Location> locations, int locIndex, ref string input)
+        static void Movement(string[,,] world, int[] playerCoor, int[] playerCoorLocation, int condition1, int condition2, int num, int index, List<Location> locations, int locIndex, ref string input, ref bool firstTime)
         {
             if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
             {
@@ -198,6 +206,7 @@ namespace InfectionInjection
                         {
                             playerCoorLocation[i] = 0;
                         }
+                        firstTime = true;
                     }
                 }
             }
@@ -206,6 +215,10 @@ namespace InfectionInjection
                 if ((playerCoor[index] + num >= 0) && (playerCoor[index] + num < 8) && (index != 2))
                 {
                     playerCoor[index] += num;
+                    //playerCoor[0] = x;
+                    //playerCoor[1] = y;
+                    //playerCoor[2] = z;
+                    //Put yos text stuff here
                 }
                 if ((playerCoorLocation[0] != 0) && (playerCoorLocation[1] != 0) && (playerCoorLocation[2] != 0))
                 {
@@ -329,7 +342,6 @@ namespace InfectionInjection
         {
             Console.WriteLine($"You are in the {locations[index].Name}");
             Console.WriteLine($"You are in the {locations[index].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]]}");
-            Console.Write("\nThere is: \n");
             int roomIndex = 0;
             for (int i = 0; i < locations[index].RoomCount; i++)
             {
@@ -337,6 +349,10 @@ namespace InfectionInjection
                 {
                     roomIndex = i;
                 }
+            }
+            if (locations[index].Rooms[roomIndex].Items.Count > 0)
+            {
+                Console.Write("\nThere is: \n");
             }
             for (int i = 0; i < locations[index].Rooms[roomIndex].Items.Count; i++)
             {
@@ -368,6 +384,13 @@ namespace InfectionInjection
 
                 loadLocation.RoomCount = Convert.ToInt32(locationTextData.ReadLine());
 
+                string[] temp = locationTextData.ReadLine().Split(',');
+
+                for (int n = 0; n < temp.Length; n++)
+                {
+                    loadLocation.StartPos[n] = Convert.ToInt32(temp[n]);
+                }
+
                 locationTextData.Close();
 
                 for (int n = 0; n < loadLocation.RoomCount; n++)
@@ -381,12 +404,23 @@ namespace InfectionInjection
                         loadRoom.Coor[x] = Convert.ToInt32(coorString[x]);
                     }
 
-                    string[] temp = roomTextData.ReadLine().Split(',');
-                    for (int z = 0; z < temp.Length; z++)
+                    string[] tempItems = new string[1];
+                    string items = roomTextData.ReadLine();
+
+                    if ((items != null) && (items.Contains(",")))
                     {
-                        if (temp[z] != "")
+                        tempItems = items.Split(',');
+                    }
+                    else
+                    {
+                        tempItems[0] = items;
+                    }
+
+                    for (int z = 0; z < tempItems.Length; z++)
+                    {
+                        if (tempItems[z] != "")
                         {
-                            loadRoom.Items.Add(temp[z]);
+                            loadRoom.Items.Add(tempItems[z]);
                         }
                     }
 
