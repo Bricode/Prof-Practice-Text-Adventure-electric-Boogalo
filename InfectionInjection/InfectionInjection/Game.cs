@@ -9,6 +9,7 @@ namespace InfectionInjection
     {
         public static string[] Inventory = new string[10];
         public static string Found_Item;
+
         public static void Inventory_Check()
         {
             bool space_found = false;
@@ -85,6 +86,7 @@ namespace InfectionInjection
                 } while (loop==true);
             }
         }
+
         static void Main(string[] args)
         {
             string[,,] world = new string[8, 8, 3];
@@ -145,28 +147,28 @@ namespace InfectionInjection
                 switch (input)
                 {
                     case "n":
-                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index);
+                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index, ref input);
                         break;
                     case "w":
-                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index);
+                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index, ref input);
                         break;
                     case "e":
-                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index);
+                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index, ref input);
                         break;
                     case "s":
-                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4]-1, playerCoorLocation[1], 1, 1, locations, index);
+                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4]-1, playerCoorLocation[1], 1, 1, locations, index, ref input);
                         break;
                     case "up":
-                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[5] - 1, playerCoorLocation[2], 1, 2, locations, index);
+                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[5] - 1, playerCoorLocation[2], 1, 2, locations, index, ref input);
                         break;
                     case "down":
-                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[2], 0, -1, 2, locations, index);
+                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[2], 0, -1, 2, locations, index, ref input);
                         break;
                 }
             } while (input != "quit");
         }
 
-        static void Movement(string[,,] world, int[] playerCoor, int[] playerCoorLocation, int condition1, int condition2, int num, int index, List<Location> locations, int locIndex)
+        static void Movement(string[,,] world, int[] playerCoor, int[] playerCoorLocation, int condition1, int condition2, int num, int index, List<Location> locations, int locIndex, ref string input)
         {
             if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
             {
@@ -174,7 +176,7 @@ namespace InfectionInjection
                 {
                     playerCoorLocation[index] += num;
                 }
-                else //if (Room down/Up)
+                else if (index != 2)
                 {
                     Console.WriteLine($"Are you sure you want to leave the {locations[locIndex].Name}?");
                     if (playerCoorLocation[2] != 0)
@@ -186,7 +188,16 @@ namespace InfectionInjection
 
                     if ((choice == "yes") || (choice == "y"))
                     {
+                        if (playerCoorLocation[2] > 0)
+                        {
+                            Death(0, ref input);
+                        }
                         playerCoor[index] += num;
+                        playerCoorLocation[2] = 0;
+                        for (int i = 0; i < playerCoorLocation.Length; i++)
+                        {
+                            playerCoorLocation[i] = 0;
+                        }
                     }
                 }
             }
@@ -204,6 +215,15 @@ namespace InfectionInjection
                     }
                 }
             }
+        }
+
+        static void Death(int number, ref string input)
+        {
+            string[] deaths = { "You fell to your death!" };
+
+            Console.WriteLine(deaths[number]);
+            input = "quit";
+            Console.ReadLine();
         }
 
         static void LocationCheck(int[] playerCoor, string[,,] world, List<Location> locations)
