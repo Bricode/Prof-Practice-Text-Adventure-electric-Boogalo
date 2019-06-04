@@ -174,7 +174,7 @@ namespace InfectionInjection
                 {
                     playerCoorLocation[index] += num;
                 }
-                else
+                else //if (Room down/Up)
                 {
                     Console.WriteLine($"Are you sure you want to leave the {locations[locIndex].Name}?");
                     if (playerCoorLocation[2] != 0)
@@ -195,10 +195,6 @@ namespace InfectionInjection
                 if ((playerCoor[index] + num >= 0) && (playerCoor[index] + num < 8) && (index != 2))
                 {
                     playerCoor[index] += num;
-                }
-                else
-                {
-                    Console.WriteLine("Can't do that here");//????
                 }
                 if ((playerCoorLocation[0] != 0) && (playerCoorLocation[1] != 0) && (playerCoorLocation[2] != 0))
                 {
