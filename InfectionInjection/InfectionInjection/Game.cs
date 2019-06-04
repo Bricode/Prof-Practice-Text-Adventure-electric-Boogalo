@@ -103,60 +103,111 @@ namespace InfectionInjection
             List<Location> locations = new List<Location>();
             LoadData(locations);
             UpdateWorld(locations, world);
+            GameLoop(world, playerCoor, playerCoorLocation, locations);
+        }
 
-            
-            //Console.WriteLine("Map of World\n");
-            //Map(world);
+        static void GameLoop(string[,,] world, int[] playerCoor, int[] playerCoorLocation, List<Location> locations)
+        {
             Console.ResetColor();
-            int floor = 0;
-            int locationNum = 0;
+            int index = 0;
             string input = "";
+
             do
             {
                 Console.Clear();
-                Console.WriteLine($"{playerCoor[0]}, {playerCoor[1]}, {playerCoor[2]}\n");
-                Console.WriteLine($"Map of inside {locations[locationNum].Name}\n");
-                LocationMap(locations, floor, locationNum, world, playerCoor);
+
+                Console.WriteLine($"{playerCoor[0]}, {playerCoor[1]}, {playerCoor[2]}");
+                Console.WriteLine($"{playerCoorLocation[0]}, {playerCoorLocation[1]}, {playerCoorLocation[2]}\n");
+
+                if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+                {
+                    for (int i = 0; i < locations.Count; i++)
+                    {
+                        if (world[playerCoor[0] + 1, playerCoor[1], playerCoor[2]] == locations[i].Name)
+                        {
+                            index = i;
+                        }
+                    }
+                    LocationText(locations, world, playerCoorLocation, index);
+                }
+                else
+                {
+                    Console.WriteLine("You are outside somewhere");
+                }
+
                 Console.ResetColor();
+
                 LocationCheck(playerCoor, world, locations);
-                Console.Write("\nInput direction: ");
+
+                Console.WriteLine("\nWhat do you want to do next?");
                 input = Console.ReadLine().ToLower();
+
                 switch (input)
                 {
                     case "n":
-                        if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
-                        {
-                            playerCoorLocation[1]--;
-                        }
-                        else
-                        {
-                            playerCoor[1]--;
-                            if ((playerCoorLocation[0] != 0) && (playerCoorLocation[1] != 0) && (playerCoorLocation[2] != 0))
-                            {
-                                for (int i = 0; i < playerCoorLocation.Length; i++)
-                                {
-                                    playerCoorLocation[i] = 0;
-                                }
-                            }
-                        }
+                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index);
                         break;
                     case "w":
-                        playerCoor[0]--;
+                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index);
                         break;
                     case "e":
-                        playerCoor[0]++;
+                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index);
                         break;
                     case "s":
-                        playerCoor[1]++;
+                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4]-1, playerCoorLocation[1], 1, 1, locations, index);
                         break;
                     case "up":
-                        playerCoor[2]++;
+                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[5] - 1, playerCoorLocation[2], 1, 2, locations, index);
                         break;
                     case "down":
-                        playerCoor[2]--;
+                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[2], 0, -1, 2, locations, index);
                         break;
                 }
-            } while (input != "");
+            } while (input != "quit");
+        }
+
+        static void Movement(string[,,] world, int[] playerCoor, int[] playerCoorLocation, int condition1, int condition2, int num, int index, List<Location> locations, int locIndex)
+        {
+            if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+            {
+                if (condition1 > condition2)
+                {
+                    playerCoorLocation[index] += num;
+                }
+                else
+                {
+                    Console.WriteLine($"Are you sure you want to leave the {locations[locIndex].Name}?");
+                    if (playerCoorLocation[2] != 0)
+                    {
+                        Console.WriteLine("You are not on the ground floor");
+                    }
+
+                    string choice = Console.ReadLine().ToLower();
+
+                    if ((choice == "yes") || (choice == "y"))
+                    {
+                        playerCoor[index] += num;
+                    }
+                }
+            }
+            else
+            {
+                if ((playerCoor[index] + num >= 0) && (playerCoor[index] + num < 8) && (index != 2))
+                {
+                    playerCoor[index] += num;
+                }
+                else
+                {
+                    Console.WriteLine("Can't do that here");//????
+                }
+                if ((playerCoorLocation[0] != 0) && (playerCoorLocation[1] != 0) && (playerCoorLocation[2] != 0))
+                {
+                    for (int i = 0; i < playerCoorLocation.Length; i++)
+                    {
+                        playerCoorLocation[i] = 0;
+                    }
+                }
+            }
         }
 
         static void LocationCheck(int[] playerCoor, string[,,] world, List<Location> locations)
@@ -258,35 +309,22 @@ namespace InfectionInjection
             }
         }
 
-        static void LocationMap(List<Location> locations, int floor, int locationNum, string[,,] world, int[] playerCoor)
+        static void LocationText(List<Location> locations, string[,,] world, int[] playerCoorLocation, int index)
         {
-            for (int y = 0; y < locations[locationNum].Dimensions[4]; y++)
+            Console.WriteLine($"You are in the {locations[index].Name}");
+            Console.WriteLine($"You are in the {locations[index].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]]}");
+            Console.Write("\nThere is: \n");
+            int roomIndex = 0;
+            for (int i = 0; i < locations[index].RoomCount; i++)
             {
-                for (int x = 0; x < locations[locationNum].Dimensions[3]; x++)
+                if (locations[index].Rooms[i].Name == locations[index].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]])
                 {
-                    if (locations[locationNum].LocationMap[x, y, floor] == "X")
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                    }
-                    else if (locations[locationNum].LocationMap[x, y, floor] == "Hallway")
-                    {
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                    }
-                    if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] == locations[locationNum].Name) && (playerCoor[0]-locations[locationNum].Dimensions[0] == x) && (playerCoor[1] - locations[locationNum].Dimensions[1] == y))
-                    {
-                        Console.Write("1".PadRight(15).PadLeft(15));
-                    }
-                    else
-                    {
-                        Console.Write(locations[locationNum].LocationMap[x, y, floor].PadRight(15).PadLeft(15));
-                    }
+                    roomIndex = i;
                 }
-                Console.WriteLine();
-                Console.WriteLine();
+            }
+            for (int i = 0; i < locations[index].Rooms[roomIndex].Items.Count; i++)
+            {
+                Console.Write($"* {locations[index].Rooms[roomIndex].Items[i]}\n");
             }
         }
 
