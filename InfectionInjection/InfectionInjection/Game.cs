@@ -8,9 +8,8 @@ namespace InfectionInjection
     class Game
     {
         public static string[] Inventory = new string[10];
-        public static string Found_Item;
 
-        public static void Inventory_Check()
+        public static void Inventory_Show()
         {
             for (int i=0; i<10; i++)
             {
@@ -49,8 +48,9 @@ namespace InfectionInjection
             } while (loop == true);
         }
 
-        public static void Inventory_Add()
+        public static string Inventory_Check(string Found_Item)
         {
+            string returnValue = "";
             bool space_found = false;
             bool STOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP = false;
             for (int i = 0; i < 10; i++)
@@ -58,6 +58,7 @@ namespace InfectionInjection
                 if ((Inventory[i] == null)&&(STOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP!=true))
                 {
                     space_found = true;
+                    returnValue = "pickup " + Inventory[i];
                     Inventory[i] = Found_Item;
                     STOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP = true;
                 }
@@ -70,49 +71,59 @@ namespace InfectionInjection
                     Console.WriteLine("Which item slot would you like to place it in? (1,2,3,4,5,6,7,8,9,0)");
                     for (int i = 0; i < 10; i++)
                     {
-                        Console.WriteLine(i + "|" + Inventory[i]);
+                        Console.WriteLine((i+1) + "| " + Inventory[i]);
                     }
                     string Temp = Console.ReadLine();
                     switch (Temp)
                     {
                         case "1":
-                            Inventory[1] = Found_Item;
+                            returnValue = "dump " + Inventory[0];
+                            Inventory[0] = Found_Item;
                             loop = false;
                             break;
                         case "2":
+                            returnValue = "dump " + Inventory[1];
                             Inventory[1] = Found_Item;
                             loop = false;
                             break;
                         case "3":
-                            Inventory[1] = Found_Item;
+                            returnValue = "dump " + Inventory[2];
+                            Inventory[2] = Found_Item;
                             loop = false;
                             break;
                         case "4":
-                            Inventory[1] = Found_Item;
+                            returnValue = "dump " + Inventory[3];
+                            Inventory[3] = Found_Item;
                             loop = false;
                             break;
                         case "5":
-                            Inventory[1] = Found_Item;
+                            returnValue = "dump " + Inventory[4];
+                            Inventory[4] = Found_Item;
                             loop = false;
                             break;
                         case "6":
-                            Inventory[1] = Found_Item;
+                            returnValue = "dump " + Inventory[5];
+                            Inventory[5] = Found_Item;
                             loop = false;
                             break;
                         case "7":
-                            Inventory[1] = Found_Item;
+                            returnValue = "dump " + Inventory[6];
+                            Inventory[6] = Found_Item;
                             loop = false;
                             break;
                         case "8":
-                            Inventory[1] = Found_Item;
+                            returnValue = "dump " + Inventory[7];
+                            Inventory[7] = Found_Item;
                             loop = false;
                             break;
                         case "9":
-                            Inventory[1] = Found_Item;
+                            returnValue = "dump " + Inventory[8];
+                            Inventory[8] = Found_Item;
                             loop = false;
                             break;
                         case "0":
-                            Inventory[1] = Found_Item;
+                            returnValue = "dump " + Inventory[9];
+                            Inventory[9] = Found_Item;
                             loop = false;
                             break;
                         default:
@@ -124,6 +135,8 @@ namespace InfectionInjection
                     }
                 } while (loop==true);
             }
+
+            return (returnValue);
         }
 
         static void Main(string[] args)
@@ -151,6 +164,7 @@ namespace InfectionInjection
         {
             Console.ResetColor();
             int index = 0;
+            int roomIndex = 0;
             string input = "";
             bool firstTime = true;
 
@@ -168,6 +182,13 @@ namespace InfectionInjection
                         if (world[playerCoor[0], playerCoor[1], playerCoor[2]] == locations[i].Name)
                         {
                             index = i;
+                            for (int n = 0; n < locations[i].RoomCount; n++)
+                            {
+                                if (locations[i].Rooms[n].Name == locations[i].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]])
+                                {
+                                    roomIndex = n;
+                                }
+                            }
                         }
                     }
                     if (firstTime)
@@ -191,26 +212,99 @@ namespace InfectionInjection
                 Console.WriteLine("\nWhat do you want to do next?");
                 input = Console.ReadLine().ToLower();
 
-                switch (input)
+                if (input.Contains(" ") == false)
                 {
-                    case "n":
-                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index, ref input, ref firstTime);
-                        break;
-                    case "w":
-                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index, ref input, ref firstTime);
-                        break;
-                    case "e":
-                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index, ref input, ref firstTime);
-                        break;
-                    case "s":
-                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4]-1, playerCoorLocation[1], 1, 1, locations, index, ref input, ref firstTime);
-                        break;
-                    case "up":
-                        Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[5] - 1, playerCoorLocation[2], 1, 2, locations, index, ref input, ref firstTime);
-                        break;
-                    case "down":
-                        Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[2], 0, -1, 2, locations, index, ref input, ref firstTime);
-                        break;
+                    switch (input)
+                    {
+                        case "n":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index, ref input, ref firstTime);
+                            break;
+                        case "north":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index, ref input, ref firstTime);
+                            break;
+                        case "forward":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index, ref input, ref firstTime);
+                            break;
+                        case "w":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index, ref input, ref firstTime);
+                            break;
+                        case "west":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index, ref input, ref firstTime);
+                            break;
+                        case "left":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index, ref input, ref firstTime);
+                            break;
+                        case "e":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index, ref input, ref firstTime);
+                            break;
+                        case "east":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index, ref input, ref firstTime);
+                            break;
+                        case "right":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index, ref input, ref firstTime);
+                            break;
+                        case "s":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4] - 1, playerCoorLocation[1], 1, 1, locations, index, ref input, ref firstTime);
+                            break;
+                        case "south":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4] - 1, playerCoorLocation[1], 1, 1, locations, index, ref input, ref firstTime);
+                            break;
+                        case "backward":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4] - 1, playerCoorLocation[1], 1, 1, locations, index, ref input, ref firstTime);
+                            break;
+                        case "up":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[5] - 1, playerCoorLocation[2], 1, 2, locations, index, ref input, ref firstTime);
+                            break;
+                        case "ascend":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[5] - 1, playerCoorLocation[2], 1, 2, locations, index, ref input, ref firstTime);
+                            break;
+                        case "down":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[2], 0, -1, 2, locations, index, ref input, ref firstTime);
+                            break;
+                        case "descend":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[2], 0, -1, 2, locations, index, ref input, ref firstTime);
+                            break;
+                    }
+                }
+                else
+                {
+                    string[] temp = input.Split(' ');
+                    string command = temp[0];
+                    string restOfArray = "";
+
+                    for (int i = 1; i < temp.Length; i++)
+                    {
+                        restOfArray += temp[i] + " ";
+                    }
+
+                    restOfArray = restOfArray.Trim();
+
+                    switch (command)
+                    {
+                        case "get":
+                            if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X") && (locations[index].Rooms[roomIndex].Items.Contains(restOfArray.ToLower())))
+                            {
+                                string[] temp2 = Inventory_Check(restOfArray).Split(' ');
+                                string itemInstruction = temp2[0];
+                                string restOfItemArray = "";
+
+                                for (int i = 1; i < temp2.Length; i++)
+                                {
+                                    restOfItemArray += temp2[i] + " ";
+                                }
+
+                                if (itemInstruction == "pickup")
+                                {
+                                    locations[index].Rooms[roomIndex].Items.Remove(restOfArray.ToLower());
+                                }
+                                else
+                                {
+                                    locations[index].Rooms[roomIndex].Items.Remove(restOfArray.ToLower());
+                                    locations[index].Rooms[roomIndex].Items.Add(restOfItemArray.ToLower());
+                                }
+                            }
+                            break;
+                    }
                 }
             } while (input != "quit");
         }
