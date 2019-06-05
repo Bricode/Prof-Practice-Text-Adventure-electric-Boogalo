@@ -9,6 +9,14 @@ namespace InfectionInjection
     {
         public static string[] Inventory = new string[10];
 
+        public static void Inventory_Show()
+        {
+            for (int i=0; i<10; i++)
+            {
+                Console.WriteLine(Inventory[i]);
+            }
+        }
+
         public static string Inventory_Check(string Found_Item)
         {
             string returnValue = "";
