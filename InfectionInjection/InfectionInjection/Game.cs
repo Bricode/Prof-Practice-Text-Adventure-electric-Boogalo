@@ -10,6 +10,14 @@ namespace InfectionInjection
         public static string[] Inventory = new string[10];
         public static string Found_Item;
 
+        public static void Inventory_Check()
+        {
+            for (int i=0; i<10; i++)
+            {
+                Console.WriteLine(Inventory[i]);
+            }
+        }
+
         public static void Inventory_Add()
         {
             bool space_found = false;
