@@ -10,7 +10,7 @@ namespace InfectionInjection
         public static string[] Inventory = new string[10];
         public static string Found_Item;
 
-        public static void Inventory_Check()
+        public static void Inventory_Add()
         {
             bool space_found = false;
             bool STOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP = false;
