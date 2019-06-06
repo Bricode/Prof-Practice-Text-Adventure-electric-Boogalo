@@ -183,7 +183,7 @@ namespace InfectionInjection
                 }
                 else
                 {
-                    Console.WriteLine("You are outside somewhere");
+                    Console.WriteLine("You are outside somewhere\n");
                     LocationCheck(playerCoor, world, locations);
                 }
 
@@ -325,14 +325,9 @@ namespace InfectionInjection
             }
             else
             {
-                if ((playerCoor[index] + num >= 0) && (playerCoor[index] + num < 8) && (index != 2))
+                if ((playerCoor[index] + num >= 0) && (playerCoor[index] + num < 5) && (index != 2))
                 {
                     playerCoor[index] += num;
-                    //playerCoor[0] = x;
-                    //playerCoor[1] = y;
-                    //playerCoor[2] = z;
-                    //Put yos text stuff here
-
                 }
                 if ((playerCoorLocation[0] != 0) && (playerCoorLocation[1] != 0) && (playerCoorLocation[2] != 0))
                 {
@@ -356,6 +351,10 @@ namespace InfectionInjection
         static void LocationCheck(int[] playerCoor, string[,,] world, List<Location> locations)
         {
             int index = 0;
+            string north = "";
+            string west = "";
+            string east = "";
+            string south = "";
 
             try
             {
@@ -368,12 +367,12 @@ namespace InfectionInjection
                             index = i;
                         }
                     }
-                    Console.WriteLine($"The {locations[index].Name} is to the East");
+                    east = $"The {locations[index].Name} is to the East";
                 }
             }
             catch
             {
-                Console.WriteLine($"You cannot go the East");
+                east = "X";
             }
             try
             {
@@ -386,12 +385,12 @@ namespace InfectionInjection
                             index = i;
                         }
                     }
-                    Console.WriteLine($"The {locations[index].Name} is to the West");
+                    west = $"The {locations[index].Name} is to the West";
                 }
             }
             catch
             {
-                Console.WriteLine($"You cannot go the West");
+                west = "X";
             }
             try
             {
@@ -404,12 +403,12 @@ namespace InfectionInjection
                             index = i;
                         }
                     }
-                    Console.WriteLine($"The {locations[index].Name} is to the South");
+                    south = $"The {locations[index].Name} is to the South";
                 }
             }
             catch
             {
-                Console.WriteLine($"You cannot go the South");
+                south = "X";
             }
             try
             {
@@ -422,12 +421,46 @@ namespace InfectionInjection
                             index = i;
                         }
                     }
-                    Console.WriteLine($"The {locations[index].Name} is to the North");
+                    north = $"The {locations[index].Name} is to the North";
                 }
             }
             catch
             {
+                north = "X";
+            }
+
+            if (north == "X")
+            {
                 Console.WriteLine($"You cannot go the North");
+            }
+            if (west == "X")
+            {
+                Console.WriteLine($"You cannot go the West");
+            }
+            if (east == "X")
+            {
+                Console.WriteLine($"You cannot go the East");
+            }
+            if (south == "X")
+            {
+                Console.WriteLine($"You cannot go the South");
+            }
+
+            if ((north != "X") && (north != ""))
+            {
+                Console.WriteLine(north);
+            }
+            if ((west != "X") && (west != ""))
+            {
+                Console.WriteLine(west);
+            }
+            if ((east != "X") && (east != ""))
+            {
+                Console.WriteLine(east);
+            }
+            if ((south != "X") && (south != ""))
+            {
+                Console.WriteLine(south);
             }
         }
 
