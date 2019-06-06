@@ -139,14 +139,18 @@ namespace InfectionInjection
 
             do
             {
-                using (StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"/Resources/data(" + playerCoor[0] + "," + playerCoor[1] + "," + playerCoor[2] + ").txt"))
+                try
                 {
-                    while (!sr.EndOfStream)
+                    using (StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"/Resources/data(" + playerCoor[0] + "," + playerCoor[1] + "," + playerCoor[2] + ").txt"))
                     {
-                        Console.WriteLine(sr.ReadLine());
+                        while (!sr.EndOfStream)
+                        {
+                            Console.WriteLine(sr.ReadLine());
 
+                        }
                     }
                 }
+                catch { }
 
                 Console.WriteLine($"{playerCoor[0]}, {playerCoor[1]}, {playerCoor[2]}");
                 Console.WriteLine($"{playerCoorLocation[0]}, {playerCoorLocation[1]}, {playerCoorLocation[2]}\n");
