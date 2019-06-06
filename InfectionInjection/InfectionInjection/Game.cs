@@ -170,8 +170,10 @@ namespace InfectionInjection
 
                 locations.Add(loadLocation);
                 StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"\locationData.txt");
-                string[] openingText = { sr.ReadLine() };
-                Console.WriteLine(openingText[0]);
+                string openingText = ( sr.ReadLine() );
+                Console.WriteLine(openingText);
+                
+
             }
         }
 
