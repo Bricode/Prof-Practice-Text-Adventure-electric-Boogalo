@@ -7,9 +7,8 @@ namespace InfectionInjection
     {
         public string Name { get; set; }
         public int[] Dimensions { get; set; } = new int[6];
-        public List<int[]> HallwayCoor { get; set; } = new List<int[]>();
         public int RoomCount { get; set; }
-        public int HallwayCount { get; set; }
+        public int[] StartPos { get; set; } = new int[3];
         public List<Room> Rooms { get; set; } = new List<Room>();
         public string[,,] LocationMap { get; set; }
     }

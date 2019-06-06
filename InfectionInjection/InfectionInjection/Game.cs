@@ -7,12 +7,113 @@ namespace InfectionInjection
 {
     class Game
     {
+        public static string[] Inventory = new string[10];
+
+        public static void Inventory_Show()
+        {
+            for (int i=0; i<10; i++)
+            {
+                Console.WriteLine(Inventory[i]);
+            }
+        }
+
+        public static string Inventory_Check(string Found_Item)
+        {
+            string returnValue = "";
+            bool space_found = false;
+            bool STOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP = false;
+            for (int i = 0; i < 10; i++)
+            {
+                if ((Inventory[i] == null)&&(STOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP!=true))
+                {
+                    space_found = true;
+                    returnValue = "pickup " + Inventory[i];
+                    Inventory[i] = Found_Item;
+                    STOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP = true;
+                }
+            }
+            if (space_found == false)
+            {
+                bool loop = true;
+                do
+                {
+                    Console.WriteLine("Which item slot would you like to replace? (1,2,3,4,5,6,7,8,9,0)");
+                    for (int i = 0; i < 10; i++)
+                    {
+                        Console.WriteLine((i+1) + "| " + Inventory[i]);
+                    }
+                    string Temp = Console.ReadLine();
+                    switch (Temp)
+                    {
+                        case "1":
+                            returnValue = "dump " + Inventory[0];
+                            Inventory[0] = Found_Item;
+                            loop = false;
+                            break;
+                        case "2":
+                            returnValue = "dump " + Inventory[1];
+                            Inventory[1] = Found_Item;
+                            loop = false;
+                            break;
+                        case "3":
+                            returnValue = "dump " + Inventory[2];
+                            Inventory[2] = Found_Item;
+                            loop = false;
+                            break;
+                        case "4":
+                            returnValue = "dump " + Inventory[3];
+                            Inventory[3] = Found_Item;
+                            loop = false;
+                            break;
+                        case "5":
+                            returnValue = "dump " + Inventory[4];
+                            Inventory[4] = Found_Item;
+                            loop = false;
+                            break;
+                        case "6":
+                            returnValue = "dump " + Inventory[5];
+                            Inventory[5] = Found_Item;
+                            loop = false;
+                            break;
+                        case "7":
+                            returnValue = "dump " + Inventory[6];
+                            Inventory[6] = Found_Item;
+                            loop = false;
+                            break;
+                        case "8":
+                            returnValue = "dump " + Inventory[7];
+                            Inventory[7] = Found_Item;
+                            loop = false;
+                            break;
+                        case "9":
+                            returnValue = "dump " + Inventory[8];
+                            Inventory[8] = Found_Item;
+                            loop = false;
+                            break;
+                        case "0":
+                            returnValue = "dump " + Inventory[9];
+                            Inventory[9] = Found_Item;
+                            loop = false;
+                            break;
+                        default:
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Clear();
+                            Console.WriteLine("Sorry, I do not understand.\nPlease try again!");
+                            Console.ForegroundColor = ConsoleColor.Gray;
+                            break;
+                    }
+                } while (loop==true);
+            }
+
+            return (returnValue);
+        }
+
         static void Main(string[] args)
         {
-            string[,,] world = new string[8, 8, 3];
-            for (int a = 0; a < 8; a++)
+            string[,,] world = new string[5, 5, 3];
+            for (int a = 0; a < 5; a++)
             {
-                for (int b = 0; b < 8; b++)
+                for (int b = 0; b < 5; b++)
                 {
                     for (int c = 0; c < 3; c++)
                     {
@@ -20,21 +121,302 @@ namespace InfectionInjection
                     }
                 }
             }
-            int[] playerCoor = { 0, 0, 0 };
+            int[] playerCoor = { 3, 3, 0 };
+            int[] playerCoorLocation = { 0, 0, 0 };
             List<Location> locations = new List<Location>();
             LoadData(locations);
             UpdateWorld(locations, world);
+            GameLoop(world, playerCoor, playerCoorLocation, locations);
+        }
 
-            
-            //Console.WriteLine("Map of World\n");
-            //Map(world);
+        static void GameLoop(string[,,] world, int[] playerCoor, int[] playerCoorLocation, List<Location> locations)
+        {
             Console.ResetColor();
-            int floor = 0;
-            int locationNum = 0;
-            Console.WriteLine($"Map of inside {locations[locationNum].Name}\n");
-            LocationMap(locations, floor, locationNum, world, playerCoor);
+            int index = 0;
+            int roomIndex = 0;
+            string input = "";
+            bool firstTime = true;
 
+            do
+            {
+                Console.Clear();
+
+                Console.WriteLine($"{playerCoor[0]}, {playerCoor[1]}, {playerCoor[2]}");
+                Console.WriteLine($"{playerCoorLocation[0]}, {playerCoorLocation[1]}, {playerCoorLocation[2]}\n");
+
+                if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+                {
+                    for (int i = 0; i < locations.Count; i++)
+                    {
+                        if (world[playerCoor[0], playerCoor[1], playerCoor[2]] == locations[i].Name)
+                        {
+                            index = i;
+                            for (int n = 0; n < locations[i].RoomCount; n++)
+                            {
+                                if (locations[i].Rooms[n].Name == locations[i].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]])
+                                {
+                                    roomIndex = n;
+                                }
+                            }
+                        }
+                    }
+                    if (firstTime)
+                    {
+                        playerCoorLocation[0] = locations[index].StartPos[0];
+                        playerCoorLocation[1] = locations[index].StartPos[1];
+                        playerCoorLocation[2] = locations[index].StartPos[2];
+
+                        firstTime = false;
+                    }
+                    LocationText(locations, world, playerCoorLocation, index);
+                }
+                else
+                {
+                    Console.WriteLine("You are outside somewhere");
+                    LocationCheck(playerCoor, world, locations);
+                }
+
+                Console.ResetColor();
+
+                Console.WriteLine("\nWhat do you want to do next?");
+                input = Console.ReadLine().ToLower();
+
+                if (input.Contains(" ") == false)
+                {
+                    switch (input)
+                    {
+                        case "n":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index, ref input, ref firstTime);
+                            break;
+                        case "north":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index, ref input, ref firstTime);
+                            break;
+                        case "forward":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index, ref input, ref firstTime);
+                            break;
+                        case "w":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index, ref input, ref firstTime);
+                            break;
+                        case "west":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index, ref input, ref firstTime);
+                            break;
+                        case "left":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index, ref input, ref firstTime);
+                            break;
+                        case "e":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index, ref input, ref firstTime);
+                            break;
+                        case "east":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index, ref input, ref firstTime);
+                            break;
+                        case "right":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index, ref input, ref firstTime);
+                            break;
+                        case "s":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4] - 1, playerCoorLocation[1], 1, 1, locations, index, ref input, ref firstTime);
+                            break;
+                        case "south":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4] - 1, playerCoorLocation[1], 1, 1, locations, index, ref input, ref firstTime);
+                            break;
+                        case "backward":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4] - 1, playerCoorLocation[1], 1, 1, locations, index, ref input, ref firstTime);
+                            break;
+                        case "up":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[5] - 1, playerCoorLocation[2], 1, 2, locations, index, ref input, ref firstTime);
+                            break;
+                        case "ascend":
+                            Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[5] - 1, playerCoorLocation[2], 1, 2, locations, index, ref input, ref firstTime);
+                            break;
+                        case "down":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[2], 0, -1, 2, locations, index, ref input, ref firstTime);
+                            break;
+                        case "descend":
+                            Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[2], 0, -1, 2, locations, index, ref input, ref firstTime);
+                            break;
+                    }
+                }
+                else
+                {
+                    string[] temp = input.Split(' ');
+                    string command = temp[0];
+                    string restOfArray = "";
+
+                    for (int i = 1; i < temp.Length; i++)
+                    {
+                        restOfArray += temp[i] + " ";
+                    }
+
+                    restOfArray = restOfArray.Trim();
+
+                    switch (command)
+                    {
+                        case "get":
+                            if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X") && (locations[index].Rooms[roomIndex].Items.Contains(restOfArray.ToLower())))
+                            {
+                                string[] temp2 = Inventory_Check(restOfArray).Split(' ');
+                                string itemInstruction = temp2[0];
+                                string restOfItemArray = "";
+
+                                for (int i = 1; i < temp2.Length; i++)
+                                {
+                                    restOfItemArray += temp2[i] + " ";
+                                }
+
+                                if (itemInstruction == "pickup")
+                                {
+                                    locations[index].Rooms[roomIndex].Items.Remove(restOfArray.ToLower());
+                                }
+                                else
+                                {
+                                    locations[index].Rooms[roomIndex].Items.Remove(restOfArray.ToLower());
+                                    locations[index].Rooms[roomIndex].Items.Add(restOfItemArray.ToLower());
+                                }
+                            }
+                            break;
+                    }
+                }
+            } while (input != "quit");
+        }
+
+        static void Movement(string[,,] world, int[] playerCoor, int[] playerCoorLocation, int condition1, int condition2, int num, int index, List<Location> locations, int locIndex, ref string input, ref bool firstTime)
+        {
+            if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+            {
+                if (condition1 > condition2)
+                {
+                    playerCoorLocation[index] += num;
+                }
+                else if (index != 2)
+                {
+                    Console.WriteLine($"Are you sure you want to leave the {locations[locIndex].Name}?");
+                    if (playerCoorLocation[2] != 0)
+                    {
+                        Console.WriteLine("You are not on the ground floor");
+                    }
+
+                    string choice = Console.ReadLine().ToLower();
+
+                    if ((choice == "yes") || (choice == "y"))
+                    {
+                        if (playerCoorLocation[2] > 0)
+                        {
+                            Death(0, ref input);
+                        }
+                        playerCoor[index] += num;
+                        playerCoorLocation[2] = 0;
+                        for (int i = 0; i < playerCoorLocation.Length; i++)
+                        {
+                            playerCoorLocation[i] = 0;
+                        }
+                        firstTime = true;
+                    }
+                }
+            }
+            else
+            {
+                if ((playerCoor[index] + num >= 0) && (playerCoor[index] + num < 8) && (index != 2))
+                {
+                    playerCoor[index] += num;
+                    //playerCoor[0] = x;
+                    //playerCoor[1] = y;
+                    //playerCoor[2] = z;
+                    //Put yos text stuff here
+                }
+                if ((playerCoorLocation[0] != 0) && (playerCoorLocation[1] != 0) && (playerCoorLocation[2] != 0))
+                {
+                    for (int i = 0; i < playerCoorLocation.Length; i++)
+                    {
+                        playerCoorLocation[i] = 0;
+                    }
+                }
+            }
+        }
+
+        static void Death(int number, ref string input)
+        {
+            string[] deaths = { "You fell to your death!" };
+
+            Console.WriteLine(deaths[number]);
+            input = "quit";
             Console.ReadLine();
+        }
+
+        static void LocationCheck(int[] playerCoor, string[,,] world, List<Location> locations)
+        {
+            int index = 0;
+
+            try
+            {
+                if (world[playerCoor[0] + 1, playerCoor[1], playerCoor[2]] != "X")
+                {
+                    for (int i = 0; i < locations.Count; i++)
+                    {
+                        if (world[playerCoor[0] + 1, playerCoor[1], playerCoor[2]] == locations[i].Name)
+                        {
+                            index = i;
+                        }
+                    }
+                    Console.WriteLine($"The {locations[index].Name} is to the East");
+                }
+            }
+            catch
+            {
+                Console.WriteLine($"You cannot go the East");
+            }
+            try
+            {
+                if (world[playerCoor[0] - 1, playerCoor[1], playerCoor[2]] != "X")
+                {
+                    for (int i = 0; i < locations.Count; i++)
+                    {
+                        if (world[playerCoor[0] - 1, playerCoor[1], playerCoor[2]] == locations[i].Name)
+                        {
+                            index = i;
+                        }
+                    }
+                    Console.WriteLine($"The {locations[index].Name} is to the West");
+                }
+            }
+            catch
+            {
+                Console.WriteLine($"You cannot go the West");
+            }
+            try
+            {
+                if (world[playerCoor[0], playerCoor[1] + 1, playerCoor[2]] != "X")
+                {
+                    for (int i = 0; i < locations.Count; i++)
+                    {
+                        if (world[playerCoor[0], playerCoor[1] + 1, playerCoor[2]] == locations[i].Name)
+                        {
+                            index = i;
+                        }
+                    }
+                    Console.WriteLine($"The {locations[index].Name} is to the South");
+                }
+            }
+            catch
+            {
+                Console.WriteLine($"You cannot go the South");
+            }
+            try
+            {
+                if (world[playerCoor[0], playerCoor[1] - 1, playerCoor[2]] != "X")
+                {
+                    for (int i = 0; i < locations.Count; i++)
+                    {
+                        if (world[playerCoor[0], playerCoor[1] - 1, playerCoor[2]] == locations[i].Name)
+                        {
+                            index = i;
+                        }
+                    }
+                    Console.WriteLine($"The {locations[index].Name} is to the North");
+                }
+            }
+            catch
+            {
+                Console.WriteLine($"You cannot go the North");
+            }
         }
 
         static void Map(string[,,] world)
@@ -58,35 +440,25 @@ namespace InfectionInjection
             }
         }
 
-        static void LocationMap(List<Location> locations, int floor, int locationNum, string[,,] world, int[] playerCoor)
+        static void LocationText(List<Location> locations, string[,,] world, int[] playerCoorLocation, int index)
         {
-            for (int y = 0; y < locations[locationNum].Dimensions[4]; y++)
+            Console.WriteLine($"You are in the {locations[index].Name}");
+            Console.WriteLine($"You are in the {locations[index].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]]}");
+            int roomIndex = 0;
+            for (int i = 0; i < locations[index].RoomCount; i++)
             {
-                for (int x = 0; x < locations[locationNum].Dimensions[3]; x++)
+                if (locations[index].Rooms[i].Name == locations[index].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]])
                 {
-                    if (locations[locationNum].LocationMap[x, y, floor] == "X")
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                    }
-                    else if (locations[locationNum].LocationMap[x, y, floor] == "Hallway")
-                    {
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                    }
-                    if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] == locations[locationNum].Name) && (playerCoor[0]-locations[locationNum].Dimensions[0] == x) && (playerCoor[1] - locations[locationNum].Dimensions[1] == y))
-                    {
-                        Console.Write("1".PadRight(15).PadLeft(15));
-                    }
-                    else
-                    {
-                        Console.Write(locations[locationNum].LocationMap[x, y, floor].PadRight(15).PadLeft(15));
-                    }
+                    roomIndex = i;
                 }
-                Console.WriteLine();
-                Console.WriteLine();
+            }
+            if (locations[index].Rooms[roomIndex].Items.Count > 0)
+            {
+                Console.Write("\nThere is: \n");
+            }
+            for (int i = 0; i < locations[index].Rooms[roomIndex].Items.Count; i++)
+            {
+                Console.Write($"* {locations[index].Rooms[roomIndex].Items[i]}\n");
             }
         }
 
@@ -112,22 +484,14 @@ namespace InfectionInjection
                     loadLocation.Dimensions[n] = Convert.ToInt32(tempDimensions[n]);
                 }
 
-                string[] coordinates = locationTextData.ReadLine().Split('.');
-                for (int x = 0; x < coordinates.Length; x++)
-                {
-                    string[] hallwayStrings = coordinates[x].Split(',');
-                    int[] hallway = new int[hallwayStrings.Length];
-
-                    for (int n = 0; n < hallwayStrings.Length; n++)
-                    {
-                        hallway[n] = Convert.ToInt32(hallwayStrings[n]);
-                    }
-
-                    loadLocation.HallwayCoor.Add(hallway);
-                }
-
                 loadLocation.RoomCount = Convert.ToInt32(locationTextData.ReadLine());
-                loadLocation.HallwayCount = Convert.ToInt32(locationTextData.ReadLine());
+
+                string[] temp = locationTextData.ReadLine().Split(',');
+
+                for (int n = 0; n < temp.Length; n++)
+                {
+                    loadLocation.StartPos[n] = Convert.ToInt32(temp[n]);
+                }
 
                 locationTextData.Close();
 
@@ -142,12 +506,23 @@ namespace InfectionInjection
                         loadRoom.Coor[x] = Convert.ToInt32(coorString[x]);
                     }
 
-                    string[] temp = roomTextData.ReadLine().Split(',');
-                    for (int z = 0; z < temp.Length; z++)
+                    string[] tempItems = new string[1];
+                    string items = roomTextData.ReadLine();
+
+                    if ((items != null) && (items.Contains(",")))
                     {
-                        if (temp[z] != "")
+                        tempItems = items.Split(',');
+                    }
+                    else
+                    {
+                        tempItems[0] = items;
+                    }
+
+                    for (int z = 0; z < tempItems.Length; z++)
+                    {
+                        if (tempItems[z] != "")
                         {
-                            loadRoom.Items.Add(temp[z]);
+                            loadRoom.Items.Add(tempItems[z]);
                         }
                     }
 
@@ -194,13 +569,6 @@ namespace InfectionInjection
                                 if ((x == locations[i].Rooms[r].Coor[0]) && (y == locations[i].Rooms[r].Coor[1]) && (z == locations[i].Rooms[r].Coor[2]))
                                 {
                                     locations[i].LocationMap[x, y, z] = locations[i].Rooms[r].Name;
-                                }
-                            }
-                            for (int h = 0; h < locations[i].HallwayCount; h++)
-                            {
-                                if ((x == locations[i].HallwayCoor[h][0]) && (y == locations[i].HallwayCoor[h][1]) && (z == locations[i].HallwayCoor[h][2]))
-                                {
-                                    locations[i].LocationMap[x, y, z] = "Hallway";
                                 }
                             }
                         }
