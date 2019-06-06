@@ -1,23 +1,31 @@
 0,0,0
+Description
 0,0,0
 
 0,1,0
+Description
 0,1,0
 
 1,0,0
+Description
 1,0,0
 
 1,1,0
+Description
 1,1,0
 
 0,0,1
+Description
 0,0,1
 
 0,1,1
+Description
 0,1,1
 
 1,0,1
+Description
 1,0,1
 
 1,1,1
+Description
 1,1,1

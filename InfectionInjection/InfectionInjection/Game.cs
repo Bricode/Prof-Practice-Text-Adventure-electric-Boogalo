@@ -183,7 +183,7 @@ namespace InfectionInjection
                 }
                 else
                 {
-                    Console.WriteLine("You are outside somewhere\n");
+                    Console.WriteLine("You are outside somewhere");
                     LocationCheck(playerCoor, world, locations);
                 }
 
@@ -497,13 +497,14 @@ namespace InfectionInjection
                     roomIndex = i;
                 }
             }
-            if (locations[index].Rooms[roomIndex].Items.Count > 0)
+            Console.WriteLine(locations[index].Rooms[roomIndex].Description);
+            if ((locations[index].Rooms[roomIndex].Items.Count > 0) && (locations[index].Rooms[roomIndex].Items[0] != null))
             {
                 Console.Write("\nThere is: \n");
-            }
-            for (int i = 0; i < locations[index].Rooms[roomIndex].Items.Count; i++)
-            {
-                Console.Write($"* {locations[index].Rooms[roomIndex].Items[i]}\n");
+                for (int i = 0; i < locations[index].Rooms[roomIndex].Items.Count; i++)
+                {
+                    Console.Write($"* {locations[index].Rooms[roomIndex].Items[i]}\n");
+                }
             }
         }
 
@@ -544,6 +545,7 @@ namespace InfectionInjection
                 {
                     Room loadRoom = new Room();
                     loadRoom.Name = roomTextData.ReadLine();
+                    loadRoom.Description = roomTextData.ReadLine();
 
                     string[] coorString = roomTextData.ReadLine().Split(',');
                     for (int x = 0; x < coorString.Length; x++)

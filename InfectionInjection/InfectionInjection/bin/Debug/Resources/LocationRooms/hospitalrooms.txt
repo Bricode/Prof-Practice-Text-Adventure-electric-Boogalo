@@ -1,24 +1,32 @@
 Waiting Room
+Description
 0,0,0
 bandage,book
 Emergency Room
+Description
 1,0,0
 scissors,bandage,first aid kit
 Pharmacy
+Description
 1,1,0
 antibiotics,vitamins,paper
 ICU
+Description
 0,1,0
 surgical kit,bandage,blood bag
 Operating Room
+Description
 0,0,1
 scalpel,scissors,face mask
 Sick Ward
+Description
 1,0,1
 vaccine
 Ward 1
+Description
 0,1,1
 hospital food,sheet
 Ward 2
+Description
 1,1,1
 hospital food,sheet
