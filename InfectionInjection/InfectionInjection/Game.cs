@@ -139,7 +139,14 @@ namespace InfectionInjection
 
             do
             {
-                Console.Clear();
+                using (StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"/Resources/data(" + playerCoor[0] + "," + playerCoor[1] + "," + playerCoor[2] + ").txt"))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        Console.WriteLine(sr.ReadLine());
+
+                    }
+                }
 
                 Console.WriteLine($"{playerCoor[0]}, {playerCoor[1]}, {playerCoor[2]}");
                 Console.WriteLine($"{playerCoorLocation[0]}, {playerCoorLocation[1]}, {playerCoorLocation[2]}\n");
@@ -180,7 +187,7 @@ namespace InfectionInjection
 
                 Console.WriteLine("\nWhat do you want to do next?");
                 input = Console.ReadLine().ToLower();
-
+                Console.Clear();
                 if (input.Contains(" ") == false)
                 {
                     switch (input)
@@ -321,6 +328,7 @@ namespace InfectionInjection
                     //playerCoor[1] = y;
                     //playerCoor[2] = z;
                     //Put yos text stuff here
+
                 }
                 if ((playerCoorLocation[0] != 0) && (playerCoorLocation[1] != 0) && (playerCoorLocation[2] != 0))
                 {
@@ -544,12 +552,13 @@ namespace InfectionInjection
                 roomTextData.Close();
 
                 locations.Add(loadLocation);
-                StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"\locationData.txt");
-                string openingText = ( sr.ReadLine() );
-                Console.WriteLine(openingText);
+                
                 
 
             }
+            StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"\locationData.txt");
+            string openingText = (sr.ReadLine());
+            Console.WriteLine(openingText);
         }
 
         static void UpdateWorld(List<Location> locations, string[,,] world)
