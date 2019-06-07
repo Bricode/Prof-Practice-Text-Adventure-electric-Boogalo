@@ -17,4 +17,4 @@ A shower of cobwebs hang from the empty shelves, with a dim light shining in thr
 Gun Locker
 Description
 1,1,1
-pistol,magazine,bullet box
+pistol,magazine

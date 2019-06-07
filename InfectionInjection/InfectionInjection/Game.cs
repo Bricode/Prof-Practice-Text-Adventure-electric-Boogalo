@@ -9,6 +9,7 @@ namespace InfectionInjection
     {
         public static string[] Inventory = new string[10];
         public static int WrongCommand = 0;
+        public static int Bullets = 5;
         public static bool GunLockerUnlocked = false;
 
         public static void Inventory_Show()
@@ -598,38 +599,131 @@ namespace InfectionInjection
             {
                 if (condition1 > condition2)
                 {
-                    playerCoorLocation[index] += num;
+                    if ((locations[locIndex].Name != "Sewer Entrance North") && (locations[locIndex].Name != "Sewer Entrance South") && (locations[locIndex].Name != "Sewer Entrance West"))
+                    {
+                        playerCoorLocation[index] += num;
+                    }
+                    else
+                    {
+                        switch (index)
+                        {
+                            case 0:
+                                if (locations[locIndex].LocationMap[playerCoorLocation[0] + num, playerCoorLocation[1], playerCoorLocation[2]] != "wall")
+                                {
+                                    playerCoorLocation[index] += num;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("You can't go that way, it's blocked by the Sewer wall.\n");
+                                }
+                                break;
+                            case 1:
+                                if (locations[locIndex].LocationMap[playerCoorLocation[0], playerCoorLocation[1] + num, playerCoorLocation[2]] != "wall")
+                                {
+                                    playerCoorLocation[index] += num;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("You can't go that way, it's blocked by the Sewer wall.\n");
+                                }
+                                break;
+                            case 2:
+                                if (locations[locIndex].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2] + num] != "wall")
+                                {
+                                    switch (locations[locIndex].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]])
+                                    {
+                                        case "Sewer Exit West":
+                                            playerCoor[0] = 0;
+                                            playerCoor[1] = 3;
+                                            playerCoor[2] = 0;
+                                            playerCoorLocation[0] = 0;
+                                            playerCoorLocation[1] = 0;
+                                            playerCoorLocation[2] = 0;
+                                            firstTime = true;
+                                            break;
+                                        case "Sewer Exit Hospital":
+                                            playerCoor[0] = 2;
+                                            playerCoor[1] = 2;
+                                            playerCoor[2] = 0;
+                                            playerCoorLocation[0] = 0;
+                                            playerCoorLocation[1] = 0;
+                                            playerCoorLocation[2] = 0;
+                                            firstTime = true;
+                                            break;
+                                        case "Sewer Exit North":
+                                            playerCoor[0] = 3;
+                                            playerCoor[1] = 1;
+                                            playerCoor[2] = 0;
+                                            playerCoorLocation[0] = 0;
+                                            playerCoorLocation[1] = 0;
+                                            playerCoorLocation[2] = 0;
+                                            firstTime = true;
+                                            break;
+                                        case "Sewer Exit Police Station":
+                                            playerCoor[0] = 4;
+                                            playerCoor[1] = 1;
+                                            playerCoor[2] = 0;
+                                            playerCoorLocation[0] = 0;
+                                            playerCoorLocation[1] = 0;
+                                            playerCoorLocation[2] = 0;
+                                            firstTime = true;
+                                            break;
+                                        case "Sewer Exit South":
+                                            playerCoor[0] = 3;
+                                            playerCoor[1] = 4;
+                                            playerCoor[2] = 0;
+                                            playerCoorLocation[0] = 0;
+                                            playerCoorLocation[1] = 0;
+                                            playerCoorLocation[2] = 0;
+                                            firstTime = true;
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("You can't go that way, it's blocked by the Sewer wall.\n");
+                                }
+                                break;
+                        }
+                    }
                 }
                 else if (index != 2)
                 {
                     int[] mapDim = { 4, 4, 2 };
 
-                    Console.WriteLine($"Are you sure you want to leave the {locations[locIndex].Name}?");
-                    if (((playerCoor[index] + num) > mapDim[index]) || ((playerCoor[index] + num) < 0))
+                    if ((locations[locIndex].Name != "Sewer Entrance North") && (locations[locIndex].Name != "Sewer Entrance South") && (locations[locIndex].Name != "Sewer Entrance West"))
                     {
-                        Console.WriteLine("CAUTION! - You are about to leave the town");
-                    }
-                    if (playerCoorLocation[2] != 0)
-                    {
-                        Console.WriteLine("You are not on the ground floor");
-                    }
-
-                    string choice = Console.ReadLine().ToLower();
-                    Console.Clear();
-
-                    if ((choice == "yes") || (choice == "y"))
-                    {
-                        if (playerCoorLocation[2] > 0)
+                        Console.WriteLine($"Are you sure you want to leave the {locations[locIndex].Name}?");
+                        if (((playerCoor[index] + num) > mapDim[index]) || ((playerCoor[index] + num) < 0))
                         {
-                            Death(0, ref input);
+                            Console.WriteLine("CAUTION! - You are about to leave the town");
                         }
-                        playerCoor[index] += num;
-                        playerCoorLocation[2] = 0;
-                        for (int i = 0; i < playerCoorLocation.Length; i++)
+                        if (playerCoorLocation[2] != 0)
                         {
-                            playerCoorLocation[i] = 0;
+                            Console.WriteLine("You are not on the ground floor");
                         }
-                        firstTime = true;
+
+                        string choice = Console.ReadLine().ToLower();
+                        Console.Clear();
+
+                        if ((choice == "yes") || (choice == "y"))
+                        {
+                            if (playerCoorLocation[2] > 0)
+                            {
+                                Death(0, ref input);
+                            }
+                            playerCoor[index] += num;
+                            playerCoorLocation[2] = 0;
+                            for (int i = 0; i < playerCoorLocation.Length; i++)
+                            {
+                                playerCoorLocation[i] = 0;
+                            }
+                            firstTime = true;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("You can't go that way, it's blocked by the Sewer wall.\n");
                     }
                 }
             }
@@ -776,12 +870,19 @@ namespace InfectionInjection
 
         static void LocationText(List<Location> locations, string[,,] world, int[] playerCoorLocation, int index)
         {
-            Console.WriteLine($"You are in the {locations[index].Name}");
-            Console.WriteLine($"You are in the {locations[index].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]]}");
+            if ((locations[index].Name != "Sewer Entrance North") && (locations[index].Name != "Sewer Entrance West") && (locations[index].Name != "Sewer Entrance South"))
+            {
+                Console.WriteLine($"You are in the {locations[index].Name}");
+                Console.WriteLine($"You are in the {locations[index].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]]}");
+            }
+            else
+            {
+                Console.WriteLine("You are in the Sewer");
+            }
             int roomIndex = 0;
             for (int i = 0; i < locations[index].RoomCount; i++)
             {
-                if (locations[index].Rooms[i].Name == locations[index].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]])
+                if ((locations[index].Rooms[i].Coor[0] == playerCoorLocation[0]) && (locations[index].Rooms[i].Coor[1] == playerCoorLocation[1]) && (locations[index].Rooms[i].Coor[2] == playerCoorLocation[2]))
                 {
                     roomIndex = i;
                 }
