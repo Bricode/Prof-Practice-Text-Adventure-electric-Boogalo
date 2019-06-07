@@ -37,7 +37,7 @@ namespace InfectionInjection
                 bool loop = true;
                 do
                 {
-                    Console.WriteLine("Which item slot would you like to replace? (1,2,3,4,5,6,7,8,9,0)");
+                    Console.WriteLine("Which item slot would you like to place it in? (1,2,3,4,5,6,7,8,9,0)");
                     for (int i = 0; i < 10; i++)
                     {
                         Console.WriteLine((i+1) + "| " + Inventory[i]);
