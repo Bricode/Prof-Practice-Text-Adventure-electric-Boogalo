@@ -1,63 +1,63 @@
+wall
+Impassable flora
 0,0,0
-Description
-0,0,0
 
-0,1,0
-Description
+wall
+Thick forrest undergrowth
 0,1,0
 
+e
+Entrance/Exit
 0,2,0
-Description
-0,2,0
 
-0,3,0
-Description
+wall
+Many, many prickle bushes
 0,3,0
 
+e
+Entrance/Exit
 1,0,0
-Description
-1,0,0
 
-1,1,0
-Description
+path
+Muddy, but crossable
 1,1,0
 
+path
+Small grass field
 1,2,0
-Description
-1,2,0
 
-1,3,0
-Description
+wall
+Sleeping pack of wolves, not worth the risk
 1,3,0
 
+wall
+Quicksand, not worth the risk
 2,0,0
-Description
-2,0,0
 
-2,1,0
-Description
+path
+A small lake, small enough to swim accross
 2,1,0
 
+path
+Shallow water
 2,2,0
-Description
-2,2,0
 
-2,3,0
-Description
+e
+Entrance/Exit
 2,3,0
 
+wall
+Big hole, to deep and wide to pass
 3,0,0
-Description
-3,0,0
 
-3,1,0
-Description
+e
+Entrance/Exit
 3,1,0
 
-3,2,0
-Description
+wall
+Slippery and sharp rocks, not worth the risk
 3,2,0
 
-3,3,0
-Description
+wall
+Toxic plant life, not worth the risk
 3,3,0
