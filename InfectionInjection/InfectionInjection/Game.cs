@@ -8,12 +8,21 @@ namespace InfectionInjection
     class Game
     {
         public static string[] Inventory = new string[10];
+        public static int WrongCommand = 0;
 
         public static void Inventory_Show()
         {
-            for (int i=0; i<10; i++)
+            if (Inventory[0] != null)
             {
-                Console.WriteLine(Inventory[i]);
+                Console.WriteLine("You have: ");
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.WriteLine((i + 1) + "| " + Inventory[i]);
+                }
+            }
+            else
+            {
+                Console.WriteLine("You don't have anyhting on you");
             }
         }
 
@@ -96,10 +105,8 @@ namespace InfectionInjection
                             loop = false;
                             break;
                         default:
-                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.Clear();
                             Console.WriteLine("Sorry, I do not understand.\nPlease try again!");
-                            Console.ForegroundColor = ConsoleColor.Gray;
                             break;
                     }
                 } while (loop==true);
@@ -136,6 +143,8 @@ namespace InfectionInjection
             int roomIndex = 0;
             string input = "";
             bool firstTime = true;
+            Random rand = new Random();
+            string[] misunderstood = { "Sorry, I do not understand.", "What?", "Not a valid command.", "Do you even know how to play?", "Try again?" };
 
             do
             {
@@ -249,6 +258,30 @@ namespace InfectionInjection
                         case "descend":
                             Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[2], 0, -1, 2, locations, index, ref input, ref firstTime);
                             break;
+                        case "inventory":
+                            Inventory_Show();
+                            break;
+                        case "help":
+                            WrongCommand = 0;
+                            using (StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"\Resources\help.txt"))
+                            {
+                                while (!sr.EndOfStream)
+                                {
+                                    Console.WriteLine(sr.ReadLine());
+                                }
+                            }
+                            break;
+                        default:
+                            if (WrongCommand < 3)
+                            {
+                                Console.WriteLine($"{misunderstood[rand.Next(0, misunderstood.Length)]}\n");
+                                WrongCommand++;
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{misunderstood[rand.Next(0, misunderstood.Length)]}\nIf you need help with the commands type \"help\".\n");
+                            }
+                            break;
                     }
                 }
                 else
@@ -289,6 +322,38 @@ namespace InfectionInjection
                                 }
                             }
                             break;
+                        case "drop":
+                            if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+                            {
+                                Console.WriteLine($"Are you sure you want to drop {restOfArray}?");
+                                string choice = Console.ReadLine().ToLower();
+                                if ((choice == "yes") || (choice == "y"))
+                                {
+                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                    locations[index].Rooms[roomIndex].Items.Add(restOfArray);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Are you sure you want to drop {restOfArray}?\nYou are not in a building so it will be lost.");
+                                string choice = Console.ReadLine().ToLower();
+                                if ((choice == "yes") || (choice == "y"))
+                                {
+                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                }
+                            }
+                            break;
+                        default:
+                            if (WrongCommand < 3)
+                            {
+                                Console.WriteLine($"{misunderstood[rand.Next(0, misunderstood.Length)]}\n");
+                                WrongCommand++;
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{misunderstood[rand.Next(0, misunderstood.Length)]}\nIf you need help with the commands type \"help\".\n");
+                            }
+                            break;
                     }
                 }
             } while (input != "quit");
@@ -317,6 +382,7 @@ namespace InfectionInjection
                     }
 
                     string choice = Console.ReadLine().ToLower();
+                    Console.Clear();
 
                     if ((choice == "yes") || (choice == "y"))
                     {

@@ -1,6 +1,4 @@
-Fix walk out of map exiting building
 Fix unable to pick up object when swapped out of inventory
-Add commands like inventory
 Add story objectives
 Add sewer system
 Add tree maze
