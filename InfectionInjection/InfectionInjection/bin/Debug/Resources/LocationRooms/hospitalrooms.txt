@@ -27,6 +27,10 @@ Description
 0,1,1
 hospital food,sheet
 Ward 2
-Description
+In ward 2 lies the Commissioner's slowly decaying body, surrounded by the dead.
 1,1,1
 hospital food,sheet
+Commissioner's Body
+Description
+0,0,2
+key,baton,whisky

@@ -9,6 +9,7 @@ namespace InfectionInjection
     {
         public static string[] Inventory = new string[10];
         public static int WrongCommand = 0;
+        public static bool GunLockerUnlocked = false;
 
         public static void Inventory_Show()
         {
@@ -19,10 +20,11 @@ namespace InfectionInjection
                 {
                     Console.WriteLine((i + 1) + "| " + Inventory[i]);
                 }
+                Console.WriteLine();
             }
             else
             {
-                Console.WriteLine("You don't have anyhting on you");
+                Console.WriteLine("You don't have anyhting on you.\n");
             }
         }
 
@@ -51,6 +53,7 @@ namespace InfectionInjection
                     {
                         Console.WriteLine((i+1) + "| " + Inventory[i]);
                     }
+                    Console.WriteLine();
                     string Temp = Console.ReadLine();
                     switch (Temp)
                     {
@@ -142,6 +145,7 @@ namespace InfectionInjection
             int index = 0;
             int roomIndex = 0;
             string input = "";
+            string lastPlace = "";
             bool firstTime = true;
             Random rand = new Random();
             string[] misunderstood = { "Sorry, I do not understand.", "What?", "Not a valid command.", "Do you even know how to play?", "Try again?" };
@@ -168,9 +172,29 @@ namespace InfectionInjection
                         }
                         if (firstTime)
                         {
-                            playerCoorLocation[0] = locations[index].StartPos[0];
-                            playerCoorLocation[1] = locations[index].StartPos[1];
-                            playerCoorLocation[2] = locations[index].StartPos[2];
+                            switch (lastPlace)
+                            {
+                                case "north":
+                                    playerCoorLocation[0] = locations[index].StartPosN[0];
+                                    playerCoorLocation[1] = locations[index].StartPosN[1];
+                                    playerCoorLocation[2] = locations[index].StartPosN[2];
+                                    break;
+                                case "west":
+                                    playerCoorLocation[0] = locations[index].StartPosW[0];
+                                    playerCoorLocation[1] = locations[index].StartPosW[1];
+                                    playerCoorLocation[2] = locations[index].StartPosW[2];
+                                    break;
+                                case "east":
+                                    playerCoorLocation[0] = locations[index].StartPosE[0];
+                                    playerCoorLocation[1] = locations[index].StartPosE[1];
+                                    playerCoorLocation[2] = locations[index].StartPosE[2];
+                                    break;
+                                case "south":
+                                    playerCoorLocation[0] = locations[index].StartPosS[0];
+                                    playerCoorLocation[1] = locations[index].StartPosS[1];
+                                    playerCoorLocation[2] = locations[index].StartPosS[2];
+                                    break;
+                            }
 
                             firstTime = false;
                         }
@@ -198,8 +222,6 @@ namespace InfectionInjection
                     Death(1, ref input);
                 }
 
-                Console.ResetColor();
-
                 if (input != "quit")
                 {
                     Console.WriteLine("\nWhat do you want to do next?");
@@ -211,39 +233,51 @@ namespace InfectionInjection
                     switch (input)
                     {
                         case "n":
+                            lastPlace = "south";
                             Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index, ref input, ref firstTime);
                             break;
                         case "north":
+                            lastPlace = "south";
                             Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index, ref input, ref firstTime);
                             break;
                         case "forward":
+                            lastPlace = "south";
                             Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[1], 0, -1, 1, locations, index, ref input, ref firstTime);
                             break;
                         case "w":
+                            lastPlace = "east";
                             Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index, ref input, ref firstTime);
                             break;
                         case "west":
+                            lastPlace = "east";
                             Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index, ref input, ref firstTime);
                             break;
                         case "left":
+                            lastPlace = "east";
                             Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[0], 0, -1, 0, locations, index, ref input, ref firstTime);
                             break;
                         case "e":
+                            lastPlace = "west";
                             Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index, ref input, ref firstTime);
                             break;
                         case "east":
+                            lastPlace = "west";
                             Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index, ref input, ref firstTime);
                             break;
                         case "right":
+                            lastPlace = "west";
                             Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[3] - 1, playerCoorLocation[0], 1, 0, locations, index, ref input, ref firstTime);
                             break;
                         case "s":
+                            lastPlace = "north";
                             Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4] - 1, playerCoorLocation[1], 1, 1, locations, index, ref input, ref firstTime);
                             break;
                         case "south":
+                            lastPlace = "north";
                             Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4] - 1, playerCoorLocation[1], 1, 1, locations, index, ref input, ref firstTime);
                             break;
                         case "backward":
+                            lastPlace = "north";
                             Movement(world, playerCoor, playerCoorLocation, locations[index].Dimensions[4] - 1, playerCoorLocation[1], 1, 1, locations, index, ref input, ref firstTime);
                             break;
                         case "up":
@@ -341,6 +375,205 @@ namespace InfectionInjection
                                 {
                                     Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
                                 }
+                            }
+                            break;
+                        case "use":
+                            if (Array.IndexOf(Inventory, restOfArray) >= 0)
+                            {
+                                if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+                                {
+                                    if ((locations[index].Rooms[roomIndex].Name == "Armory") && (GunLockerUnlocked == false) && (restOfArray == "key"))
+                                    {
+                                        GunLockerUnlocked = true;
+                                        Console.WriteLine("Unlocked Gun Locker.\n");
+                                    }
+                                    else if ((locations[index].Rooms[roomIndex].Name == "Armory") && (GunLockerUnlocked) && (restOfArray == "key"))
+                                    {
+                                        Console.WriteLine("Already Unlocked.\n");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Can't use that.\n");
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Can't use that.\n");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("You don't have that item.\n");
+                            }
+                            break;
+                        case "search":
+                            if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+                            {
+                                if ((locations[index].Rooms[roomIndex].Name == "Armory") && (GunLockerUnlocked) && (restOfArray == "gun locker"))
+                                {
+                                    do
+                                    {
+                                        Console.WriteLine("In the gun locker you found:");
+
+                                        if ((locations[6].Rooms[4].Items.Count > 0) && (locations[6].Rooms[4].Items[0] != null))
+                                        {
+                                            for (int i = 0; i < locations[6].Rooms[4].Items.Count; i++)
+                                            {
+                                                Console.Write($"* {locations[6].Rooms[4].Items[i]}\n");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Nothing.");
+                                        }
+
+                                        Console.WriteLine("\nWhat do you want to do next?");
+                                        input = Console.ReadLine().ToLower();
+                                        Console.Clear();
+                                        if (input.Contains(" ") == false)
+                                        {
+                                            switch (input)
+                                            {
+                                                case "back":
+                                                    break;
+                                                default:
+                                                    Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
+                                                    break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            string[] temp2 = input.Split(' ');
+                                            command = temp2[0];
+                                            restOfArray = "";
+
+                                            for (int i = 1; i < temp2.Length; i++)
+                                            {
+                                                restOfArray += temp2[i] + " ";
+                                            }
+
+                                            restOfArray = restOfArray.Trim();
+
+                                            switch (command)
+                                            {
+                                                case "get":
+                                                    if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X") && (locations[6].Rooms[4].Items.Contains(restOfArray.ToLower())))
+                                                    {
+                                                        string[] temp3 = Inventory_Check(restOfArray).Split(' ');
+                                                        string itemInstruction = temp3[0];
+                                                        string restOfItemArray = "";
+
+                                                        for (int i = 1; i < temp3.Length; i++)
+                                                        {
+                                                            restOfItemArray += temp3[i] + " ";
+                                                        }
+
+                                                        if (itemInstruction == "pickup")
+                                                        {
+                                                            locations[6].Rooms[4].Items.Remove(restOfArray.ToLower());
+                                                        }
+                                                        else
+                                                        {
+                                                            locations[6].Rooms[4].Items.Remove(restOfArray.ToLower());
+                                                            locations[6].Rooms[4].Items.Add(restOfItemArray.ToLower());
+                                                        }
+                                                    }
+                                                    break;
+                                                default:
+                                                    Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
+                                                    break;
+                                            }
+                                        }
+                                    } while (input != "back");
+                                }
+                                else if ((locations[index].Rooms[roomIndex].Name == "Armory") && (GunLockerUnlocked == false) && (restOfArray == "gun locker"))
+                                {
+                                    Console.WriteLine("The Gun Locker is locked.");
+                                }
+                                if ((locations[index].Rooms[roomIndex].Name == "Ward 2") && ((restOfArray == "commissioner's body") || (restOfArray == "commissioners body") || (restOfArray == "commissioner")))
+                                {
+                                    do
+                                    {
+                                        Console.WriteLine("On the commissioner's body you found:");
+                                        if ((locations[3].Rooms[8].Items.Count > 0) && (locations[3].Rooms[8].Items[0] != null))
+                                        {
+                                            for (int i = 0; i < locations[3].Rooms[8].Items.Count; i++)
+                                            {
+                                                Console.Write($"* {locations[3].Rooms[8].Items[i]}\n");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Nothing.");
+                                        }
+
+                                        Console.WriteLine("\nWhat do you want to do next?");
+                                        input = Console.ReadLine().ToLower();
+                                        Console.Clear();
+                                        if (input.Contains(" ") == false)
+                                        {
+                                            switch (input)
+                                            {
+                                                case "back":
+                                                    break;
+                                                default:
+                                                    Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
+                                                    break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            string[] temp2 = input.Split(' ');
+                                            command = temp2[0];
+                                            restOfArray = "";
+
+                                            for (int i = 1; i < temp2.Length; i++)
+                                            {
+                                                restOfArray += temp2[i] + " ";
+                                            }
+
+                                            restOfArray = restOfArray.Trim();
+
+                                            switch (command)
+                                            {
+                                                case "get":
+                                                    if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X") && (locations[3].Rooms[8].Items.Contains(restOfArray.ToLower())))
+                                                    {
+                                                        string[] temp3 = Inventory_Check(restOfArray).Split(' ');
+                                                        string itemInstruction = temp3[0];
+                                                        string restOfItemArray = "";
+
+                                                        for (int i = 1; i < temp3.Length; i++)
+                                                        {
+                                                            restOfItemArray += temp3[i] + " ";
+                                                        }
+
+                                                        if (itemInstruction == "pickup")
+                                                        {
+                                                            locations[3].Rooms[8].Items.Remove(restOfArray.ToLower());
+                                                        }
+                                                        else
+                                                        {
+                                                            locations[3].Rooms[8].Items.Remove(restOfArray.ToLower());
+                                                            locations[3].Rooms[8].Items.Add(restOfItemArray.ToLower());
+                                                        }
+                                                    }
+                                                    break;
+                                                default:
+                                                    Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
+                                                    break;
+                                            }
+                                        }
+                                    } while (input != "back");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Can't do that.\n");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Can't do that.\n");
                             }
                             break;
                         default:

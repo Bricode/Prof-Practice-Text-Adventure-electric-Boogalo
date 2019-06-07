@@ -3,4 +3,7 @@ If you are in one of the many buildings of Steelport type [Up], [Down] or [Ascen
 While in a location; type [Get] "item name" to pickup different items.
 To drop an item type [Drop] "item name".
 If you want to view the inventory, type [Inventory].
+When the room tells you about objects in the room type [Search] to look through them.
+When you want to use an item from your inventory type [Use] "item name".
+Whenever you want to quit just type [Quit].
  
