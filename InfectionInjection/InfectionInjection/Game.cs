@@ -11,9 +11,17 @@ namespace InfectionInjection
 
         public static void Inventory_Show()
         {
-            for (int i=0; i<10; i++)
+            if (Inventory[0] != null)
             {
-                Console.WriteLine(Inventory[i]);
+                Console.WriteLine("You have: ");
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.WriteLine((i + 1) + "| " + Inventory[i]);
+                }
+            }
+            else
+            {
+                Console.WriteLine("You don't have anyhting on you");
             }
         }
 
@@ -249,6 +257,9 @@ namespace InfectionInjection
                         case "descend":
                             Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[2], 0, -1, 2, locations, index, ref input, ref firstTime);
                             break;
+                        case "inventory":
+                            Inventory_Show();
+                            break;
                     }
                 }
                 else
@@ -289,6 +300,27 @@ namespace InfectionInjection
                                 }
                             }
                             break;
+                        case "drop":
+                            if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+                            {
+                                Console.WriteLine($"Are you sure you want to drop {restOfArray}?");
+                                string choice = Console.ReadLine().ToLower();
+                                if ((choice == "yes") || (choice == "y"))
+                                {
+                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                    locations[index].Rooms[roomIndex].Items.Add(restOfArray);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Are you sure you want to drop {restOfArray}?\nYou are not in a building so it will be lost.");
+                                string choice = Console.ReadLine().ToLower();
+                                if ((choice == "yes") || (choice == "y"))
+                                {
+                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                }
+                            }
+                            break;
                     }
                 }
             } while (input != "quit");
@@ -317,6 +349,7 @@ namespace InfectionInjection
                     }
 
                     string choice = Console.ReadLine().ToLower();
+                    Console.Clear();
 
                     if ((choice == "yes") || (choice == "y"))
                     {
