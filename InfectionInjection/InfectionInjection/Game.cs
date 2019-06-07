@@ -141,56 +141,61 @@ namespace InfectionInjection
             {
                 try
                 {
-                    using (StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"/Resources/data(" + playerCoor[0] + "," + playerCoor[1] + "," + playerCoor[2] + ").txt"))
+                    if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
                     {
-                        while (!sr.EndOfStream)
+                        for (int i = 0; i < locations.Count; i++)
                         {
-                            Console.WriteLine(sr.ReadLine());
-
-                        }
-                    }
-                }
-                catch { }
-
-                Console.WriteLine($"{playerCoor[0]}, {playerCoor[1]}, {playerCoor[2]}");
-                Console.WriteLine($"{playerCoorLocation[0]}, {playerCoorLocation[1]}, {playerCoorLocation[2]}\n");
-
-                if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
-                {
-                    for (int i = 0; i < locations.Count; i++)
-                    {
-                        if (world[playerCoor[0], playerCoor[1], playerCoor[2]] == locations[i].Name)
-                        {
-                            index = i;
-                            for (int n = 0; n < locations[i].RoomCount; n++)
+                            if (world[playerCoor[0], playerCoor[1], playerCoor[2]] == locations[i].Name)
                             {
-                                if (locations[i].Rooms[n].Name == locations[i].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]])
+                                index = i;
+                                for (int n = 0; n < locations[i].RoomCount; n++)
                                 {
-                                    roomIndex = n;
+                                    if (locations[i].Rooms[n].Name == locations[i].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]])
+                                    {
+                                        roomIndex = n;
+                                    }
                                 }
                             }
                         }
-                    }
-                    if (firstTime)
-                    {
-                        playerCoorLocation[0] = locations[index].StartPos[0];
-                        playerCoorLocation[1] = locations[index].StartPos[1];
-                        playerCoorLocation[2] = locations[index].StartPos[2];
+                        if (firstTime)
+                        {
+                            playerCoorLocation[0] = locations[index].StartPos[0];
+                            playerCoorLocation[1] = locations[index].StartPos[1];
+                            playerCoorLocation[2] = locations[index].StartPos[2];
 
-                        firstTime = false;
+                            firstTime = false;
+                        }
+                        LocationText(locations, world, playerCoorLocation, index);
                     }
-                    LocationText(locations, world, playerCoorLocation, index);
+                    else
+                    {
+                        Console.WriteLine("You are outside; wandering the town of Steelport.");
+                        try
+                        {
+                            using (StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"/Resources/data(" + playerCoor[0] + "," + playerCoor[1] + "," + playerCoor[2] + ").txt"))
+                            {
+                                while (!sr.EndOfStream)
+                                {
+                                    Console.WriteLine(sr.ReadLine());
+                                }
+                            }
+                        }
+                        catch { }
+                        LocationCheck(playerCoor, world, locations);
+                    }
                 }
-                else
+                catch
                 {
-                    Console.WriteLine("You are outside somewhere");
-                    LocationCheck(playerCoor, world, locations);
+                    Death(1, ref input);
                 }
 
                 Console.ResetColor();
 
-                Console.WriteLine("\nWhat do you want to do next?");
-                input = Console.ReadLine().ToLower();
+                if (input != "quit")
+                {
+                    Console.WriteLine("\nWhat do you want to do next?");
+                    input = Console.ReadLine().ToLower();
+                }
                 Console.Clear();
                 if (input.Contains(" ") == false)
                 {
@@ -299,7 +304,13 @@ namespace InfectionInjection
                 }
                 else if (index != 2)
                 {
+                    int[] mapDim = { 4, 4, 2 };
+
                     Console.WriteLine($"Are you sure you want to leave the {locations[locIndex].Name}?");
+                    if (((playerCoor[index] + num) > mapDim[index]) || ((playerCoor[index] + num) < 0))
+                    {
+                        Console.WriteLine("CAUTION! - You are about to leave the town");
+                    }
                     if (playerCoorLocation[2] != 0)
                     {
                         Console.WriteLine("You are not on the ground floor");
@@ -325,7 +336,7 @@ namespace InfectionInjection
             }
             else
             {
-                if ((playerCoor[index] + num >= 0) && (playerCoor[index] + num < 5) && (index != 2))
+                if (index != 2)
                 {
                     playerCoor[index] += num;
                 }
@@ -341,7 +352,7 @@ namespace InfectionInjection
 
         static void Death(int number, ref string input)
         {
-            string[] deaths = { "You fell to your death!" };
+            string[] deaths = { "You fell to your death!", "As you attempt to flee from the town, you hear a thumping through the ground.\nAs you turn in horror towards the vibrations, you see a horde of green shambling corpses running towards you at a speed you couldn't believe was possible.\nYou try desperately to run.\nYour last thoughts on how you failed this town and have doomed this world to a zombie apocalypse." };
 
             Console.WriteLine(deaths[number]);
             input = "quit";
@@ -431,19 +442,19 @@ namespace InfectionInjection
 
             if (north == "X")
             {
-                Console.WriteLine($"You cannot go the North");
+                Console.WriteLine($"CAUTION! - If you go North you will leave the town.");
             }
             if (west == "X")
             {
-                Console.WriteLine($"You cannot go the West");
+                Console.WriteLine($"CAUTION! - If you go West you will leave the town.");
             }
             if (east == "X")
             {
-                Console.WriteLine($"You cannot go the East");
+                Console.WriteLine($"CAUTION! - If you go East you will leave the town.");
             }
             if (south == "X")
             {
-                Console.WriteLine($"You cannot go the South");
+                Console.WriteLine($"CAUTION! - If you go South you will leave the town");
             }
 
             if ((north != "X") && (north != ""))
@@ -461,27 +472,6 @@ namespace InfectionInjection
             if ((south != "X") && (south != ""))
             {
                 Console.WriteLine(south);
-            }
-        }
-
-        static void Map(string[,,] world)
-        {
-            for (int y = 0; y < 8; y++)
-            {
-                for (int x = 0; x < 8; x++)
-                {
-                    if (world[x, y, 0] == "X")
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                    }
-                    Console.Write(world[x, y, 0].PadRight(15).PadLeft(15));
-                }
-                Console.WriteLine();
-                Console.WriteLine();
             }
         }
 
@@ -596,8 +586,10 @@ namespace InfectionInjection
 
             }
             StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"\locationData.txt");
-            string openingText = (sr.ReadLine());
-            Console.WriteLine(openingText);
+            while (!sr.EndOfStream)
+            {
+                Console.WriteLine(sr.ReadLine());
+            }
         }
 
         static void UpdateWorld(List<Location> locations, string[,,] world)
