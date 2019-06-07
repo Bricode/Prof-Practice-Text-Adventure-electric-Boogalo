@@ -9,6 +9,7 @@ namespace InfectionInjection
     public class Room
     {
         public string Name { get; set; }
+        public string Description { get; set; }
         public int[] Coor { get; set; } = new int[3];
         public List<string> Items { get; set; } = new List<string>();
     }

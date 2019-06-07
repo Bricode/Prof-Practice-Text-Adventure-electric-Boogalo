@@ -171,7 +171,18 @@ namespace InfectionInjection
 
             do
             {
-                Console.Clear();
+                try
+                {
+                    using (StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"/Resources/data(" + playerCoor[0] + "," + playerCoor[1] + "," + playerCoor[2] + ").txt"))
+                    {
+                        while (!sr.EndOfStream)
+                        {
+                            Console.WriteLine(sr.ReadLine());
+
+                        }
+                    }
+                }
+                catch { }
 
                 Console.WriteLine($"{playerCoor[0]}, {playerCoor[1]}, {playerCoor[2]}");
                 Console.WriteLine($"{playerCoorLocation[0]}, {playerCoorLocation[1]}, {playerCoorLocation[2]}\n");
@@ -212,7 +223,7 @@ namespace InfectionInjection
 
                 Console.WriteLine("\nWhat do you want to do next?");
                 input = Console.ReadLine().ToLower();
-
+                Console.Clear();
                 if (input.Contains(" ") == false)
                 {
                     switch (input)
@@ -346,13 +357,9 @@ namespace InfectionInjection
             }
             else
             {
-                if ((playerCoor[index] + num >= 0) && (playerCoor[index] + num < 8) && (index != 2))
+                if ((playerCoor[index] + num >= 0) && (playerCoor[index] + num < 5) && (index != 2))
                 {
                     playerCoor[index] += num;
-                    //playerCoor[0] = x;
-                    //playerCoor[1] = y;
-                    //playerCoor[2] = z;
-                    //Put yos text stuff here
                 }
                 if ((playerCoorLocation[0] != 0) && (playerCoorLocation[1] != 0) && (playerCoorLocation[2] != 0))
                 {
@@ -376,6 +383,10 @@ namespace InfectionInjection
         static void LocationCheck(int[] playerCoor, string[,,] world, List<Location> locations)
         {
             int index = 0;
+            string north = "";
+            string west = "";
+            string east = "";
+            string south = "";
 
             try
             {
@@ -388,12 +399,12 @@ namespace InfectionInjection
                             index = i;
                         }
                     }
-                    Console.WriteLine($"The {locations[index].Name} is to the East");
+                    east = $"The {locations[index].Name} is to the East";
                 }
             }
             catch
             {
-                Console.WriteLine($"You cannot go the East");
+                east = "X";
             }
             try
             {
@@ -406,12 +417,12 @@ namespace InfectionInjection
                             index = i;
                         }
                     }
-                    Console.WriteLine($"The {locations[index].Name} is to the West");
+                    west = $"The {locations[index].Name} is to the West";
                 }
             }
             catch
             {
-                Console.WriteLine($"You cannot go the West");
+                west = "X";
             }
             try
             {
@@ -424,12 +435,12 @@ namespace InfectionInjection
                             index = i;
                         }
                     }
-                    Console.WriteLine($"The {locations[index].Name} is to the South");
+                    south = $"The {locations[index].Name} is to the South";
                 }
             }
             catch
             {
-                Console.WriteLine($"You cannot go the South");
+                south = "X";
             }
             try
             {
@@ -442,12 +453,46 @@ namespace InfectionInjection
                             index = i;
                         }
                     }
-                    Console.WriteLine($"The {locations[index].Name} is to the North");
+                    north = $"The {locations[index].Name} is to the North";
                 }
             }
             catch
             {
+                north = "X";
+            }
+
+            if (north == "X")
+            {
                 Console.WriteLine($"You cannot go the North");
+            }
+            if (west == "X")
+            {
+                Console.WriteLine($"You cannot go the West");
+            }
+            if (east == "X")
+            {
+                Console.WriteLine($"You cannot go the East");
+            }
+            if (south == "X")
+            {
+                Console.WriteLine($"You cannot go the South");
+            }
+
+            if ((north != "X") && (north != ""))
+            {
+                Console.WriteLine(north);
+            }
+            if ((west != "X") && (west != ""))
+            {
+                Console.WriteLine(west);
+            }
+            if ((east != "X") && (east != ""))
+            {
+                Console.WriteLine(east);
+            }
+            if ((south != "X") && (south != ""))
+            {
+                Console.WriteLine(south);
             }
         }
 
@@ -484,13 +529,14 @@ namespace InfectionInjection
                     roomIndex = i;
                 }
             }
-            if (locations[index].Rooms[roomIndex].Items.Count > 0)
+            Console.WriteLine(locations[index].Rooms[roomIndex].Description);
+            if ((locations[index].Rooms[roomIndex].Items.Count > 0) && (locations[index].Rooms[roomIndex].Items[0] != null))
             {
                 Console.Write("\nThere is: \n");
-            }
-            for (int i = 0; i < locations[index].Rooms[roomIndex].Items.Count; i++)
-            {
-                Console.Write($"* {locations[index].Rooms[roomIndex].Items[i]}\n");
+                for (int i = 0; i < locations[index].Rooms[roomIndex].Items.Count; i++)
+                {
+                    Console.Write($"* {locations[index].Rooms[roomIndex].Items[i]}\n");
+                }
             }
         }
 
@@ -531,6 +577,7 @@ namespace InfectionInjection
                 {
                     Room loadRoom = new Room();
                     loadRoom.Name = roomTextData.ReadLine();
+                    loadRoom.Description = roomTextData.ReadLine();
 
                     string[] coorString = roomTextData.ReadLine().Split(',');
                     for (int x = 0; x < coorString.Length; x++)
@@ -576,10 +623,13 @@ namespace InfectionInjection
                 roomTextData.Close();
 
                 locations.Add(loadLocation);
-                StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"\locationData.txt");
-                string[] openingText = { sr.ReadLine() };
-                Console.WriteLine(openingText[0]);
+                
+                
+
             }
+            StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"\locationData.txt");
+            string openingText = (sr.ReadLine());
+            Console.WriteLine(openingText);
         }
 
         static void UpdateWorld(List<Location> locations, string[,,] world)
