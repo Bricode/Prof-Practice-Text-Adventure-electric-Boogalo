@@ -8,6 +8,7 @@ namespace InfectionInjection
     class Game
     {
         public static string[] Inventory = new string[10];
+        public static int WrongCommand = 0;
 
         public static void Inventory_Show()
         {
@@ -104,10 +105,8 @@ namespace InfectionInjection
                             loop = false;
                             break;
                         default:
-                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.Clear();
                             Console.WriteLine("Sorry, I do not understand.\nPlease try again!");
-                            Console.ForegroundColor = ConsoleColor.Gray;
                             break;
                     }
                 } while (loop==true);
@@ -144,6 +143,8 @@ namespace InfectionInjection
             int roomIndex = 0;
             string input = "";
             bool firstTime = true;
+            Random rand = new Random();
+            string[] misunderstood = { "Sorry, I do not understand.", "What?", "Not a valid command.", "Do you even know how to play?", "Try again?" };
 
             do
             {
@@ -260,6 +261,27 @@ namespace InfectionInjection
                         case "inventory":
                             Inventory_Show();
                             break;
+                        case "help":
+                            WrongCommand = 0;
+                            using (StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"\Resources\help.txt"))
+                            {
+                                while (!sr.EndOfStream)
+                                {
+                                    Console.WriteLine(sr.ReadLine());
+                                }
+                            }
+                            break;
+                        default:
+                            if (WrongCommand < 3)
+                            {
+                                Console.WriteLine($"{misunderstood[rand.Next(0, misunderstood.Length)]}\n");
+                                WrongCommand++;
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{misunderstood[rand.Next(0, misunderstood.Length)]}\nIf you need help with the commands type \"help\".\n");
+                            }
+                            break;
                     }
                 }
                 else
@@ -319,6 +341,17 @@ namespace InfectionInjection
                                 {
                                     Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
                                 }
+                            }
+                            break;
+                        default:
+                            if (WrongCommand < 3)
+                            {
+                                Console.WriteLine($"{misunderstood[rand.Next(0, misunderstood.Length)]}\n");
+                                WrongCommand++;
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{misunderstood[rand.Next(0, misunderstood.Length)]}\nIf you need help with the commands type \"help\".\n");
                             }
                             break;
                     }
