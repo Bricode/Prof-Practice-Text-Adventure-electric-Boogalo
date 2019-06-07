@@ -15,38 +15,6 @@ namespace InfectionInjection
             {
                 Console.WriteLine(Inventory[i]);
             }
-            bool loop = true;
-            do
-            {
-                Console.WriteLine("Would you like to drop an item? (Y/N)");
-                string temp = Console.ReadLine();
-                temp = temp.ToUpper();
-                if (temp == "Y")
-                {
-                    Console.Clear();
-                    do
-                    {
-                        Console.WriteLine("Which item would you like to drop?");
-                        for (int i = 0; i < 10; i++)
-                        {
-                            Console.WriteLine(Inventory[i]);
-                        }
-                        temp=Console.ReadLine();
-                    } while (loop == true);
-                }
-                else if (temp == "N")
-                {
-                    Console.Clear();
-                    loop = false;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Clear();
-                    Console.WriteLine("Sorry, I do not understand.\nPlease try again!");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                }
-            } while (loop == true);
         }
 
         public static string Inventory_Check(string Found_Item)
