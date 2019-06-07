@@ -31,6 +31,7 @@ namespace InfectionInjection
                         {
                             Console.WriteLine(Inventory[i]);
                         }
+                        temp=Console.ReadLine();
                     } while (loop == true);
                 }
                 else if (temp == "N")
