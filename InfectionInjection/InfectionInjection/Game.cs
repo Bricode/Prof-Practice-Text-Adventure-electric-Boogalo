@@ -592,7 +592,28 @@ namespace InfectionInjection
 
                 for (int n = 0; n < temp.Length; n++)
                 {
-                    loadLocation.StartPos[n] = Convert.ToInt32(temp[n]);
+                    loadLocation.StartPosN[n] = Convert.ToInt32(temp[n]);
+                }
+
+                string[] temp2 = locationTextData.ReadLine().Split(',');
+
+                for (int n = 0; n < temp.Length; n++)
+                {
+                    loadLocation.StartPosW[n] = Convert.ToInt32(temp2[n]);
+                }
+
+                string[] temp3 = locationTextData.ReadLine().Split(',');
+
+                for (int n = 0; n < temp.Length; n++)
+                {
+                    loadLocation.StartPosE[n] = Convert.ToInt32(temp3[n]);
+                }
+
+                string[] temp4 = locationTextData.ReadLine().Split(',');
+
+                for (int n = 0; n < temp.Length; n++)
+                {
+                    loadLocation.StartPosS[n] = Convert.ToInt32(temp4[n]);
                 }
 
                 locationTextData.Close();
