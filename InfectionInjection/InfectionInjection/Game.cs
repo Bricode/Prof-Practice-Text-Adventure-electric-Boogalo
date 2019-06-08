@@ -599,11 +599,11 @@ namespace InfectionInjection
             {
                 if (condition1 > condition2)
                 {
-                    if ((locations[locIndex].Name != "Sewer Entrance North") && (locations[locIndex].Name != "Sewer Entrance South") && (locations[locIndex].Name != "Sewer Entrance West"))
+                    if ((locations[locIndex].Name != "Sewer Entrance North") && (locations[locIndex].Name != "Sewer Entrance South") && (locations[locIndex].Name != "Sewer Entrance West") && (locations[locIndex].Name != "North Forest") && (locations[locIndex].Name != "West Forest") && (locations[locIndex].Name != "South Forest"))
                     {
                         playerCoorLocation[index] += num;
                     }
-                    else
+                    else if ((locations[locIndex].Name == "Sewer Entrance North") || (locations[locIndex].Name == "Sewer Entrance South") || (locations[locIndex].Name == "Sewer Entrance West"))
                     {
                         switch (index)
                         {
@@ -682,6 +682,50 @@ namespace InfectionInjection
                                 else
                                 {
                                     Console.WriteLine("You can't go that way, it's blocked by the Sewer wall.\n");
+                                }
+                                break;
+                        }
+                    }
+                    else if ((locations[locIndex].Name == "North Forest") || (locations[locIndex].Name == "West Forest") || (locations[locIndex].Name == "South Forest"))
+                    {
+                        switch (index)
+                        {
+                            case 0:
+                                if (locations[locIndex].LocationMap[playerCoorLocation[0] + num, playerCoorLocation[1], playerCoorLocation[2]] != "wall")
+                                {
+                                    playerCoorLocation[index] += num;
+                                }
+                                else
+                                {
+                                    int roomIndex = 0;
+
+                                    for (int i = 0; i < locations[locIndex].RoomCount; i++)
+                                    {
+                                        if (((playerCoorLocation[0] + num) == locations[locIndex].Rooms[i].Coor[0]) && ((playerCoorLocation[1]) == locations[locIndex].Rooms[i].Coor[1]) && ((playerCoorLocation[2]) == locations[locIndex].Rooms[i].Coor[2]))
+                                        {
+                                            roomIndex = i;
+                                        }
+                                    }
+                                    Console.WriteLine("Can't go that way; " + locations[locIndex].Rooms[roomIndex].Description + "\n");
+                                }
+                                break;
+                            case 1:
+                                if (locations[locIndex].LocationMap[playerCoorLocation[0], playerCoorLocation[1] + num, playerCoorLocation[2]] != "wall")
+                                {
+                                    playerCoorLocation[index] += num;
+                                }
+                                else
+                                {
+                                    int roomIndex = 0;
+
+                                    for (int i = 0; i < locations[locIndex].RoomCount; i++)
+                                    {
+                                        if (((playerCoorLocation[0]) == locations[locIndex].Rooms[i].Coor[0]) && ((playerCoorLocation[1] + num) == locations[locIndex].Rooms[i].Coor[1]) && ((playerCoorLocation[2]) == locations[locIndex].Rooms[i].Coor[2]))
+                                        {
+                                            roomIndex = i;
+                                        }
+                                    }
+                                    Console.WriteLine("Can't go that way; " + locations[locIndex].Rooms[roomIndex].Description + "\n");
                                 }
                                 break;
                         }
@@ -870,14 +914,18 @@ namespace InfectionInjection
 
         static void LocationText(List<Location> locations, string[,,] world, int[] playerCoorLocation, int index)
         {
-            if ((locations[index].Name != "Sewer Entrance North") && (locations[index].Name != "Sewer Entrance West") && (locations[index].Name != "Sewer Entrance South"))
+            if ((locations[index].Name != "Sewer Entrance North") && (locations[index].Name != "Sewer Entrance West") && (locations[index].Name != "Sewer Entrance South") && (locations[index].Name != "South Forest") && (locations[index].Name != "North Forest") && (locations[index].Name != "West Forest"))
             {
                 Console.WriteLine($"You are in the {locations[index].Name}");
                 Console.WriteLine($"You are in the {locations[index].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]]}");
             }
-            else
+            else if ((locations[index].Name == "Sewer Entrance North") || (locations[index].Name == "Sewer Entrance West") || (locations[index].Name == "Sewer Entrance South"))
             {
                 Console.WriteLine("You are in the Sewer");
+            }
+            else if ((locations[index].Name == "South Forest") || (locations[index].Name == "North Forest") || (locations[index].Name == "West Forest"))
+            {
+                Console.WriteLine("You are in a Forest");
             }
             int roomIndex = 0;
             for (int i = 0; i < locations[index].RoomCount; i++)
