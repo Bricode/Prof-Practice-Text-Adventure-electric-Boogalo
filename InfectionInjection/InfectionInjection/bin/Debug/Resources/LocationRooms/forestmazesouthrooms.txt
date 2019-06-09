@@ -41,7 +41,7 @@ A small lake, small enough to swim accross.
 path
 Shallow water. Great, now your feet are wet.
 2,2,0
-
+building key
 e
 There seems to be an exit out to the South.
 2,3,0

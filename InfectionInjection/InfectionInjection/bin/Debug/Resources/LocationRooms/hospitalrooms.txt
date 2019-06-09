@@ -33,4 +33,4 @@ hospital food,sheet
 Commissioner's Body
 Description
 0,0,2
-key,baton,whisky
+small key,baton,whisky
