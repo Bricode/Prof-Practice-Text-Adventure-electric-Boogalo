@@ -11,6 +11,7 @@ namespace InfectionInjection
         public static int WrongCommand = 0;
         public static int Bullets = 5;
         public static bool GunLockerUnlocked = false;
+        public static bool PoliceStationUnlocked = false;
 
         public static void Inventory_Show()
         {
@@ -346,6 +347,8 @@ namespace InfectionInjection
                                     restOfItemArray += temp2[i] + " ";
                                 }
 
+                                restOfItemArray = restOfItemArray.Trim();
+
                                 if (itemInstruction == "pickup")
                                 {
                                     locations[index].Rooms[roomIndex].Items.Remove(restOfArray.ToLower());
@@ -383,12 +386,12 @@ namespace InfectionInjection
                             {
                                 if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
                                 {
-                                    if ((locations[index].Rooms[roomIndex].Name == "Armory") && (GunLockerUnlocked == false) && (restOfArray == "key"))
+                                    if ((locations[index].Rooms[roomIndex].Name == "Armory") && (GunLockerUnlocked == false) && (restOfArray == "small key"))
                                     {
                                         GunLockerUnlocked = true;
                                         Console.WriteLine("Unlocked Gun Locker.\n");
                                     }
-                                    else if ((locations[index].Rooms[roomIndex].Name == "Armory") && (GunLockerUnlocked) && (restOfArray == "key"))
+                                    else if ((locations[index].Rooms[roomIndex].Name == "Armory") && (GunLockerUnlocked) && (restOfArray == "small key"))
                                     {
                                         Console.WriteLine("Already Unlocked.\n");
                                     }
@@ -412,80 +415,7 @@ namespace InfectionInjection
                             {
                                 if ((locations[index].Rooms[roomIndex].Name == "Armory") && (GunLockerUnlocked) && (restOfArray == "gun locker"))
                                 {
-                                    do
-                                    {
-                                        Console.WriteLine("In the gun locker you found:");
-
-                                        if ((locations[6].Rooms[4].Items.Count > 0) && (locations[6].Rooms[4].Items[0] != null))
-                                        {
-                                            for (int i = 0; i < locations[6].Rooms[4].Items.Count; i++)
-                                            {
-                                                Console.Write($"* {locations[6].Rooms[4].Items[i]}\n");
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("Nothing.");
-                                        }
-
-                                        Console.WriteLine("\nWhat do you want to do next?");
-                                        input = Console.ReadLine().ToLower();
-                                        Console.Clear();
-                                        if (input.Contains(" ") == false)
-                                        {
-                                            switch (input)
-                                            {
-                                                case "back":
-                                                    break;
-                                                default:
-                                                    Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
-                                                    break;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            string[] temp2 = input.Split(' ');
-                                            command = temp2[0];
-                                            restOfArray = "";
-
-                                            for (int i = 1; i < temp2.Length; i++)
-                                            {
-                                                restOfArray += temp2[i] + " ";
-                                            }
-
-                                            restOfArray = restOfArray.Trim();
-
-                                            switch (command)
-                                            {
-                                                case "get":
-                                                    if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X") && (locations[6].Rooms[4].Items.Contains(restOfArray.ToLower())))
-                                                    {
-                                                        string[] temp3 = Inventory_Check(restOfArray).Split(' ');
-                                                        string itemInstruction = temp3[0];
-                                                        string restOfItemArray = "";
-
-                                                        for (int i = 1; i < temp3.Length; i++)
-                                                        {
-                                                            restOfItemArray += temp3[i] + " ";
-                                                        }
-
-                                                        if (itemInstruction == "pickup")
-                                                        {
-                                                            locations[6].Rooms[4].Items.Remove(restOfArray.ToLower());
-                                                        }
-                                                        else
-                                                        {
-                                                            locations[6].Rooms[4].Items.Remove(restOfArray.ToLower());
-                                                            locations[6].Rooms[4].Items.Add(restOfItemArray.ToLower());
-                                                        }
-                                                    }
-                                                    break;
-                                                default:
-                                                    Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
-                                                    break;
-                                            }
-                                        }
-                                    } while (input != "back");
+                                    Search("gun locker", 6, 4, locations, input, playerCoor, world);
                                 }
                                 else if ((locations[index].Rooms[roomIndex].Name == "Armory") && (GunLockerUnlocked == false) && (restOfArray == "gun locker"))
                                 {
@@ -493,79 +423,7 @@ namespace InfectionInjection
                                 }
                                 if ((locations[index].Rooms[roomIndex].Name == "Ward 2") && ((restOfArray == "commissioner's body") || (restOfArray == "commissioners body") || (restOfArray == "commissioner")))
                                 {
-                                    do
-                                    {
-                                        Console.WriteLine("On the commissioner's body you found:");
-                                        if ((locations[3].Rooms[8].Items.Count > 0) && (locations[3].Rooms[8].Items[0] != null))
-                                        {
-                                            for (int i = 0; i < locations[3].Rooms[8].Items.Count; i++)
-                                            {
-                                                Console.Write($"* {locations[3].Rooms[8].Items[i]}\n");
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("Nothing.");
-                                        }
-
-                                        Console.WriteLine("\nWhat do you want to do next?");
-                                        input = Console.ReadLine().ToLower();
-                                        Console.Clear();
-                                        if (input.Contains(" ") == false)
-                                        {
-                                            switch (input)
-                                            {
-                                                case "back":
-                                                    break;
-                                                default:
-                                                    Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
-                                                    break;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            string[] temp2 = input.Split(' ');
-                                            command = temp2[0];
-                                            restOfArray = "";
-
-                                            for (int i = 1; i < temp2.Length; i++)
-                                            {
-                                                restOfArray += temp2[i] + " ";
-                                            }
-
-                                            restOfArray = restOfArray.Trim();
-
-                                            switch (command)
-                                            {
-                                                case "get":
-                                                    if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X") && (locations[3].Rooms[8].Items.Contains(restOfArray.ToLower())))
-                                                    {
-                                                        string[] temp3 = Inventory_Check(restOfArray).Split(' ');
-                                                        string itemInstruction = temp3[0];
-                                                        string restOfItemArray = "";
-
-                                                        for (int i = 1; i < temp3.Length; i++)
-                                                        {
-                                                            restOfItemArray += temp3[i] + " ";
-                                                        }
-
-                                                        if (itemInstruction == "pickup")
-                                                        {
-                                                            locations[3].Rooms[8].Items.Remove(restOfArray.ToLower());
-                                                        }
-                                                        else
-                                                        {
-                                                            locations[3].Rooms[8].Items.Remove(restOfArray.ToLower());
-                                                            locations[3].Rooms[8].Items.Add(restOfItemArray.ToLower());
-                                                        }
-                                                    }
-                                                    break;
-                                                default:
-                                                    Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
-                                                    break;
-                                            }
-                                        }
-                                    } while (input != "back");
+                                    Search("commissioner's body", 3, 8, locations, input, playerCoor, world);
                                 }
                                 else
                                 {
@@ -591,6 +449,86 @@ namespace InfectionInjection
                     }
                 }
             } while (input != "quit");
+        }
+
+        static void Search(string searchPlace, int locNum, int roomNum, List<Location> locations, string input, int[] playerCoor, string[,,] world)
+        {
+            do
+            {
+                Console.WriteLine($"In the {searchPlace} you found:");
+
+                if ((locations[locNum].Rooms[roomNum].Items.Count > 0) && (locations[locNum].Rooms[roomNum].Items[0] != null))
+                {
+                    for (int i = 0; i < locations[locNum].Rooms[roomNum].Items.Count; i++)
+                    {
+                        Console.Write($"* {locations[locNum].Rooms[roomNum].Items[i]}\n");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Nothing.");
+                }
+
+                Console.WriteLine("\nWhat do you want to do next?");
+                input = Console.ReadLine().ToLower();
+                Console.Clear();
+                if (input.Contains(" ") == false)
+                {
+                    switch (input)
+                    {
+                        case "back":
+                            break;
+                        default:
+                            Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
+                            break;
+                    }
+                }
+                else
+                {
+                    string[] temp = input.Split(' ');
+                    string command = temp[0];
+                    string restOfArray = "";
+
+                    for (int i = 1; i < temp.Length; i++)
+                    {
+                        restOfArray += temp[i] + " ";
+                    }
+
+                    restOfArray = restOfArray.Trim();
+
+                    switch (command)
+                    {
+                        case "get":
+                            if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X") && (locations[locNum].Rooms[roomNum].Items.Contains(restOfArray.ToLower())))
+                            {
+                                string[] temp2 = Inventory_Check(restOfArray).Split(' ');
+                                string itemInstruction = temp2[0];
+                                string restOfItemArray = "";
+
+                                for (int i = 1; i < temp2.Length; i++)
+                                {
+                                    restOfItemArray += temp2[i] + " ";
+                                }
+
+                                restOfItemArray = restOfItemArray.Trim();
+
+                                if (itemInstruction == "pickup")
+                                {
+                                    locations[locNum].Rooms[roomNum].Items.Remove(restOfArray.ToLower());
+                                }
+                                else
+                                {
+                                    locations[locNum].Rooms[roomNum].Items.Remove(restOfArray.ToLower());
+                                    locations[locNum].Rooms[roomNum].Items.Add(restOfItemArray.ToLower());
+                                }
+                            }
+                            break;
+                        default:
+                            Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
+                            break;
+                    }
+                }
+            } while (input != "back");
         }
 
         static void Movement(string[,,] world, int[] playerCoor, int[] playerCoorLocation, int condition1, int condition2, int num, int index, List<Location> locations, int locIndex, ref string input, ref bool firstTime)
@@ -775,7 +713,75 @@ namespace InfectionInjection
             {
                 if (index != 2)
                 {
-                    playerCoor[index] += num;
+                    switch (index)
+                    {
+                        case 0:
+                            if (((playerCoor[0] + num) == locations[6].Dimensions[0]) && (playerCoor[1] == locations[6].Dimensions[1]) && (playerCoor[2] == locations[6].Dimensions[2]) && PoliceStationUnlocked)
+                            {
+                                playerCoor[index] += num;
+                            }
+                            else if (((playerCoor[0] + num) == locations[6].Dimensions[0]) && (playerCoor[1] == locations[6].Dimensions[1]) && (playerCoor[2] == locations[6].Dimensions[2]) && (PoliceStationUnlocked == false))
+                            {
+                                if (Array.IndexOf(Inventory, "building key") >= 0)
+                                {
+                                    PoliceStationUnlocked = true;
+                                    Console.WriteLine("Police Station Unlocked.\n");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("The Police Station is Locked and you don't have the key.\n");
+                                }
+                            }
+                            else
+                            {
+                                playerCoor[index] += num;
+                            }
+                            break;
+                        case 1:
+                            if (((playerCoor[1] + num) == locations[6].Dimensions[1]) && (playerCoor[0] == locations[6].Dimensions[0]) && (playerCoor[2] == locations[6].Dimensions[2]) && PoliceStationUnlocked)
+                            {
+                                playerCoor[index] += num;
+                            }
+                            else if (((playerCoor[1] + num) == locations[6].Dimensions[1]) && (playerCoor[0] == locations[6].Dimensions[0]) && (playerCoor[2] == locations[6].Dimensions[2]) && (PoliceStationUnlocked == false))
+                            {
+                                if (Array.IndexOf(Inventory, "building key") >= 0)
+                                {
+                                    PoliceStationUnlocked = true;
+                                    Console.WriteLine("Police Station Unlocked.\n");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("The Police Station is Locked and you don't have the key.\n");
+                                }
+                            }
+                            else
+                            {
+                                playerCoor[index] += num;
+                            }
+                            break;
+                        case 2:
+                            if (((playerCoor[2] + num) == locations[6].Dimensions[2]) && (playerCoor[1] == locations[6].Dimensions[1]) && (playerCoor[0] == locations[6].Dimensions[0]) && PoliceStationUnlocked)
+                            {
+                                playerCoor[index] += num;
+                            }
+                            else if (((playerCoor[2] + num) == locations[6].Dimensions[2]) && (playerCoor[1] == locations[6].Dimensions[1]) && (playerCoor[0] == locations[6].Dimensions[0]) && (PoliceStationUnlocked == false))
+                            {
+                                if (Array.IndexOf(Inventory, "building key") >= 0)
+                                {
+                                    PoliceStationUnlocked = true;
+                                    Console.WriteLine("Police Station Unlocked.\n");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("The Police Station is Locked and you don't have the key.\n");
+                                }
+                            }
+                            else
+                            {
+                                playerCoor[index] += num;
+                            }
+                            break;
+                    }
                 }
                 if ((playerCoorLocation[0] != 0) && (playerCoorLocation[1] != 0) && (playerCoorLocation[2] != 0))
                 {
