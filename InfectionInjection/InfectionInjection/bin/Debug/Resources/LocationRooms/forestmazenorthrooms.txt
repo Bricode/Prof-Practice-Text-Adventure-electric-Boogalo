@@ -1,63 +1,255 @@
+wall
+n/a
 0,0,0
-Description
-0,0,0
 
-0,1,0
-Description
+wall
+Forrest Fire
 0,1,0
 
+e
+West exit
 0,2,0
-Description
-0,2,0
 
-0,3,0
-Description
+wall
+Thick Bush
 0,3,0
 
+wall
+Big rockface, too difficult to climb
+0,4,0
+
+e
+West exit
+0,5,0
+
+wall
+Very big rockface, too difficult to climb
+0,6,0
+
+wall
+Scary sounds
+0,7,0
+
+wall
+Raging rapids
 1,0,0
-Description
-1,0,0
 
-1,1,0
-Description
+path
+A nice gravel trail
 1,1,0
 
+Path
+A worn gravel trail
 1,2,0
-Description
-1,2,0
 
-1,3,0
-Description
+Path
+A dirt path
 1,3,0
 
+wall
+Zombies
+1,4,0
+
+path
+Ankle hight prickles, ouch 
+1,5,0
+
+path
+A field of cannabis
+1,6,0
+
+e
+South exit
+1,7,0
+
+wall
+Sleeping bear, better not go near
 2,0,0
-Description
-2,0,0
 
-2,1,0
-Description
+path
+An old, overgrown path
 2,1,0
 
+wall
+The Killer Rabbit of Caerbannog
 2,2,0
-Description
-2,2,0
 
-2,3,0
-Description
+path
+Slightly grassy path
 2,3,0
 
+wall
+Slightly dangerous cliff
+2,4,0
+
+wall
+Very dangerous cliff
+2,5,0
+
+path
+The rubble of a factory 
+2,6,0
+
+wall
+Crevice
+2,7,0
+
+wall
+Minefield
 3,0,0
-Description
-3,0,0
 
-3,1,0
-Description
+path
+Yellow brick road
 3,1,0
 
-3,2,0
-Description
+wall
+Toxic waste
 3,2,0
 
-3,3,0
+
 Description
 3,3,0
+
+3,4,0
+Description
+3,4,0
+
+3,5,0
+Description
+3,5,0
+
+3,6,0
+Description
+3,6,0
+
+3,7,0
+Description
+3,7,0
+
+4,0,0
+Description
+4,0,0
+
+4,1,0
+Description
+4,1,0
+
+4,2,0
+Description
+4,2,0
+
+4,3,0
+Description
+4,3,0
+
+4,4,0
+Description
+4,4,0
+
+4,5,0
+Description
+4,5,0
+
+4,6,0
+Description
+4,6,0
+
+4,7,0
+Description
+4,7,0
+
+5,0,0
+Description
+5,0,0
+
+5,1,0
+Description
+5,1,0
+
+5,2,0
+Description
+5,2,0
+
+5,3,0
+Description
+5,3,0
+
+5,4,0
+Description
+5,4,0
+
+5,5,0
+Description
+5,5,0
+
+5,6,0
+Description
+5,6,0
+
+5,7,0
+Description
+5,7,0
+
+6,0,0
+Description
+6,0,0
+
+6,1,0
+Description
+6,1,0
+
+6,2,0
+Description
+6,2,0
+
+6,3,0
+Description
+6,3,0
+
+6,4,0
+Description
+6,4,0
+
+6,5,0
+Description
+6,5,0
+
+6,6,0
+Description
+6,6,0
+
+6,7,0
+Description
+6,7,0
+
+7,0,0
+Description
+7,0,0
+
+7,1,0
+Description
+7,1,0
+
+7,2,0
+Description
+7,2,0
+
+7,3,0
+Description
+7,3,0
+
+7,4,0
+Description
+7,4,0
+
+7,5,0
+Description
+7,5,0
+
+7,6,0
+Description
+7,6,0
+
+7,7,0
+Description
+7,7,0
