@@ -1,102 +1,82 @@
 wall
 Description
-0,0,0
-
-wall
-Description
-0,1,0
-
-Sewer
-A dark and disgusting sewer tunnel with light coming in from the South.
-0,2,0
-
-Sewer Exit West
-There's a ladder up to the surface here, wonder where it goes.
-0,3,0
-
-wall
-Description
-0,4,0
-
-wall
-Description
 1,0,0
 
 wall
 Description
 1,1,0
 
-Sewer Exit Hospital
-There is a maintenance hatch here, I think it leads to a building above.
+Sewer
+A dark and disgusting sewer tunnel with light coming in from the South.
 1,2,0
 
-wall
-Description
-1,3,0
-
-wall
-Description
-1,4,0
-
-Sewer Exit North
+Sewer Exit West
 There's a ladder up to the surface here, wonder where it goes.
-2,0,0
-
-Sewer
-A dark and disgusting sewer tunnel with light coming in from the North
-2,1,0
+1,3,0
 
 Sewer
 The sewer splits off in multiple directions here.
+1,4,0
+
+wall
+Description
+2,0,0
+
+wall
+Description
+2,1,0
+
+Sewer Exit Hospital
+There is a maintenance hatch here, you think it leads to a building above.
 2,2,0
 
 wall
 Description
 2,3,0
 
-wall
-Description
+Sewer
+A dark and seemingly endless path.
 2,4,0
 
-wall
-Description
+Sewer Exit North
+There's a ladder up to the surface here, wonder where it goes.
 3,0,0
 
-Sewer Exit Police Station
-There is a maintenance hatch here, I think it leads to a building above.
+Sewer
+A dark and disgusting sewer tunnel with light coming in from the North
 3,1,0
 
 Sewer
 The sewer splits off in multiple directions here.
 3,2,0
 
-Sewer
-A dark and disgusting sewer tunnel with light coming in from the South
+wall
+Description
 3,3,0
 
-Sewer Exit South
-There's a ladder up to the surface here, wonder where it goes.
+Sewer
+A dark and seemingly endless path.
 3,4,0
 
 wall
 Description
-0,0,1
+4,0,0
 
-wall
-Description
-0,1,1
-
-wall
-A dark and disgusting sewer tunnel with light coming in from the South.
-0,2,1
+Sewer Exit Police Station
+There is a maintenance hatch here, you think it leads to a building above.
+4,1,0
 
 Sewer
-There's a ladder up to the surface here, wonder where it goes.
-0,3,1
+The sewer splits off in multiple directions here.
+4,2,0
 
-wall
-Description
-0,4,1
+Sewer
+A dark and disgusting sewer tunnel with light coming in from the South
+4,3,0
+
+Sewer Exit South
+There's a ladder up to the surface here, wonder where it goes.
+4,4,0
 
 wall
 Description
@@ -106,28 +86,28 @@ wall
 Description
 1,1,1
 
-Sewer
-There is a maintenance hatch here, I think it leads to a building above.
+wall
+A dark and disgusting sewer tunnel with light coming in from the South.
 1,2,1
 
-wall
-Description
+Sewer
+There's a ladder up to the surface here, wonder where it goes.
 1,3,1
 
 wall
 Description
 1,4,1
 
-Sewer
-There's a ladder up to the surface here, wonder where it goes.
+wall
+Description
 2,0,1
 
 wall
-A dark and disgusting sewer tunnel with light coming in from the North
+Description
 2,1,1
 
-wall
-The sewer splits off in multiple directions here.
+Sewer
+There is a maintenance hatch here, you think it leads to a building above.
 2,2,1
 
 wall
@@ -138,12 +118,12 @@ wall
 Description
 2,4,1
 
-wall
-Description
+Sewer
+There's a ladder up to the surface here, wonder where it goes.
 3,0,1
 
-Sewer
-There is a maintenance hatch here, I think it leads to a building above.
+wall
+A dark and disgusting sewer tunnel with light coming in from the North
 3,1,1
 
 wall
@@ -151,9 +131,69 @@ The sewer splits off in multiple directions here.
 3,2,1
 
 wall
-A dark and disgusting sewer tunnel with light coming in from the South
+Description
 3,3,1
+
+wall
+Description
+3,4,1
+
+wall
+Description
+4,0,1
+
+Sewer
+There is a maintenance hatch here, you think it leads to a building above.
+4,1,1
+
+wall
+The sewer splits off in multiple directions here.
+4,2,1
+
+wall
+A dark and disgusting sewer tunnel with light coming in from the South
+4,3,1
 
 Sewer
 There's a ladder up to the surface here, wonder where it goes.
-3,4,1
+4,4,1
+
+wall
+Description
+0,0,0
+
+wall
+Description
+0,1,0
+
+wall
+Description
+0,2,0
+
+wall
+Description
+0,3,0
+
+Sewer Exit Infected Zone
+There is a maintenance hatch here, you think it leads to a building above.
+0,4,0
+
+wall
+Description
+0,0,1
+
+wall
+Description
+0,1,1
+
+wall
+Description
+0,2,1
+
+wall
+Description
+0,3,1
+
+Sewer Exit Infected Zone
+There is a maintenance hatch here, you think it leads to a building above.
+0,4,1

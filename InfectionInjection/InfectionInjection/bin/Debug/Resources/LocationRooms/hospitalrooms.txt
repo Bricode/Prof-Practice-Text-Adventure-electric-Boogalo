@@ -17,7 +17,7 @@ surgical kit,bandage,blood bag
 Operating Room
 Description
 0,0,1
-scalpel,scissors,face mask
+scalpel,scissors,face mask,surgical torch
 Sick Ward
 Description
 1,0,1

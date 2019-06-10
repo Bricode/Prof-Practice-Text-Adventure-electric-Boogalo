@@ -38,10 +38,10 @@ path
 A small lake, small enough to swim accross.
 2,1,0
 
-path
-Shallow water. Great, now your feet are wet.
+Frank in a puddle
+Shallow water. There is a dead police officer with "Frank" written on his name tag; lying in the water.
 2,2,0
-building key
+
 e
 There seems to be an exit out to the South.
 2,3,0
@@ -51,7 +51,7 @@ Big hole, to deep and wide to pass.
 3,0,0
 
 e
-I can leave this maze through the opening to the East.
+You can leave this maze through the opening to the East.
 3,1,0
 
 wall
@@ -61,3 +61,8 @@ Slippery and sharp rocks, far too hazardous.
 wall
 Toxic plant life, nothing left to say.
 3,3,0
+
+Frank's Body
+Description
+0,0,1
+building key
