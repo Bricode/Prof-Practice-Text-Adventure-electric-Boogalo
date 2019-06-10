@@ -144,26 +144,40 @@ namespace InfectionInjection
 
         static void Main(string[] args)
         {
-            string[,,] world = new string[5, 5, 3];
-            for (int a = 0; a < 5; a++)
+            string game = "";
+
+            do
             {
-                for (int b = 0; b < 5; b++)
+                string[,,] world = new string[5, 5, 3];
+                for (int a = 0; a < 5; a++)
                 {
-                    for (int c = 0; c < 3; c++)
+                    for (int b = 0; b < 5; b++)
                     {
-                        world[a, b, c] = "X";
+                        for (int c = 0; c < 3; c++)
+                        {
+                            world[a, b, c] = "X";
+                        }
                     }
                 }
-            }
-            int[] playerCoor = { 3, 3, 0 };
-            int[] playerCoorLocation = { 0, 0, 0 };
-            List<Location> locations = new List<Location>();
-            LoadData(locations);
-            UpdateWorld(locations, world);
-            GameLoop(world, playerCoor, playerCoorLocation, locations);
+                int[] playerCoor = { 3, 3, 0 };
+                int[] playerCoorLocation = { 0, 0, 0 };
+                List<Location> locations = new List<Location>();
+                Console.Clear();
+                Console.WriteLine(@"
+▀█▀ █▀▀▄ █▀▀ █▀▀ █▀▀ ▀▀█▀▀ ░▀░ █▀▀█ █▀▀▄ 
+▒█░ █░░█ █▀▀ █▀▀ █░░ ░░█░░ ▀█▀ █░░█ █░░█ 
+▄█▄ ▀░░▀ ▀░░ ▀▀▀ ▀▀▀ ░░▀░░ ▀▀▀ ▀▀▀▀ ▀░░▀ 
+
+▀█▀ █▀▀▄ ░░▀ █▀▀ █▀▀ ▀▀█▀▀ ░▀░ █▀▀█ █▀▀▄ 
+▒█░ █░░█ ░░█ █▀▀ █░░ ░░█░░ ▀█▀ █░░█ █░░█ 
+▄█▄ ▀░░▀ █▄█ ▀▀▀ ▀▀▀ ░░▀░░ ▀▀▀ ▀▀▀▀ ▀░░▀" + "\n");
+                LoadData(locations);
+                UpdateWorld(locations, world);
+                game = GameLoop(world, playerCoor, playerCoorLocation, locations);
+            } while (game != "quit");
         }
 
-        static void GameLoop(string[,,] world, int[] playerCoor, int[] playerCoorLocation, List<Location> locations)
+        static string GameLoop(string[,,] world, int[] playerCoor, int[] playerCoorLocation, List<Location> locations)
         {
             Console.ResetColor();
             int index = 0;
@@ -247,7 +261,7 @@ namespace InfectionInjection
                     Death(1, ref input);
                 }
 
-                if (input != "quit")
+                if ((input != "quit") && (input != "death"))
                 {
                     Console.WriteLine("\nWhat do you want to do next?");
                     input = Console.ReadLine().ToLower();
@@ -382,26 +396,37 @@ namespace InfectionInjection
                                     locations[index].Rooms[roomIndex].Items.Add(restOfItemArray.ToLower());
                                 }
                             }
+                            else
+                            {
+                                Console.WriteLine("Can't do that.\n");
+                            }
                             break;
                         case "drop":
-                            if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+                            if (Array.IndexOf(Inventory, restOfArray) >= 0)
                             {
-                                Console.WriteLine($"Are you sure you want to drop {restOfArray}?");
-                                string choice = Console.ReadLine().ToLower();
-                                if ((choice == "yes") || (choice == "y"))
+                                if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
                                 {
-                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
-                                    locations[index].Rooms[roomIndex].Items.Add(restOfArray);
+                                    Console.WriteLine($"Are you sure you want to drop {restOfArray}? - [Y]es or [N]o");
+                                    string choice = Console.ReadLine().ToLower();
+                                    if ((choice == "yes") || (choice == "y"))
+                                    {
+                                        Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                        locations[index].Rooms[roomIndex].Items.Add(restOfArray);
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Are you sure you want to drop {restOfArray}? - [Y]es or [N]o\nYou are not in a building so it will be lost.");
+                                    string choice = Console.ReadLine().ToLower();
+                                    if ((choice == "yes") || (choice == "y"))
+                                    {
+                                        Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                    }
                                 }
                             }
                             else
                             {
-                                Console.WriteLine($"Are you sure you want to drop {restOfArray}?\nYou are not in a building so it will be lost.");
-                                string choice = Console.ReadLine().ToLower();
-                                if ((choice == "yes") || (choice == "y"))
-                                {
-                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
-                                }
+                                Console.WriteLine("You don't have that item.\n");
                             }
                             break;
                         case "use":
@@ -484,7 +509,9 @@ namespace InfectionInjection
                             break;
                     }
                 }
-            } while (input != "quit");
+            } while ((input != "quit") && (input != "death"));
+
+            return (input);
         }
 
         static void Search(string searchPlace, int locNum, int roomNum, List<Location> locations, string input, int[] playerCoor, string[,,] world)
@@ -594,7 +621,7 @@ namespace InfectionInjection
                                 {
                                     Console.WriteLine("You do not have a torch.\n");
                                 }
-                                Console.WriteLine("It's really dark in the sewer and you may injure yourself.\nAre you sure you want to explore? - [Y]es or [N]o\n");
+                                Console.WriteLine("It's really dark in the sewer and you may injure yourself.\nAre you sure you want to explore? - [Y]es or [N]o");
                                 choice = Console.ReadLine();
                                 Console.Clear();
                             } while ((choice != "yes") && (choice != "y") && (choice != "no") && (choice != "n"));
@@ -908,7 +935,7 @@ namespace InfectionInjection
             string[] deaths = { "You step in the direction you thought to be the door, soon realising that it was infact the window.\nYou try to stop yourself, but you've stepped with so much conviction that you can't.\nYou fly through the window, sending glass fragments everywhere.\nWith shards of glass embedded in your face and arms, you fall helplessly to the ground.\nAnd there your lifeless body stays, with humanity doomed due to a simple navigational error.", "As you attempt to flee from the town, you hear a thumping through the ground.\nAs you turn in horror towards the vibrations, you see a horde of green shambling corpses running towards you at a speed you couldn't believe was possible.\nYou try desperately to run.\nYour last thoughts on how you failed this town and have doomed this world to a zombie apocalypse.", "You enter the police station through the maintenance hatch.\nAs it closes behind you, you realise that it can only be opened from the sewer.\nYou soon discover that the police station is locked, with you, trapped inside.\nAfter many weeks of agonising pain you finaly starve to death on the cold tile floors.\nForgotten by the world of undead, hopelessly wandering for the rest of enternity.", "You entered the Steel port apartment complex unarmed and stumbled into a zombie.\nIt ran at you and ripped apart your flesh with it's decaying nails as you lay helplessly on the ground screaming in agony.", "You foolishly entered the apartment complex infront of the horde of zombies lurking in the lobby.\nYou try to escape, inadvertently shutting the door.\nThe horde of decaying flesh forces you into the closed door,\nallowing you to get one last glimpse of the world before they break open your body with you blacking out on the lobby floor.", "You tried to wander about the sewers in the pitch black darkness.\nYou managed to get a fair way through the sewer system,\nhowever at this point you could't see your hand in front of your face.\nThe floor stepped down, throwing you off balance.\nYour arms flying frantically through the air.\nYou fall forward, heart racing.\nThe next thing you felt was your head colliding with the cold concrete sewer wall.\nThere your body lay, face down in the murky water, with your blood streaming down your lifeless head." };
 
             Console.WriteLine(deaths[number] + "\n\nPress enter to continue.");
-            input = "quit";
+            input = "death";
             Console.ReadLine();
         }
 
