@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 wall
 Description
+=======
+Wall
+Slippery ice
+>>>>>>> 37a1e28ba6b68f231ea6ac9de7f2dceafa1252ad
 0,0,0
 
 wall
