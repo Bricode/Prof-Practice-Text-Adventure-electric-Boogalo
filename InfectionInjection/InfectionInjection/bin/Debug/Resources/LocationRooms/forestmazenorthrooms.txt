@@ -15,11 +15,11 @@ Thick Bush
 0,3,0
 
 wall
-Big rockface, too difficult to climb
+n/a
 0,4,0
 
-e
-West exit
+wall
+Big rockface, too difficult to climb
 0,5,0
 
 wall
@@ -154,8 +154,8 @@ Description
 Description
 4,6,0
 
-4,7,0
-Description
+wall
+n/a
 4,7,0
 
 5,0,0
@@ -186,12 +186,12 @@ Description
 Description
 5,6,0
 
-5,7,0
-Description
+wall
+n/a
 5,7,0
 
-6,0,0
-Description
+wall
+n/a
 6,0,0
 
 6,1,0
@@ -222,12 +222,12 @@ Description
 Description
 6,7,0
 
-7,0,0
-Description
+wall
+n/a
 7,0,0
 
-7,1,0
-Description
+wall
+n/a
 7,1,0
 
 7,2,0
@@ -250,6 +250,6 @@ Description
 Description
 7,6,0
 
-7,7,0
-Description
+wall
+n/a
 7,7,0

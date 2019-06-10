@@ -30,8 +30,8 @@ wall
 N/A
 0,7,0
 
-1,0,0
-Description
+e
+North exit
 1,0,0
 
 1,1,0
@@ -122,8 +122,8 @@ Description
 Description
 3,6,0
 
-3,7,0
-Description
+e
+South exit
 3,7,0
 
 4,0,0
@@ -234,8 +234,8 @@ Description
 Description
 7,2,0
 
-7,3,0
-Description
+e
+East exit
 7,3,0
 
 7,4,0
