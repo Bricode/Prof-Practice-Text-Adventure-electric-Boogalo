@@ -1104,7 +1104,11 @@ namespace InfectionInjection
             string locationDir = Directory.GetCurrentDirectory() + @"\Resources\Location\";
             string locationRoomDir = Directory.GetCurrentDirectory() + @"\Resources\LocationRooms\";
             string[] locationFilePaths = Directory.GetFiles(locationDir);
-            string[] roomFilePaths = Directory.GetFiles(locationRoomDir);
+            string[] roomFilePaths = new string[locationFilePaths.Length];
+            for (int i = 0; i < roomFilePaths.Length; i++)
+            {
+                roomFilePaths[i] = Directory.GetCurrentDirectory() + @"\Resources\LocationRooms\" + locationFilePaths[i].Split('\\')[locationFilePaths[i].Split('\\').Length - 1].Replace(".txt", "rooms.txt");
+            }
             string[] mapX = { "8", "7", "6" };
             string[] mapy = { "1", "2", "3" };
             for (int i = 0; i < locationFilePaths.Length; i++)
@@ -1157,6 +1161,7 @@ namespace InfectionInjection
                 {
                     Room loadRoom = new Room();
                     loadRoom.Name = roomTextData.ReadLine();
+
                     loadRoom.Description = roomTextData.ReadLine();
 
                     string[] coorString = roomTextData.ReadLine().Split(',');

@@ -15,11 +15,11 @@ Thick Bush
 0,3,0
 
 wall
-Big rockface, too difficult to climb
+n/a
 0,4,0
 
-e
-West exit
+wall
+Big rockface, too difficult to climb
 0,5,0
 
 wall
@@ -106,150 +106,150 @@ wall
 Toxic waste
 3,2,0
 
-
+path
 Description
 3,3,0
 
-3,4,0
+path
 Description
 3,4,0
 
-3,5,0
+path
 Description
 3,5,0
 
-3,6,0
+path
 Description
 3,6,0
 
-3,7,0
+wall
 Description
 3,7,0
 
-4,0,0
+wall
 Description
 4,0,0
 
-4,1,0
+path
 Description
 4,1,0
 
-4,2,0
+wall
 Description
 4,2,0
 
-4,3,0
+wall
 Description
 4,3,0
 
-4,4,0
+wall
 Description
 4,4,0
 
-4,5,0
+path
 Description
 4,5,0
 
-4,6,0
+wall
 Description
 4,6,0
 
+wall
+n/a
 4,7,0
-Description
-4,7,0
 
-5,0,0
+wall
 Description
 5,0,0
 
-5,1,0
+path
 Description
 5,1,0
 
-5,2,0
+path
 Description
 5,2,0
 
-5,3,0
+path
 Description
 5,3,0
 
-5,4,0
+wall
 Description
 5,4,0
 
-5,5,0
+path
 Description
 5,5,0
 
-5,6,0
+wall
 Description
 5,6,0
 
+wall
+n/a
 5,7,0
-Description
-5,7,0
 
-6,0,0
-Description
+wall
+n/a
 6,0,0
 
-6,1,0
+wall
 Description
 6,1,0
 
-6,2,0
+path
 Description
 6,2,0
 
-6,3,0
+path
 Description
 6,3,0
 
-6,4,0
+path
 Description
 6,4,0
 
-6,5,0
+path
 Description
 6,5,0
 
-6,6,0
+path
 Description
 6,6,0
 
-6,7,0
+wall
 Description
 6,7,0
 
+wall
+n/a
 7,0,0
-Description
-7,0,0
 
-7,1,0
-Description
+wall
+n/a
 7,1,0
 
-7,2,0
+wall
 Description
 7,2,0
 
-7,3,0
+wall
 Description
 7,3,0
 
+e
+East exit
 7,4,0
-Description
-7,4,0
 
-7,5,0
+wall
 Description
 7,5,0
 
-7,6,0
+wall
 Description
 7,6,0
 
-7,7,0
-Description
+wall
+n/a
 7,7,0
