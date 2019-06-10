@@ -1,4 +1,4 @@
-Wall
+wall
 Slippery ice
 0,0,0
 
@@ -74,7 +74,7 @@ path
 Description
 2,2,0
 
-paths
+path
 Description
 2,3,0
 

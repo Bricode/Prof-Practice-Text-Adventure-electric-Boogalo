@@ -217,6 +217,7 @@ Description
 path
 Description
 6,6,0
+
 wall
 Description
 6,7,0
