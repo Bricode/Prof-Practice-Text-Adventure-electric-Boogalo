@@ -14,6 +14,7 @@ namespace InfectionInjection
         public static bool PoliceStationUnlocked = false;
         public static bool TorchIsEnabled = false;
         public static bool ZombiePresent = false;
+        public static int BodyAntitoxin = 100;
 
         public static void Inventory_Show()
         {
@@ -174,6 +175,9 @@ namespace InfectionInjection
 ▄█▄ ▀░░▀ █▄█ ▀▀▀ ▀▀▀ ░░▀░░ ▀▀▀ ▀▀▀▀ ▀░░▀" + "\n");
                 LoadData(locations);
                 UpdateWorld(locations, world);
+                Inventory[0] = "surgical torch";
+                Inventory[1] = "pistol";
+                Inventory[2] = "magazine";
                 game = GameLoop(world, playerCoor, playerCoorLocation, locations);
             } while (game != "quit");
         }
@@ -456,15 +460,15 @@ namespace InfectionInjection
                                     else if ((locations[index].Name == "Infected Zone") && (ZombiePresent) && (restOfArray == "pistol") && (Bullets > 0))
                                     {
                                         Bullets--;
-                                        if (rand.Next(0, 10) == 0)
+                                        if (rand.Next(0, 3) == 0)
+                                        {
+                                            Console.WriteLine($"You panicked and fired a shot, missing the zombie.\n{Bullets} bullets left.\n");
+                                        }
+                                        else
                                         {
                                             ZombiePresent = false;
                                             Console.WriteLine($"You shot the zombie in the head, instantly killing it.\n{Bullets} bullets left.\n");
                                             locations[index].Rooms[roomIndex].Items.Add("zombie flesh sample");
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine($"You panicked and fired a shot, missing the zombie.\n{Bullets} bullets left.\n");
                                         }
                                     }
                                     else if ((locations[index].Name == "Infected Zone") && (ZombiePresent == false) && (restOfArray == "pistol") && (Bullets > 0))
@@ -643,6 +647,10 @@ namespace InfectionInjection
 
         static void Movement(string[,,] world, int[] playerCoor, int[] playerCoorLocation, int condition1, int condition2, int num, int index, List<Location> locations, int locIndex, ref string input, ref bool firstTime)
         {
+            if (Array.IndexOf(Inventory, "zombie flesh sample") >= 0)
+            {
+
+            }
             if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
             {
                 if (condition1 > condition2)
@@ -1151,26 +1159,22 @@ namespace InfectionInjection
             }
             else if (locations[index].Name == "Infected Zone")
             {
-                Console.Write("You are in the Steelport apartment complex.");
+                Console.Write("You are in the Steelport apartment complex, ");
                 if (playerCoorLocation[2] == 0)
                 {
                     Console.WriteLine("on the Ground floor.");
                     Console.WriteLine($"You are in the {locations[index].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]]}.");
-                    Console.WriteLine(locations[index].Rooms[roomIndex].Description);
+                    Console.WriteLine("\n" + locations[index].Rooms[roomIndex].Description);
                 }
                 else
                 {
                     Console.WriteLine($"on floor No. {playerCoorLocation[2]}.");
-                    if (playerCoorLocation[0] == 1)
+                    if ((playerCoorLocation[2] >= 0) && (playerCoorLocation[0] == 1))
                     {
                         Console.WriteLine($"You are in the hallway.");
                         Console.WriteLine($"The room {playerCoorLocation[2]}{(char)(65 + playerCoorLocation[1])} on the left.\nThe room {playerCoorLocation[2]}{(char)(68 + playerCoorLocation[1])} on the right.");
-                        Random rand = new Random();
-                        string[] descriptions = { "", "", "" }; TypeCode HERE!
-
-                        Console.WriteLine(descriptions[rand.Next(0, descriptions.Length)]);
                     }
-                    else
+                    else if (playerCoorLocation[0] != 1)
                     {
                         if (playerCoorLocation[0] == 0)
                         {
@@ -1180,6 +1184,10 @@ namespace InfectionInjection
                         {
                             Console.WriteLine($"You are in room {playerCoorLocation[2]}{(char)(68 + playerCoorLocation[1])}");
                         }
+
+                        Random rand = new Random();
+                        string[] descriptions = { "The room has been abandoned, everything still in its place; like a snapshot of time.", "Ransacked and looted. This room makes you feel uneasy.", "An unforgivable stench invades your nose. This room filled with death.", "Another room empty and barren. The furniture left behind.", "Glass and china covers the floor, you navigate the surroundings cautiously.", "This room is filled with corpses of the dead. A horrific sight that will haunt you.", "This room is accompanied by a feeling that you are being watched.", "The room you have found is eerily quiet. Too quiet.", "The stale musty air is followed by the sight of skeletons scattered over the floor." };
+                        Console.WriteLine("\n" + descriptions[rand.Next(0, descriptions.Length)]);
                     }
                 }
                 if (ZombiePresent == false)
@@ -1188,7 +1196,7 @@ namespace InfectionInjection
                 }
                 else
                 {
-                    Console.WriteLine("A zombie has noticed you and is about to attack.");
+                    Console.WriteLine("WARNING! - A zombie has noticed you and is about to attack.");
                 }
             }
             else if ((locations[index].Name == "Sewer Entrance North") || (locations[index].Name == "Sewer Entrance West") || (locations[index].Name == "Sewer Entrance South"))
@@ -1199,7 +1207,10 @@ namespace InfectionInjection
             {
                 Console.WriteLine("You are in a Forest.");
             }
-            Console.WriteLine("\n" + locations[index].Rooms[roomIndex].Description);
+            if (locations[index].Name != "Infected Zone")
+            {
+                Console.WriteLine("\n" + locations[index].Rooms[roomIndex].Description);
+            }
             if ((locations[index].Rooms[roomIndex].Items.Count > 0) && (locations[index].Rooms[roomIndex].Items[0] != null))
             {
                 Console.Write("\nThere is: \n");
