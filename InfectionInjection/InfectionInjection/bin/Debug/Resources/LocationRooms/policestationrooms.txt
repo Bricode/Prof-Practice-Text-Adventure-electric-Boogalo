@@ -11,7 +11,7 @@ Description
 1,0,0
 
 Armory
-A shower of cobwebs hang from the empty shelves, with light shining in through the barred window onto a gun locker.
+A shower of cobwebs hang from the empty shelves, with light shining in through the barred window onto a "Gun Locker".
 1,1,0
 
 Gun Locker

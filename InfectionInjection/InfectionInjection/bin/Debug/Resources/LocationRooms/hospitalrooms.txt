@@ -1,5 +1,5 @@
 Waiting Room
-An airly dark waiting room filled with chairs scattered about the room.
+An eerily dark waiting room filled with chairs scattered about.
 0,0,0
 bandage,book
 Emergency Room
@@ -27,7 +27,7 @@ Description
 0,1,1
 hospital food,sheet
 Ward 2
-In ward 2 lies the Commissioner's slowly decaying body, surrounded by the dead.
+In ward 2 lies the "Commissioner"'s slowly decaying body, surrounded by the dead.
 1,1,1
 hospital food,sheet
 Commissioner's Body

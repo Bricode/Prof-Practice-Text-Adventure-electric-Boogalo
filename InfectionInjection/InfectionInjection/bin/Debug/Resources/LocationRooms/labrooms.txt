@@ -1,31 +1,15 @@
+Reception
+An empty welcome desk invites in solitude and despair.
 0,0,0
-Description
-0,0,0
 
-0,1,0
-Description
+Waiting Room
+A room full of chairs. Maybe one day, visitors will again use this space.
 0,1,0
 
+Storage
+Storage shelves full of chemicals and containers.
 1,0,0
-Description
-1,0,0
-
+beaker,chemical42,chemical12,chemical35,chemical51,chemical92,bunsen burner
+Main Labratory
+The main labratory, where chemical solutions can be synthesized. There is a workbench here.
 1,1,0
-Description
-1,1,0
-
-0,0,1
-Description
-0,0,1
-
-0,1,1
-Description
-0,1,1
-
-1,0,1
-Description
-1,0,1
-
-1,1,1
-Description
-1,1,1

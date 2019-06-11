@@ -14,7 +14,8 @@ namespace InfectionInjection
         public static bool PoliceStationUnlocked = false;
         public static bool TorchIsEnabled = false;
         public static bool ZombiePresent = false;
-        public static int BodyAntitoxin = 100;
+        public static int ViralImmunity = 75;
+        public static int Health = 100;
 
         public static void Inventory_Show()
         {
@@ -77,7 +78,14 @@ namespace InfectionInjection
                     Console.WriteLine("Which item slot would you like to place it in? (1,2,3,4,5,6,7,8,9,0)");
                     for (int i = 0; i < 10; i++)
                     {
-                        Console.WriteLine((i+1) + "| " + Inventory[i]);
+                        if (i < 9)
+                        {
+                            Console.WriteLine(" " + (i + 1) + "| " + Inventory[i][0].ToString().ToUpper() + Inventory[i].Substring(1));
+                        }
+                        else
+                        {
+                            Console.WriteLine((i + 1) + "| " + Inventory[i][0].ToString().ToUpper() + Inventory[i].Substring(1));
+                        }
                     }
                     Console.WriteLine();
                     string Temp = Console.ReadLine();
@@ -138,7 +146,7 @@ namespace InfectionInjection
                             Console.WriteLine("Sorry, I do not understand.\nPlease try again!");
                             break;
                     }
-                } while (loop==true);
+                } while (loop);
             }
 
             return (returnValue);
@@ -175,9 +183,10 @@ namespace InfectionInjection
 ▄█▄ ▀░░▀ █▄█ ▀▀▀ ▀▀▀ ░░▀░░ ▀▀▀ ▀▀▀▀ ▀░░▀" + "\n");
                 LoadData(locations);
                 UpdateWorld(locations, world);
-                Inventory[0] = "surgical torch";
-                Inventory[1] = "pistol";
-                Inventory[2] = "magazine";
+                Inventory[0] = "note";
+                //Inventory[0] = "surgical torch";
+                //Inventory[1] = "pistol";
+                //Inventory[2] = "magazine";
                 game = GameLoop(world, playerCoor, playerCoorLocation, locations);
             } while (game != "quit");
         }
@@ -199,6 +208,10 @@ namespace InfectionInjection
                 {
                     if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
                     {
+                        Console.WriteLine("Viral Immunity: " + ViralImmunity);
+                        Console.WriteLine("Health: " + Health);
+                        Console.WriteLine();
+
                         for (int i = 0; i < locations.Count; i++)
                         {
                             if (world[playerCoor[0], playerCoor[1], playerCoor[2]] == locations[i].Name)
@@ -246,6 +259,9 @@ namespace InfectionInjection
                     else
                     {
                         TorchIsEnabled = false;
+                        Console.WriteLine("Viral Immunity: " + ViralImmunity);
+                        Console.WriteLine("Health: " + Health);
+                        Console.WriteLine();
                         Console.WriteLine("You are outside; wandering the town of Steelport.\n");
                         try
                         {
@@ -269,7 +285,7 @@ namespace InfectionInjection
                 if ((input != "quit") && (input != "death"))
                 {
                     Console.WriteLine("\nWhat do you want to do next?");
-                    input = Console.ReadLine().ToLower();
+                    input = Console.ReadLine().ToLower().Trim();
                 }
                 Console.Clear();
                 if (input.Contains(" ") == false)
@@ -337,6 +353,9 @@ namespace InfectionInjection
                             Movement(world, playerCoor, playerCoorLocation, playerCoorLocation[2], 0, -1, 2, locations, index, ref input, ref firstTime);
                             break;
                         case "inventory":
+                            Inventory_Show();
+                            break;
+                        case "i":
                             Inventory_Show();
                             break;
                         case "help":
@@ -437,6 +456,53 @@ namespace InfectionInjection
                         case "use":
                             if (Array.IndexOf(Inventory, restOfArray) >= 0)
                             {
+                                if (restOfArray == "note")
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine("" +
+                                        " __________________________________________________________________________\n" +
+                                        "|                                                                          |\n" +
+                                        "|                                                                          |\n" +
+                                        "|                                                                          |\n" +
+                                        "|                                                                          |\n" +
+                                        "|      Dear Jeff,                                                          |\n" +
+                                        "|                                                                          |\n" +
+                                        "|                                                                          |\n" +
+                                        "|      I'm writing to you to inform you on the situation for when you      |\n" +
+                                        "|      get back. They messed up at the Steelport laboratory. The           |\n" +
+                                        "|      infection is spreading rapidly and has infected the new             |\n" +
+                                        "|      development to the South. Steelport Tower apartment complex is      |\n" +
+                                        "|      crowded with the helpless and infected. We need URGENT              |\n" +
+                                        "|      assistance. You will need to come to the Steelport Tower to         |\n" +
+                                        "|      collect samples to synthesize a cure. I urge you to bring a         |\n" +
+                                        "|      weapon as a means to protect yourself. We are no longer             |\n" +
+                                        "|      ourselves. DO NOT enter the Steelport tower directly - find         |\n" +
+                                        "|      another access point. Take the samples to the research lab to       |\n" +
+                                        "|      the North. Once there, use the chemicals to create a solution       |\n" +
+                                        "|      that matches the chemical vitality ratio of 286, once the           |\n" +
+                                        "|      sample has been added.                                              |\n" +
+                                        "|                                                                          |\n" +
+                                        "|      Good Luck. You're our only hope.                                    |\n" +
+                                        "|                                                                          |\n" +
+                                        "|                                                                          |\n" +
+                                        "|                                                                          |\n" +
+                                        "|      |\\ |)                                                               |\n" +
+                                        "|      |/ |/\\  /|/|                                                        |\n" +
+                                        "|      |_/|  |/ | |_/                                                      |\n" +
+                                        "|      |)                                                                  |\n" +
+                                        "|                                                                          |\n" +
+                                        "|      - Frank                                                             |\n" +
+                                        "|                                                                          |\n" +
+                                        "|      Manager of WHO Steelport Lab                                        |\n" +
+                                        "|                                                                          |\n" +
+                                        "|                                                                          |\n" +
+                                        "|                                                                          |\n" +
+                                        "|                                                                          |\n" +
+                                        " ==========================================================================\n");
+                                    Console.WriteLine("Press enter to continue.");
+                                    Console.ReadLine();
+                                    Console.Clear();
+                                }
                                 if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
                                 {
                                     if ((locations[index].Rooms[roomIndex].Name == "Armory") && (GunLockerUnlocked == false) && (restOfArray == "small key"))
@@ -508,7 +574,7 @@ namespace InfectionInjection
                                         Console.WriteLine("Can't use that.\n");
                                     }
                                 }
-                                else
+                                else if (restOfArray != "note")
                                 {
                                     Console.WriteLine("Can't use that.\n");
                                 }
@@ -649,7 +715,18 @@ namespace InfectionInjection
         {
             if (Array.IndexOf(Inventory, "zombie flesh sample") >= 0)
             {
-
+                if (ViralImmunity > 0)
+                {
+                    ViralImmunity -= 5;
+                }
+                else
+                {
+                    Health -= 5;
+                }
+                if (Health <= 0)
+                {
+                    Death(7, ref input);
+                }
             }
             if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
             {
@@ -1000,7 +1077,14 @@ namespace InfectionInjection
 
         static void Death(int number, ref string input)
         {
-            string[] deaths = { "You step in the direction you thought to be the door, soon realising that it was infact the window.\nYou try to stop yourself, but you've stepped with so much conviction that you can't.\nYou fly through the window, sending glass fragments everywhere.\nWith shards of glass embedded in your face and arms, you fall helplessly to the ground.\nAnd there your lifeless body stays, with humanity doomed due to a simple navigational error.", "As you attempt to flee from the town, you hear a thumping through the ground.\nAs you turn in horror towards the vibrations, you see a horde of green shambling corpses running towards you at a speed you couldn't believe was possible.\nYou try desperately to run.\nYour last thoughts on how you failed this town and have doomed this world to a zombie apocalypse.", "You enter the police station through the maintenance hatch.\nAs it closes behind you, you realise that it can only be opened from the sewer.\nYou soon discover that the police station is locked, with you, trapped inside.\nAfter many weeks of agonising pain you finaly starve to death on the cold tile floors.\nForgotten by the world of undead, hopelessly wandering for the rest of enternity.", "You entered the Steel port apartment complex unarmed and stumbled into a zombie.\nIt ran at you and ripped apart your flesh with it's decaying nails as you lay helplessly on the ground screaming in agony.", "You foolishly entered the apartment complex infront of the horde of zombies lurking in the lobby.\nYou try to escape, inadvertently shutting the door.\nThe horde of decaying flesh forces you into the closed door,\nallowing you to get one last glimpse of the world before they break open your body with you blacking out on the lobby floor.", "You tried to wander about the sewers in the pitch black darkness.\nYou managed to get a fair way through the sewer system,\nhowever at this point you could't see your hand in front of your face.\nThe floor stepped down, throwing you off balance.\nYour arms flying frantically through the air.\nYou fall forward, heart racing.\nThe next thing you felt was your head colliding with the cold concrete sewer wall.\nThere your body lay, face down in the murky water, with your blood streaming down your lifeless head.", "You feel pressure on your neck as it's hands grasp around your throat.\nYou lose feeling in your body as it rips apart your neck,\nseperating your head from your now lifeless body." };
+            string[] deaths = { "You step in the direction you thought to be the door, soon realising that it was infact the window.\nYou try to stop yourself, but you've stepped with so much conviction that you can't.\nYou fly through the window, sending glass fragments everywhere.\nWith shards of glass embedded in your face and arms, you fall helplessly to the ground.\nAnd there your lifeless body stays, with humanity doomed due to a simple navigational error.",
+                "As you attempt to flee from the town, you hear a thumping through the ground.\nAs you turn in horror towards the vibrations, you see a horde of green shambling corpses running towards you at a speed you couldn't believe was possible.\nYou try desperately to run.\nYour last thoughts on how you failed this town and have doomed this world to a zombie apocalypse.",
+                "You enter the police station through the maintenance hatch.\nAs it closes behind you, you realise that it can only be opened from the sewer.\nYou soon discover that the police station is locked, with you, trapped inside.\nAfter many weeks of agonising pain you finaly starve to death on the cold tile floors.\nForgotten by the world of undead, hopelessly wandering for the rest of enternity.",
+                "You entered the Steel port apartment complex unarmed and stumbled into a zombie.\nIt ran at you and ripped apart your flesh with it's decaying nails as you lay helplessly on the ground screaming in agony.",
+                "You foolishly entered the apartment complex infront of the horde of zombies lurking in the lobby.\nYou try to escape, inadvertently shutting the door.\nThe horde of decaying flesh forces you into the closed door,\nallowing you to get one last glimpse of the world before they break open your body with you blacking out on the lobby floor.",
+                "You tried to wander about the sewers in the pitch black darkness.\nYou managed to get a fair way through the sewer system,\nhowever at this point you could't see your hand in front of your face.\nThe floor stepped down, throwing you off balance.\nYour arms flying frantically through the air.\nYou fall forward, heart racing.\nThe next thing you felt was your head colliding with the cold concrete sewer wall.\nThere your body lay, face down in the murky water, with your blood streaming down your lifeless head.",
+                "You feel pressure on your neck as it's hands grasp around your throat.\nYou lose feeling in your body as it rips apart your neck,\nseperating your head from your now lifeless body.",
+                "You feel your sanity slowly slip as the world goes out of focus.\nYou collapse to the ground feeling the toxins raging through your veins.\nAs the infection rages stronger you start to lose muscle control.\nYour thoughts becoming empty and mindless, as you slip into an eternity of limbo.\nYourself, lost, to the hands of the undead.\nNever to be saved from the plague that consumes you.\nCursed to wander the Earth forever.\n" };
 
             Console.WriteLine(deaths[number] + "\n\nPress enter to continue.");
             input = "death";
