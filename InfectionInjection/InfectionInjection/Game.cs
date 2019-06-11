@@ -13,6 +13,7 @@ namespace InfectionInjection
         public static bool GunLockerUnlocked = false;
         public static bool PoliceStationUnlocked = false;
         public static bool TorchIsEnabled = false;
+        public static bool ZombiePresent = false;
 
         public static void Inventory_Show()
         {
@@ -452,6 +453,52 @@ namespace InfectionInjection
                                     {
                                         Console.WriteLine("Torch is already on.\n");
                                     }
+                                    else if ((locations[index].Name == "Infected Zone") && (ZombiePresent) && (restOfArray == "pistol") && (Bullets > 0))
+                                    {
+                                        Bullets--;
+                                        if (rand.Next(0, 10) == 0)
+                                        {
+                                            ZombiePresent = false;
+                                            Console.WriteLine($"You shot the zombie in the head, instantly killing it.\n{Bullets} bullets left.\n");
+                                            locations[index].Rooms[roomIndex].Items.Add("zombie flesh sample");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine($"You panicked and fired a shot, missing the zombie.\n{Bullets} bullets left.\n");
+                                        }
+                                    }
+                                    else if ((locations[index].Name == "Infected Zone") && (ZombiePresent == false) && (restOfArray == "pistol") && (Bullets > 0))
+                                    {
+                                        Bullets--;
+                                        Console.WriteLine($"You scared yourself, firing a round and wasting it.\n{Bullets} bullets left.\n");
+                                    }
+                                    else if ((locations[index].Name == "Infected Zone") && (ZombiePresent) && (restOfArray == "pistol") && (Bullets <= 0))
+                                    {
+                                        Console.WriteLine("You are out of bullets.\n");
+                                        if (Array.IndexOf(Inventory, "magazine") >= 0)
+                                        {
+                                            Console.WriteLine("Try [Use] \"Magazine\".\n");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("You don't have any more bullets.\nMay God have mercy on your soul.\n");
+                                        }
+                                    }
+                                    else if ((locations[index].Name == "Infected Zone") && (restOfArray == "magazine"))
+                                    {
+                                        if (Array.IndexOf(Inventory, restOfArray) >= 0)
+                                        {
+                                            Bullets += 5;
+                                            Console.WriteLine($"You reloaded your gun.\n{Bullets} bullets left.\n");
+                                            Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                            locations[index].Rooms[roomIndex].Items.Add("empty magazine");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("You don't have a replacement magazine.\n");
+                                        }
+
+                                    }
                                     else
                                     {
                                         Console.WriteLine("Can't use that.\n");
@@ -603,6 +650,19 @@ namespace InfectionInjection
                     if ((locations[locIndex].Name != "Sewer Entrance North") && (locations[locIndex].Name != "Sewer Entrance South") && (locations[locIndex].Name != "Sewer Entrance West") && (locations[locIndex].Name != "North Forest") && (locations[locIndex].Name != "West Forest") && (locations[locIndex].Name != "South Forest"))
                     {
                         playerCoorLocation[index] += num;
+
+                        if ((locations[locIndex].Name == "Infected Zone") && (ZombiePresent == false))
+                        {
+                            Random rand = new Random();
+                            if (rand.Next(0, 3) == 0)
+                            {
+                                ZombiePresent = true;
+                            }
+                        }
+                        else if (ZombiePresent)
+                        {
+                            Death(6, ref input);
+                        }
                     }
                     else if ((locations[locIndex].Name == "Sewer Entrance North") || (locations[locIndex].Name == "Sewer Entrance South") || (locations[locIndex].Name == "Sewer Entrance West"))
                     {
@@ -932,7 +992,7 @@ namespace InfectionInjection
 
         static void Death(int number, ref string input)
         {
-            string[] deaths = { "You step in the direction you thought to be the door, soon realising that it was infact the window.\nYou try to stop yourself, but you've stepped with so much conviction that you can't.\nYou fly through the window, sending glass fragments everywhere.\nWith shards of glass embedded in your face and arms, you fall helplessly to the ground.\nAnd there your lifeless body stays, with humanity doomed due to a simple navigational error.", "As you attempt to flee from the town, you hear a thumping through the ground.\nAs you turn in horror towards the vibrations, you see a horde of green shambling corpses running towards you at a speed you couldn't believe was possible.\nYou try desperately to run.\nYour last thoughts on how you failed this town and have doomed this world to a zombie apocalypse.", "You enter the police station through the maintenance hatch.\nAs it closes behind you, you realise that it can only be opened from the sewer.\nYou soon discover that the police station is locked, with you, trapped inside.\nAfter many weeks of agonising pain you finaly starve to death on the cold tile floors.\nForgotten by the world of undead, hopelessly wandering for the rest of enternity.", "You entered the Steel port apartment complex unarmed and stumbled into a zombie.\nIt ran at you and ripped apart your flesh with it's decaying nails as you lay helplessly on the ground screaming in agony.", "You foolishly entered the apartment complex infront of the horde of zombies lurking in the lobby.\nYou try to escape, inadvertently shutting the door.\nThe horde of decaying flesh forces you into the closed door,\nallowing you to get one last glimpse of the world before they break open your body with you blacking out on the lobby floor.", "You tried to wander about the sewers in the pitch black darkness.\nYou managed to get a fair way through the sewer system,\nhowever at this point you could't see your hand in front of your face.\nThe floor stepped down, throwing you off balance.\nYour arms flying frantically through the air.\nYou fall forward, heart racing.\nThe next thing you felt was your head colliding with the cold concrete sewer wall.\nThere your body lay, face down in the murky water, with your blood streaming down your lifeless head." };
+            string[] deaths = { "You step in the direction you thought to be the door, soon realising that it was infact the window.\nYou try to stop yourself, but you've stepped with so much conviction that you can't.\nYou fly through the window, sending glass fragments everywhere.\nWith shards of glass embedded in your face and arms, you fall helplessly to the ground.\nAnd there your lifeless body stays, with humanity doomed due to a simple navigational error.", "As you attempt to flee from the town, you hear a thumping through the ground.\nAs you turn in horror towards the vibrations, you see a horde of green shambling corpses running towards you at a speed you couldn't believe was possible.\nYou try desperately to run.\nYour last thoughts on how you failed this town and have doomed this world to a zombie apocalypse.", "You enter the police station through the maintenance hatch.\nAs it closes behind you, you realise that it can only be opened from the sewer.\nYou soon discover that the police station is locked, with you, trapped inside.\nAfter many weeks of agonising pain you finaly starve to death on the cold tile floors.\nForgotten by the world of undead, hopelessly wandering for the rest of enternity.", "You entered the Steel port apartment complex unarmed and stumbled into a zombie.\nIt ran at you and ripped apart your flesh with it's decaying nails as you lay helplessly on the ground screaming in agony.", "You foolishly entered the apartment complex infront of the horde of zombies lurking in the lobby.\nYou try to escape, inadvertently shutting the door.\nThe horde of decaying flesh forces you into the closed door,\nallowing you to get one last glimpse of the world before they break open your body with you blacking out on the lobby floor.", "You tried to wander about the sewers in the pitch black darkness.\nYou managed to get a fair way through the sewer system,\nhowever at this point you could't see your hand in front of your face.\nThe floor stepped down, throwing you off balance.\nYour arms flying frantically through the air.\nYou fall forward, heart racing.\nThe next thing you felt was your head colliding with the cold concrete sewer wall.\nThere your body lay, face down in the murky water, with your blood streaming down your lifeless head.", "You feel pressure on your neck as it's hands grasp around your throat.\nYou lose feeling in your body as it rips apart your neck,\nseperating your head from your now lifeless body." };
 
             Console.WriteLine(deaths[number] + "\n\nPress enter to continue.");
             input = "death";
@@ -1067,10 +1127,69 @@ namespace InfectionInjection
 
         static void LocationText(List<Location> locations, string[,,] world, int[] playerCoorLocation, int index)
         {
-            if ((locations[index].Name != "Sewer Entrance North") && (locations[index].Name != "Sewer Entrance West") && (locations[index].Name != "Sewer Entrance South") && (locations[index].Name != "South Forest") && (locations[index].Name != "North Forest") && (locations[index].Name != "West Forest"))
+            int roomIndex = 0;
+            for (int i = 0; i < locations[index].RoomCount; i++)
             {
-                Console.WriteLine($"You are in the {locations[index].Name}.");
+                if ((locations[index].Rooms[i].Coor[0] == playerCoorLocation[0]) && (locations[index].Rooms[i].Coor[1] == playerCoorLocation[1]) && (locations[index].Rooms[i].Coor[2] == playerCoorLocation[2]))
+                {
+                    roomIndex = i;
+                }
+            }
+
+            if ((locations[index].Name != "Sewer Entrance North") && (locations[index].Name != "Sewer Entrance West") && (locations[index].Name != "Sewer Entrance South") && (locations[index].Name != "South Forest") && (locations[index].Name != "North Forest") && (locations[index].Name != "West Forest") && (locations[index].Name != "Infected Zone"))
+            {
+                Console.Write($"You are in the {locations[index].Name}, ");
+                if (playerCoorLocation[2] == 0)
+                {
+                    Console.WriteLine("on the Ground floor.");
+                }
+                else
+                {
+                    Console.WriteLine($"on floor No. {playerCoorLocation[2]}.");
+                }
                 Console.WriteLine($"You are in the {locations[index].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]]}.");
+            }
+            else if (locations[index].Name == "Infected Zone")
+            {
+                Console.Write("You are in the Steelport apartment complex.");
+                if (playerCoorLocation[2] == 0)
+                {
+                    Console.WriteLine("on the Ground floor.");
+                    Console.WriteLine($"You are in the {locations[index].LocationMap[playerCoorLocation[0], playerCoorLocation[1], playerCoorLocation[2]]}.");
+                    Console.WriteLine(locations[index].Rooms[roomIndex].Description);
+                }
+                else
+                {
+                    Console.WriteLine($"on floor No. {playerCoorLocation[2]}.");
+                    if (playerCoorLocation[0] == 1)
+                    {
+                        Console.WriteLine($"You are in the hallway.");
+                        Console.WriteLine($"The room {playerCoorLocation[2]}{(char)(65 + playerCoorLocation[1])} on the left.\nThe room {playerCoorLocation[2]}{(char)(68 + playerCoorLocation[1])} on the right.");
+                        Random rand = new Random();
+                        string[] descriptions = { "", "", "" }; TypeCode HERE!
+
+                        Console.WriteLine(descriptions[rand.Next(0, descriptions.Length)]);
+                    }
+                    else
+                    {
+                        if (playerCoorLocation[0] == 0)
+                        {
+                            Console.WriteLine($"You are in room {playerCoorLocation[2]}{(char)(65 + playerCoorLocation[1])}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"You are in room {playerCoorLocation[2]}{(char)(68 + playerCoorLocation[1])}");
+                        }
+                    }
+                }
+                if (ZombiePresent == false)
+                {
+                    Console.WriteLine("Be careful, there could be a zombie just around the corner.");
+                }
+                else
+                {
+                    Console.WriteLine("A zombie has noticed you and is about to attack.");
+                }
             }
             else if ((locations[index].Name == "Sewer Entrance North") || (locations[index].Name == "Sewer Entrance West") || (locations[index].Name == "Sewer Entrance South"))
             {
@@ -1079,14 +1198,6 @@ namespace InfectionInjection
             else if ((locations[index].Name == "South Forest") || (locations[index].Name == "North Forest") || (locations[index].Name == "West Forest"))
             {
                 Console.WriteLine("You are in a Forest.");
-            }
-            int roomIndex = 0;
-            for (int i = 0; i < locations[index].RoomCount; i++)
-            {
-                if ((locations[index].Rooms[i].Coor[0] == playerCoorLocation[0]) && (locations[index].Rooms[i].Coor[1] == playerCoorLocation[1]) && (locations[index].Rooms[i].Coor[2] == playerCoorLocation[2]))
-                {
-                    roomIndex = i;
-                }
             }
             Console.WriteLine("\n" + locations[index].Rooms[roomIndex].Description);
             if ((locations[index].Rooms[roomIndex].Items.Count > 0) && (locations[index].Rooms[roomIndex].Items[0] != null))

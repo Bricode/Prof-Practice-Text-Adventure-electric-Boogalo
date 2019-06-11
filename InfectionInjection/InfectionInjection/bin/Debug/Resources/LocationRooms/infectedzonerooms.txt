@@ -1,37 +1,37 @@
+Lobby
+The horde of zombies you saw in here seem to have dispersed throughout the complex.
 0,0,0
-Description
-0,0,0
 
-0,1,0
-Description
+Reception
+A desk covered in a layer of dust, unused for years.
 0,1,0
 
+Staff office
+An empty office with lockers to one side and a collection of dusty seats in the centre.
 0,2,0
-Description
-0,2,0
 
-1,0,0
-Description
+Hallway
+You're in the hallway with the lobby on either side.
 1,0,0
 
+Hallway
+You're in the hallway with the reception to the left and the cafe to the right.
 1,1,0
-Description
-1,1,0
 
-1,2,0
-Description
+Hallway
+You're in the hallway with the staff office to the left and the storage room to the right.
 1,2,0
 
-2,0,0
-Description
+Lobby
+Another area of the lobby, also abandoned and strangely empty.
 2,0,0
 
-2,1,0
-Description
+Small Cafe
+The building's cafe, long since abandoned, is accompanied by the smell of rotting food.
 2,1,0
 
-2,2,0
-Description
+Storage Room
+Messy shelves covered in cobwebs, the small nature of the room is making you claustrophobic.
 2,2,0
 
 0,0,1
