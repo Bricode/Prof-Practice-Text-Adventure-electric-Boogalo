@@ -1,4 +1,4 @@
-﻿//Maccle
+﻿//Correct Formula = Flesh (26) + N29 + N52 + 63 + 156 + 122
 
 using System;
 using System.Collections.Generic;
@@ -16,6 +16,7 @@ namespace InfectionInjection
         public static bool PoliceStationUnlocked = false;
         public static bool TorchIsEnabled = false;
         public static bool ZombiePresent = false;
+        public static string ItemOnWorkBench = "";
         public static int ViralImmunity = 75;
         public static int Health = 100;
 
@@ -168,23 +169,25 @@ namespace InfectionInjection
         static void Main(string[] args)
         {
             string game = "";
+            string[,,] world = new string[5, 5, 3];
+            for (int a = 0; a < 5; a++)
+            {
+                for (int b = 0; b < 5; b++)
+                {
+                    for (int c = 0; c < 3; c++)
+                    {
+                        world[a, b, c] = "X";
+                    }
+                }
+            }
+            List<Location> locations = new List<Location>();
 
             do
             {
-                string[,,] world = new string[5, 5, 3];
-                for (int a = 0; a < 5; a++)
-                {
-                    for (int b = 0; b < 5; b++)
-                    {
-                        for (int c = 0; c < 3; c++)
-                        {
-                            world[a, b, c] = "X";
-                        }
-                    }
-                }
-                int[] playerCoor = { 3, 3, 0 };
+                // 3, 3, 0
+                int[] playerCoor = { 0, 0, 0 };
                 int[] playerCoorLocation = { 0, 0, 0 };
-                List<Location> locations = new List<Location>();
+                
                 Console.Clear();
                 Console.WriteLine(@"
 ▀█▀ █▀▀▄ █▀▀ █▀▀ █▀▀ ▀▀█▀▀ ░▀░ █▀▀█ █▀▀▄ 
@@ -194,9 +197,18 @@ namespace InfectionInjection
 ▀█▀ █▀▀▄ ░░▀ █▀▀ █▀▀ ▀▀█▀▀ ░▀░ █▀▀█ █▀▀▄ 
 ▒█░ █░░█ ░░█ █▀▀ █░░ ░░█░░ ▀█▀ █░░█ █░░█ 
 ▄█▄ ▀░░▀ █▄█ ▀▀▀ ▀▀▀ ░░▀░░ ▀▀▀ ▀▀▀▀ ▀░░▀" + "\n");
-                LoadData(locations);
-                UpdateWorld(locations, world);
+                if (game != "death")
+                {
+                    LoadData(locations);
+                    UpdateWorld(locations, world);
+                }
+                else
+                {
+                    Console.WriteLine("You somehow managed to respawn back at the start with all your things.\nThanks to someone watching over you, humanity now has a second chance.\n");
+                }
                 Inventory[0] = "note";
+                Inventory[1] = "zombie flesh sample";
+                Inventory[2] = "zombie flesh sample";
                 //Inventory[0] = "surgical torch";
                 //Inventory[1] = "pistol";
                 //Inventory[2] = "magazine";
@@ -390,7 +402,7 @@ namespace InfectionInjection
                             }
                             break;
                         default:
-                            if (WrongCommand < 3)
+                            if (WrongCommand < 1)
                             {
                                 Console.WriteLine($"{misunderstood[rand.Next(0, misunderstood.Length)]}\n");
                                 WrongCommand++;
@@ -489,8 +501,8 @@ namespace InfectionInjection
                                         "|      Dear Jeff,                                                          |\n" +
                                         "|                                                                          |\n" +
                                         "|                                                                          |\n" +
-                                        "|      I'm writing to you to inform you on the situation for when you      |\n" +
-                                        "|      get back. There has been a contaminant breech at the Steelport      |\n" +
+                                        "|      I'm writing to inform you on the situation for when you             |\n" +
+                                        "|      get back. There has been a containment breach at the Steelport      |\n" +
                                         "|      laboratory. The infection is spreading rapidly and has              |\n" +
                                         "|      infected the new development to the South. The Steelport Tower      |\n" +
                                         "|      apartment complex is crowded with the helpless and infected.        |\n" +
@@ -734,6 +746,10 @@ namespace InfectionInjection
                                 {
                                     Search("police officer's body", 1, 16, locations, input, playerCoor, world);
                                 }
+                                else if ((locations[index].Rooms[roomIndex].Name == "Storage Room") && (restOfArray == "locker"))
+                                {
+                                    Search("locker", 5, 5, locations, input, playerCoor, world);
+                                }
                                 else
                                 {
                                     Console.WriteLine("Can't do that.\n");
@@ -745,7 +761,7 @@ namespace InfectionInjection
                             }
                             break;
                         default:
-                            if (WrongCommand < 3)
+                            if (WrongCommand < 1)
                             {
                                 Console.WriteLine($"{misunderstood[rand.Next(0, misunderstood.Length)]}\n");
                                 WrongCommand++;
@@ -794,10 +810,16 @@ namespace InfectionInjection
                 {
                     switch (input)
                     {
+                        case "inventory":
+                            Inventory_Show();
+                            break;
+                        case "i":
+                            Inventory_Show();
+                            break;
                         case "back":
                             break;
                         default:
-                            Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
+                            Console.WriteLine("When searching type [Get] \"item name\" or [Store] \"item name\" or [I]nventory or [Back].\n");
                             break;
                     }
                 }
@@ -812,12 +834,16 @@ namespace InfectionInjection
                         restOfArray += temp[i] + " ";
                     }
 
-                    restOfArray = restOfArray.Trim();
+                    restOfArray = restOfArray.Trim().ToLower();
 
                     switch (command)
                     {
                         case "get":
-                            if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X") && (locations[locNum].Rooms[roomNum].Items.Contains(restOfArray.ToLower())))
+                            if (restOfArray.Contains("chemicaln"))
+                            {
+                                restOfArray = "chemicalN" + restOfArray.Substring(9);
+                            }
+                            if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X") && (locations[locNum].Rooms[roomNum].Items.Contains(restOfArray)))
                             {
                                 string[] temp2 = Inventory_Check(restOfArray).Split(' ');
                                 string itemInstruction = temp2[0];
@@ -832,17 +858,29 @@ namespace InfectionInjection
 
                                 if (itemInstruction == "pickup")
                                 {
-                                    locations[locNum].Rooms[roomNum].Items.Remove(restOfArray.ToLower());
+                                    locations[locNum].Rooms[roomNum].Items.Remove(restOfArray);
                                 }
                                 else
                                 {
-                                    locations[locNum].Rooms[roomNum].Items.Remove(restOfArray.ToLower());
-                                    locations[locNum].Rooms[roomNum].Items.Add(restOfItemArray.ToLower());
+                                    locations[locNum].Rooms[roomNum].Items.Remove(restOfArray);
+                                    locations[locNum].Rooms[roomNum].Items.Add(restOfItemArray);
                                 }
                             }
                             break;
+                        case "store":
+                            if (Array.IndexOf(Inventory, restOfArray) >= 0)
+                            {
+                                Console.WriteLine($"{restOfArray[0].ToString().ToUpper() + restOfArray.Substring(1)} stored.\n");
+                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                    locations[locNum].Rooms[roomNum].Items.Add(restOfArray);
+                            }
+                            else
+                            {
+                                Console.WriteLine("You don't have that item.\n");
+                            }
+                            break;
                         default:
-                            Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
+                            Console.WriteLine("When searching type [Get] \"item name\" or [Store] \"item name\" or [I]nventory or [Back].\n");
                             break;
                     }
                 }
@@ -855,9 +893,41 @@ namespace InfectionInjection
             {
                 if ((locations[locNum].Rooms[roomNum].Items.Count > 0) && (locations[locNum].Rooms[roomNum].Items[0] != null))
                 {
-                    for (int i = 0; i < locations[locNum].Rooms[roomNum].Items.Count; i++)
+                    if (ItemOnWorkBench.Contains("beaker"))
                     {
-                        Console.Write($"* {locations[locNum].Rooms[roomNum].Items[i][0].ToString().ToUpper() + locations[locNum].Rooms[roomNum].Items[i].Substring(1)}\n");
+                        Console.WriteLine("Items in the beaker:");
+                        if (locations[locNum].Rooms[roomNum].Items.Count == 1)
+                        {
+                            Console.WriteLine("Nothing.");
+                        }
+                        else
+                        {
+                            for (int i = 0; i < locations[locNum].Rooms[roomNum].Items.Count; i++)
+                            {
+                                if ((locations[locNum].Rooms[roomNum].Items[i] != "bunsen burner") && (locations[locNum].Rooms[roomNum].Items[i].Contains("beaker") == false))
+                                {
+                                    Console.Write($"* {locations[locNum].Rooms[roomNum].Items[i][0].ToString().ToUpper() + locations[locNum].Rooms[roomNum].Items[i].Substring(1)}\n");
+                                }
+                            }
+
+                            Console.Write("\nBeaker State: Beaker");
+                            if (ItemOnWorkBench[6] == 'M')
+                            {
+                                Console.WriteLine(ItemOnWorkBench[6].ToString().ToUpper() + ItemOnWorkBench.Substring(7));
+                            }
+                            else
+                            {
+                                Console.WriteLine(ItemOnWorkBench.Substring(6));
+                            }
+                        }
+                    }
+                    else if (ItemOnWorkBench == "bunsen burner")
+                    {
+                        Console.WriteLine("Use mixture on bunsen burner to create solution.");
+                    }
+                    else if (ItemOnWorkBench == "zombie flesh sample")
+                    {
+                        Console.WriteLine("Please add solution to zombie flesh sample.");
                     }
                 }
                 else
@@ -874,8 +944,24 @@ namespace InfectionInjection
                     {
                         case "back":
                             break;
+                        case "inventory":
+                            Inventory_Show();
+                            break;
+                        case "i":
+                            Inventory_Show();
+                            break;
+                        case "help":
+                            using (StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"\Resources\helpWB.txt"))
+                            {
+                                while (!sr.EndOfStream)
+                                {
+                                    Console.WriteLine(sr.ReadLine());
+                                }
+                            }
+                            Console.WriteLine();
+                            break;
                         default:
-                            Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
+                            Console.WriteLine("For help using the workbench type the [Help] command.\n");
                             break;
                     }
                 }
@@ -914,19 +1000,87 @@ namespace InfectionInjection
                                 }
                                 else
                                 {
-                                    locations[locNum].Rooms[roomNum].Items.Remove(restOfArray.ToLower());
-                                    locations[locNum].Rooms[roomNum].Items.Add(restOfItemArray.ToLower());
+                                    Console.WriteLine("You can't pick this up because your inventory is full.\n");
                                 }
                             }
                             break;
                         case "drop":
+                            if (Array.IndexOf(Inventory, restOfArray) >= 0)
+                            {
+                                if (ItemOnWorkBench.Contains("beaker"))
+                                {
+                                    if (restOfArray.Contains("chemical") || (restOfArray == "zombie flesh sample"))
+                                    {
+                                        Console.WriteLine($"Are you sure you want to drop {restOfArray} into the beaker? - [Y]es or [N]o");
+                                        string choice = Console.ReadLine().ToLower();
+                                        Console.Clear();
+                                        if ((choice == "yes") || (choice == "y"))
+                                        {
+                                            if (restOfArray.Contains("N"))
+                                            {
+                                                try
+                                                {
+                                                    if (ItemOnWorkBench.Contains("M")) ItemOnWorkBench.Replace("M", "");
+                                                    int number = Convert.ToInt32(ItemOnWorkBench.Replace("beaker", ""));
+                                                    number += Convert.ToInt32(restOfArray.Replace("chemical", ""));
+                                                    ItemOnWorkBench = "beakerM" + number;
+                                                }
+                                                catch
+                                                {
+                                                    ItemOnWorkBench += "-" + restOfArray.Replace("chemical", "");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                try
+                                                {
+                                                    if (ItemOnWorkBench.Contains("M")) ItemOnWorkBench.Replace("M", "");
+                                                    int number = Convert.ToInt32(ItemOnWorkBench.Replace("beaker", ""));
+                                                    number += Convert.ToInt32(restOfArray.Replace("chemical", ""));
+                                                    ItemOnWorkBench = "beakerM" + number;
+                                                }
+                                                catch
+                                                {
+                                                    ItemOnWorkBench += restOfArray.Replace("chemical", "");
+                                                }
+                                            }
+
+                                            Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                            locations[locNum].Rooms[roomNum].Items.Add(restOfArray);
+                                        }
+                                    }
+                                }
+                                else if (ItemOnWorkBench == "bunsen burner")
+                                {
+
+                                }
+                                else if (ItemOnWorkBench == "zombie flesh sample")
+                                {
+
+                                }
+                                else
+                                {
+                                    Console.WriteLine("There is nothing on the workbench.\nPlease [Place] something there to continue.\n");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("You don't have that item.\n");
+                            }
                             break;
                         case "place":
-                            break;
-                        case "help":
+                            if (Array.IndexOf(Inventory, restOfArray) >= 0)
+                            {
+                                if (restOfArray.Contains("beaker"))
+                                {
+                                    ItemOnWorkBench = restOfArray;
+                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                    locations[locNum].Rooms[roomNum].Items.Add(restOfArray);
+                                }
+                            }
                             break;
                         default:
-                            Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
+                            Console.WriteLine("For help using the workbench type the [Help] command.\n");
                             break;
                     }
                 }

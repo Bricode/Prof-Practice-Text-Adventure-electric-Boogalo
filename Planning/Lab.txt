@@ -14,3 +14,13 @@ drop solution
 if succesful rename solution to cure
 if failed rename solution to failed solution
 if you don't have a second sample you can test on yourself
+zfs = 26
+
+N29, N52, 63, 156, 122,
+84, N39, N5, N35, 95,
+N29, 95, 156, 63, N35, N52, 122, 84, N39, N5
+
+total = 286
+
+You lose viral resistance when you choose not to leave a location
+Breaks when 3rd chemical added to beaker?? Trace that sucker!!!

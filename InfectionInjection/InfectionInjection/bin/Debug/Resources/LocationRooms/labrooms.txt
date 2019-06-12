@@ -6,10 +6,10 @@ Waiting Room
 A room full of chairs. Maybe one day, visitors will again use this space.
 0,1,0
 
-Storage
-Storage shelves full of chemicals and containers.
+Storage Room
+Storage shelves full of chemicals and containers, there's also a "Locker" here. Good for storing items.
 1,0,0
-beaker,chemical42,chemical12,chemical35,chemical51,chemical92,bunsen burner
+beaker,chemical63,chemical95,chemical122,chemical156,chemical84,bunsen burner
 Main Labratory
 The main labratory, where chemical solutions can be synthesized. There is a workbench here.
 1,1,0
@@ -17,3 +17,8 @@ The main labratory, where chemical solutions can be synthesized. There is a work
 Workbench
 This is the workbench where you can attempt to create a solution.
 0,0,1
+
+Locker
+This is a storage locker
+0,1,1
+chemicalN5,chemicalN29,chemicalN35,chemicalN39,chemicalN52

@@ -1,7 +1,7 @@
 Waiting Room
 An eerily dark waiting room filled with chairs scattered about.
 0,0,0
-bandage,book
+book,bandage
 Emergency Room
 A huge room with stretched beds a plenty, with the words EMERGENCY plastered on the wall.
 1,0,0
@@ -25,7 +25,7 @@ vaccine
 Ward 1
 Description
 0,1,1
-hospital food,sheet
+old clothes,sheet,hospital food
 Ward 2
 In ward 2 lies the "Commissioner"'s slowly decaying body, surrounded by the dead.
 1,1,1
