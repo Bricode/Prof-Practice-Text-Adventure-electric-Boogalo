@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Maccle
+
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.IO;
@@ -19,7 +21,18 @@ namespace InfectionInjection
 
         public static void Inventory_Show()
         {
-            if (Inventory[0] != null)
+            bool empty = true;
+
+            for (int i = 0; i < Inventory.Length; i++)
+            {
+                if (Inventory[i] != null)
+                {
+                    empty = false;
+                    break;
+                }
+            }
+
+            if (!empty)
             {
                 Console.WriteLine("You have: ");
                 for (int i = 0; i < 10; i++)
@@ -51,7 +64,7 @@ namespace InfectionInjection
             }
             else
             {
-                Console.WriteLine("You don't have anyhting on you.\n");
+                Console.WriteLine("You don't have anything on you.\n");
             }
         }
 
@@ -75,7 +88,7 @@ namespace InfectionInjection
                 bool loop = true;
                 do
                 {
-                    Console.WriteLine("Which item slot would you like to place it in? (1,2,3,4,5,6,7,8,9,0)");
+                    Console.WriteLine("Which item slot would you like to place it in? (1,2,3,4,5,6,7,8,9,10)");
                     for (int i = 0; i < 10; i++)
                     {
                         if (i < 9)
@@ -136,7 +149,7 @@ namespace InfectionInjection
                             Inventory[8] = Found_Item;
                             loop = false;
                             break;
-                        case "0":
+                        case "10":
                             returnValue = "dump " + Inventory[9];
                             Inventory[9] = Found_Item;
                             loop = false;
@@ -358,6 +371,14 @@ namespace InfectionInjection
                         case "i":
                             Inventory_Show();
                             break;
+                        case "workbench":
+                            if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X") && (locations[index].Rooms[roomIndex].Name == "Main Labratory"))
+                            {
+                                Workbench(locations, index, roomIndex, input, playerCoor, world);
+                            }
+                            break;
+                        case "place":
+                            break;
                         case "help":
                             WrongCommand = 0;
                             using (StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"\Resources\help.txt"))
@@ -469,18 +490,18 @@ namespace InfectionInjection
                                         "|                                                                          |\n" +
                                         "|                                                                          |\n" +
                                         "|      I'm writing to you to inform you on the situation for when you      |\n" +
-                                        "|      get back. They messed up at the Steelport laboratory. The           |\n" +
-                                        "|      infection is spreading rapidly and has infected the new             |\n" +
-                                        "|      development to the South. Steelport Tower apartment complex is      |\n" +
-                                        "|      crowded with the helpless and infected. We need URGENT              |\n" +
-                                        "|      assistance. You will need to come to the Steelport Tower to         |\n" +
-                                        "|      collect samples to synthesize a cure. I urge you to bring a         |\n" +
-                                        "|      weapon as a means to protect yourself. We are no longer             |\n" +
-                                        "|      ourselves. DO NOT enter the Steelport tower directly - find         |\n" +
-                                        "|      another access point. Take the samples to the research lab to       |\n" +
-                                        "|      the North. Once there, use the chemicals to create a solution       |\n" +
-                                        "|      that matches the chemical vitality ratio of 286, once the           |\n" +
-                                        "|      sample has been added.                                              |\n" +
+                                        "|      get back. There has been a contaminant breech at the Steelport      |\n" +
+                                        "|      laboratory. The infection is spreading rapidly and has              |\n" +
+                                        "|      infected the new development to the South. The Steelport Tower      |\n" +
+                                        "|      apartment complex is crowded with the helpless and infected.        |\n" +
+                                        "|      We need URGENT assistance. You will need to come to the             |\n" +
+                                        "|      Steelport Tower to collect samples to synthesize a cure. I          |\n" +
+                                        "|      urge you to bring a weapon as a means to protect yourself as        |\n" +
+                                        "|      we are no longer ourselves. DO NOT enter the Steelport tower        |\n" +
+                                        "|      directly - find another access point. Take the samples to the       |\n" +
+                                        "|      research lab to the North. Once there, use the chemicals to         |\n" +
+                                        "|      create a solution that matches the chemical vitality ratio          |\n" +
+                                        "|      of 286, once the sample has been added.                             |\n" +
                                         "|                                                                          |\n" +
                                         "|      Good Luck. You're our only hope.                                    |\n" +
                                         "|                                                                          |\n" +
@@ -503,7 +524,117 @@ namespace InfectionInjection
                                     Console.ReadLine();
                                     Console.Clear();
                                 }
-                                if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+                                if (restOfArray == "bandage")
+                                {
+                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                    Health += 5;
+                                    if (Health > 100)
+                                    {
+                                        Health = 100;
+                                    }
+                                }
+                                else if ((restOfArray == "first aid kit") || (restOfArray == "blood bag"))
+                                {
+                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                    if (restOfArray == "blood bag")
+                                    {
+                                        if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+                                        {
+                                            locations[index].Rooms[roomIndex].Items.Add("empty medical bag");
+                                        }
+                                        Health += 20;
+                                        if (Health > 100)
+                                        {
+                                            Health = 100;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+                                        {
+                                            locations[index].Rooms[roomIndex].Items.Add("empty first aid kit");
+                                        }
+                                        Health += 10;
+                                        if (Health > 100)
+                                        {
+                                            Health = 100;
+                                        }
+                                    }
+                                }
+                                else if ((restOfArray == "antibiotics") || (restOfArray == "vaccine"))
+                                {
+                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                    if ((restOfArray == "vaccine") && (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X"))
+                                    {
+                                        locations[index].Rooms[roomIndex].Items.Add("empty syringe");
+                                        ViralImmunity += 20;
+                                        if (ViralImmunity > 75)
+                                        {
+                                            ViralImmunity = 75;
+                                        }
+                                    }
+                                    else if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+                                    {
+                                        locations[index].Rooms[roomIndex].Items.Add("empty container");
+                                        ViralImmunity += 10;
+                                        if (ViralImmunity > 75)
+                                        {
+                                            ViralImmunity = 75;
+                                        }
+                                    }
+                                }
+                                else if (restOfArray == "vitamins")
+                                {
+                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                    if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+                                    {
+                                        locations[index].Rooms[roomIndex].Items.Add("empty container");
+                                        ViralImmunity += 5;
+                                        if (ViralImmunity > 75)
+                                        {
+                                            ViralImmunity = 75;
+                                        }
+                                    }
+                                }
+                                else if (restOfArray == "hospital food")
+                                {
+                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                    if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+                                    {
+                                        locations[index].Rooms[roomIndex].Items.Add("empty tray");
+                                    }
+                                    Console.WriteLine("You ate the hospital food which was infested with bacteria.\nYou vomited several times and you feel terrible.\nAt least now you're not hungry.\n");
+                                    ViralImmunity /= 2;
+                                    Health += 10;
+                                    if (Health > 100)
+                                    {
+                                        Health = 100;
+                                    }
+                                    if (ViralImmunity > 75)
+                                    {
+                                        ViralImmunity = 75;
+                                    }
+                                }
+                                else if (restOfArray == "whisky")
+                                {
+                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
+                                    if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
+                                    {
+                                        locations[index].Rooms[roomIndex].Items.Add("empty bottle");
+                                    }
+                                    Console.WriteLine("You drank the entire bottle of whisky.\nAfter you passed out, you started coughing up blood.\nThe alcohol killed all the bacteria in your digestive tract.\n");
+                                    ViralImmunity += 10;
+                                    Health /= 2;
+                                    if (Health > 100)
+                                    {
+                                        Health = 100;
+                                    }
+                                    if (ViralImmunity > 75)
+                                    {
+                                        ViralImmunity = 75;
+                                    }
+                                }
+                                else if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
                                 {
                                     if ((locations[index].Rooms[roomIndex].Name == "Armory") && (GunLockerUnlocked == false) && (restOfArray == "small key"))
                                     {
@@ -635,13 +766,20 @@ namespace InfectionInjection
         {
             do
             {
-                Console.WriteLine($"In the {searchPlace} you found:");
+                if ((searchPlace == "commissioner's body") || (searchPlace == "police officer's body"))
+                {
+                    Console.WriteLine($"On the {searchPlace} you found:");
+                }
+                else
+                {
+                    Console.WriteLine($"In the {searchPlace} you found:");
+                }
 
                 if ((locations[locNum].Rooms[roomNum].Items.Count > 0) && (locations[locNum].Rooms[roomNum].Items[0] != null))
                 {
                     for (int i = 0; i < locations[locNum].Rooms[roomNum].Items.Count; i++)
                     {
-                        Console.Write($"* {locations[locNum].Rooms[roomNum].Items[i]}\n");
+                        Console.Write($"* {locations[locNum].Rooms[roomNum].Items[i][0].ToString().ToUpper() + locations[locNum].Rooms[roomNum].Items[i].Substring(1)}\n");
                     }
                 }
                 else
@@ -702,6 +840,90 @@ namespace InfectionInjection
                                     locations[locNum].Rooms[roomNum].Items.Add(restOfItemArray.ToLower());
                                 }
                             }
+                            break;
+                        default:
+                            Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
+                            break;
+                    }
+                }
+            } while (input != "back");
+        }
+
+        static void Workbench(List<Location> locations, int locNum, int roomNum, string input, int[] playerCoor, string[,,] world)
+        {
+            do
+            {
+                if ((locations[locNum].Rooms[roomNum].Items.Count > 0) && (locations[locNum].Rooms[roomNum].Items[0] != null))
+                {
+                    for (int i = 0; i < locations[locNum].Rooms[roomNum].Items.Count; i++)
+                    {
+                        Console.Write($"* {locations[locNum].Rooms[roomNum].Items[i][0].ToString().ToUpper() + locations[locNum].Rooms[roomNum].Items[i].Substring(1)}\n");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Nothing.");
+                }
+
+                Console.WriteLine("\nWhat do you want to do next?");
+                input = Console.ReadLine().ToLower();
+                Console.Clear();
+                if (input.Contains(" ") == false)
+                {
+                    switch (input)
+                    {
+                        case "back":
+                            break;
+                        default:
+                            Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");
+                            break;
+                    }
+                }
+                else
+                {
+                    string[] temp = input.Split(' ');
+                    string command = temp[0];
+                    string restOfArray = "";
+
+                    for (int i = 1; i < temp.Length; i++)
+                    {
+                        restOfArray += temp[i] + " ";
+                    }
+
+                    restOfArray = restOfArray.Trim();
+
+                    switch (command)
+                    {
+                        case "get":
+                            if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X") && (locations[locNum].Rooms[roomNum].Items.Contains(restOfArray.ToLower())))
+                            {
+                                string[] temp2 = Inventory_Check(restOfArray).Split(' ');
+                                string itemInstruction = temp2[0];
+                                string restOfItemArray = "";
+
+                                for (int i = 1; i < temp2.Length; i++)
+                                {
+                                    restOfItemArray += temp2[i] + " ";
+                                }
+
+                                restOfItemArray = restOfItemArray.Trim();
+
+                                if (itemInstruction == "pickup")
+                                {
+                                    locations[locNum].Rooms[roomNum].Items.Remove(restOfArray.ToLower());
+                                }
+                                else
+                                {
+                                    locations[locNum].Rooms[roomNum].Items.Remove(restOfArray.ToLower());
+                                    locations[locNum].Rooms[roomNum].Items.Add(restOfItemArray.ToLower());
+                                }
+                            }
+                            break;
+                        case "drop":
+                            break;
+                        case "place":
+                            break;
+                        case "help":
                             break;
                         default:
                             Console.WriteLine("When searching type [Get] \"item name\" or [Back].\n");

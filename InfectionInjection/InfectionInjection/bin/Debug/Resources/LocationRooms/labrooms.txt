@@ -13,3 +13,7 @@ beaker,chemical42,chemical12,chemical35,chemical51,chemical92,bunsen burner
 Main Labratory
 The main labratory, where chemical solutions can be synthesized. There is a workbench here.
 1,1,0
+
+Workbench
+This is the workbench where you can attempt to create a solution.
+0,0,1

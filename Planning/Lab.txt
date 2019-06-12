@@ -1,0 +1,16 @@
+Main Lab
+Beaker, Chemical42, Chemical12, Chemical35, Chemical51, Chemical92, Bunsen Burner
+Workbench - Lab room on second floor
+place beaker - Puts the beaker on the workbench
+drop zombie flesh sample - adds zombie flesh sample
+drop chemical42 - adds chemical 42
+chemical vitality ratio = 42+26 = 68 out of 268 e.g.
+when you're ready - get solution
+place bunsen burner
+drop solution
+get solution
+place zombie flesh sample
+drop solution
+if succesful rename solution to cure
+if failed rename solution to failed solution
+if you don't have a second sample you can test on yourself
