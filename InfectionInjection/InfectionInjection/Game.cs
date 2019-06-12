@@ -862,7 +862,7 @@ namespace InfectionInjection
                 }
                 else
                 {
-                    Console.WriteLine("Nothing.");
+                    Console.WriteLine("There is nothing on the workbench.");
                 }
 
                 Console.WriteLine("\nWhat do you want to do next?");
