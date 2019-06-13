@@ -107,51 +107,51 @@ Toxic waste
 3,2,0
 
 path
-Description
+A bed of pebbles
 3,3,0
 
 path
-Description
+A patch of sand
 3,4,0
 
 path
-Description
+Fallen leaves
 3,5,0
 
 path
-Description
+Dead grass
 3,6,0
 
 wall
-Description
+A damaged old stone wall, but to slippery to climb through the damage
 3,7,0
 
 wall
-Description
+Some old stone wall
 4,0,0
 
 path
-Description
+Wild potato patch
 4,1,0
 
 wall
-Description
+Rockface
 4,2,0
 
 wall
-Description
+Large boulders
 4,3,0
 
 wall
-Description
+Crumbly sandstone cliff
 4,4,0
 
 path
-Description
+Dried out river bed
 4,5,0
 
 wall
-Description
+Collapsed foot-bridge
 4,6,0
 
 wall
@@ -159,31 +159,31 @@ n/a
 4,7,0
 
 wall
-Description
+Extremely hot thermal pools
 5,0,0
 
 path
-Description
+Cave
 5,1,0
 
 path
-Description
+Dimly lit cave
 5,2,0
 
 path
-Description
+Barely lit cave
 5,3,0
 
-wall
-Description
+path
+Cave wall
 5,4,0
 
 path
-Description
+Soggy river bed
 5,5,0
 
 wall
-Description
+Repaired barbed wire fence
 5,6,0
 
 wall
@@ -195,31 +195,31 @@ n/a
 6,0,0
 
 wall
-Description
+Sharp granite
 6,1,0
 
 path
-Description
+Moist cave
 6,2,0
 
 path
-Description
+Well lit cave
 6,3,0
 
 path
-Description
+Asphalt road in extreme disrepair
 6,4,0
 
 path
-Description
+Concrete slab
 6,5,0
 
 path
-Description
+Mossy ground
 6,6,0
 
 wall
-Description
+Rusted barbed wire fence
 6,7,0
 
 wall
@@ -231,11 +231,11 @@ n/a
 7,1,0
 
 wall
-Description
+Slippery stone
 7,2,0
 
 wall
-Description
+Lose debris
 7,3,0
 
 e
@@ -243,11 +243,11 @@ East exit
 7,4,0
 
 wall
-Description
+Tar pit
 7,5,0
 
 wall
-Description
+Barbed wire fence
 7,6,0
 
 wall
