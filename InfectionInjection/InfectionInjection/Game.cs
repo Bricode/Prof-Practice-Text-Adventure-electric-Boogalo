@@ -931,6 +931,7 @@ namespace InfectionInjection
                             Console.WriteLine($"\nBeaker State: Mixture.");
                         }
                         Console.WriteLine($"Beaker Vitality Ratio: {workbench.BeakerVitality}");
+                        Console.WriteLine($"Mixture Viable: {workbench.Viable}");
                     }
                     else
                     {
@@ -995,6 +996,18 @@ namespace InfectionInjection
                     {
                         restOfArray = restOfArray.Replace("n", "N");
                     }
+                    if (restOfArray.Contains("beakermn"))
+                    {
+                        restOfArray = restOfArray.Replace("mn", "MN");
+                    }
+                    if (restOfArray.Contains("beakerm"))
+                    {
+                        restOfArray = restOfArray.Replace("m", "M");
+                    }
+                    if (restOfArray.Contains("beakern"))
+                    {
+                        restOfArray = restOfArray.Replace("n", "N");
+                    }
 
                     restOfArray = restOfArray.Trim();
 
@@ -1004,7 +1017,29 @@ namespace InfectionInjection
                             if ((restOfArray == "beaker") && (workbench.ToolOnWorkBench == "beaker"))
                             {
                                 workbench.ToolOnWorkBench = "";
-                                restOfArray = "beaker" + "M" + workbench.BeakerVitality;
+                                if (workbench.ItemsInBeaker.Count > 1)
+                                {
+                                    if (workbench.BeakerVitality > 0)
+                                    {
+                                        restOfArray = "beaker" + "M" + workbench.BeakerVitality;
+                                    }
+                                    else
+                                    {
+                                        restOfArray = "beaker" + "M" + "N" + workbench.BeakerVitality.ToString().Replace("-", "");
+                                    }
+                                }
+                                else if (workbench.BeakerVitality > 0)
+                                {
+                                    restOfArray = "beaker" + workbench.BeakerVitality;
+                                }
+                                else if (workbench.BeakerVitality < 0)
+                                {
+                                    restOfArray = "beaker" + "N" + workbench.BeakerVitality.ToString().Replace("-", "");
+                                }
+                                else
+                                {
+                                    restOfArray = "beaker";
+                                }
 
                                 string[] temp2 = Inventory_Check(restOfArray).Split(' ');
                                 string itemInstruction = temp2[0];
@@ -1021,6 +1056,14 @@ namespace InfectionInjection
                                 {
                                     locations[locNum].Rooms[roomNum].Items.Add(restOfItemArray.ToLower());
                                 }
+                            }
+                            else if ((restOfArray == "beaker") && (workbench.ToolOnWorkBench == "bunsen burner"))
+                            {
+
+                            }
+                            else if (restOfArray == "bunsen burner")
+                            {
+
                             }
                             else
                             {
@@ -1063,16 +1106,36 @@ namespace InfectionInjection
                             {
                                 Console.WriteLine("You don't have this item.\n");
                             }
+
+                            if (workbench.ItemsInBeaker.Contains("zombie flesh sample"))
+                            {
+                                workbench.Viable = true;
+                            }
                             break;
                         case "place":
                             if (Array.IndexOf(Inventory, restOfArray) >= 0)
                             {
                                 if ((restOfArray.Contains("beaker")) || (restOfArray == "zombie flesh sample") || (restOfArray == "bunsen burner"))
                                 {
-                                    string returnString = WorkbenchClass.Place(Inventory, restOfArray, workbench.ToolOnWorkBench);
+                                    string returnString = "";
+
+                                    if (restOfArray.Contains("beaker") && (restOfArray != "beaker"))
+                                    {
+                                        returnString = WorkbenchClass.Place(Inventory, "beaker", workbench.ToolOnWorkBench);
+                                    }
+                                    else
+                                    {
+                                        returnString = WorkbenchClass.Place(Inventory, restOfArray, workbench.ToolOnWorkBench);
+                                    }
                                     if (returnString != "Tool already on workbench.")
                                     {
                                         workbench.ToolOnWorkBench = returnString;
+
+                                        if (restOfArray.Contains("beaker") && (restOfArray != "beaker"))
+                                        {
+                                            returnString = restOfArray;
+                                        }
+
                                         Inventory[Array.IndexOf(Inventory, returnString)] = null;
                                     }
                                 }
