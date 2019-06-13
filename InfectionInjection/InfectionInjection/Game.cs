@@ -19,6 +19,7 @@ namespace InfectionInjection
         public static int ViralImmunity = 75;
         public static int Health = 100;
         public static bool WorkbenchExists = false;
+        public static int DeathCount = 0;
 
         public static void Inventory_Show()
         {
@@ -186,8 +187,7 @@ namespace InfectionInjection
 
             do
             {
-                // 3, 3, 0
-                int[] playerCoor = { 0, 0, 0 };
+                int[] playerCoor = { 3, 3, 0 };
                 int[] playerCoorLocation = { 0, 0, 0 };
                 
                 Console.Clear();
@@ -209,14 +209,6 @@ namespace InfectionInjection
                     Console.WriteLine("You somehow managed to respawn back at the start with all your things.\nThanks to someone watching over you, humanity now has a second chance.\n");
                 }
                 Inventory[0] = "note";
-                Inventory[1] = "zombie flesh sample";
-                Inventory[2] = "zombie flesh sample";
-                Inventory[3] = "beaker";
-                Inventory[4] = "chemical63";
-                Inventory[5] = "chemicalN5";
-                //Inventory[0] = "surgical torch";
-                //Inventory[1] = "pistol";
-                //Inventory[2] = "magazine";
                 game = GameLoop(world, playerCoor, playerCoorLocation, locations, workbench);
             } while (game != "quit");
         }
@@ -394,8 +386,6 @@ namespace InfectionInjection
                                 Workbench(locations, index, roomIndex, input, playerCoor, world, workbench);
                             }
                             break;
-                        case "place":
-                            break;
                         case "help":
                             WrongCommand = 0;
                             using (StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"\Resources\help.txt"))
@@ -431,6 +421,11 @@ namespace InfectionInjection
                     }
 
                     restOfArray = restOfArray.Trim();
+
+                    if (restOfArray.Contains("beakers"))
+                    {
+                        restOfArray = restOfArray.Replace("s", "S");
+                    }
 
                     switch (command)
                     {
@@ -496,6 +491,62 @@ namespace InfectionInjection
                         case "use":
                             if (Array.IndexOf(Inventory, restOfArray) >= 0)
                             {
+                                if (restOfArray == "cure")
+                                {
+                                    Death(9, ref input);
+                                }
+                                if (restOfArray.Contains("beakerS"))
+                                {
+                                    if (workbench.Viable)
+                                    {
+                                        if (workbench.BeakerVitality == 286)
+                                        {
+                                            Console.WriteLine("Test SUCCEEDED - You found the CURE!\n");
+                                            workbench.ToolOnWorkBench = "";
+                                            Inventory[Array.IndexOf(Inventory, "beakerS" + workbench.BeakerVitality.ToString())] = "cure";
+                                            workbench.BeakerVitality = 0;
+
+                                            int count = workbench.ItemsInBeaker.Count;
+
+                                            for (int i = 0; i < count; i++)
+                                            {
+                                                workbench.ItemsInBeaker.Remove(workbench.ItemsInBeaker[0]);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Test FAILED - Solution wrong vitality ratio.\nSolution destroyed.\nSample destroyed.\n");
+                                            workbench.ToolOnWorkBench = "";
+                                            Inventory[Array.IndexOf(Inventory, "beakerS" + workbench.BeakerVitality.ToString())] = "beaker";
+                                            workbench.BeakerVitality = 0;
+
+                                            int count = workbench.ItemsInBeaker.Count;
+
+                                            for (int i = 0; i < count; i++)
+                                            {
+                                                workbench.ItemsInBeaker.Remove(workbench.ItemsInBeaker[0]);
+                                            }
+
+                                            Death(8, ref input);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Test FAILED - Solution is missing zombie flesh sample.\nSolution destroyed.\nSample destroyed.\n");
+                                        workbench.ToolOnWorkBench = "";
+                                        Inventory[Array.IndexOf(Inventory, "beakerS" + workbench.BeakerVitality.ToString())] = "beaker";
+                                        workbench.BeakerVitality = 0;
+
+                                        int count = workbench.ItemsInBeaker.Count;
+
+                                        for (int i = 0; i < count; i++)
+                                        {
+                                            workbench.ItemsInBeaker.Remove(workbench.ItemsInBeaker[0]);
+                                        }
+
+                                        Death(8, ref input);
+                                    }
+                                }
                                 if (restOfArray == "note")
                                 {
                                     Console.Clear();
@@ -719,12 +770,12 @@ namespace InfectionInjection
                                         }
 
                                     }
-                                    else
+                                    else if((restOfArray != "note") && (restOfArray != "cure") && (restOfArray.Contains("beakerS") == false))
                                     {
                                         Console.WriteLine("Can't use that.\n");
                                     }
                                 }
-                                else if (restOfArray != "note")
+                                else if ((restOfArray != "note") && (restOfArray != "cure") && (restOfArray.Contains("beakerS") == false))
                                 {
                                     Console.WriteLine("Can't use that.\n");
                                 }
@@ -940,11 +991,11 @@ namespace InfectionInjection
                 }
                 else if (workbench.ToolOnWorkBench == "bunsen burner")
                 {
-                    Console.WriteLine("Use mixture on bunsen burner to create solution.");
+                    Console.WriteLine("Drop mixture on bunsen burner to create solution.");
                 }
                 else if (workbench.ToolOnWorkBench == "zombie flesh sample")
                 {
-                    Console.WriteLine("Please add solution to zombie flesh sample.");
+                    Console.WriteLine("Please drop solution on to zombie flesh sample to test for a positive cure.");
                 }
                 else
                 {
@@ -999,6 +1050,14 @@ namespace InfectionInjection
                     if (restOfArray.Contains("beakermn"))
                     {
                         restOfArray = restOfArray.Replace("mn", "MN");
+                    }
+                    if (restOfArray.Contains("beakersn"))
+                    {
+                        restOfArray = restOfArray.Replace("sn", "SN");
+                    }
+                    if (restOfArray.Contains("beakers"))
+                    {
+                        restOfArray = restOfArray.Replace("s", "S");
                     }
                     if (restOfArray.Contains("beakerm"))
                     {
@@ -1057,13 +1116,43 @@ namespace InfectionInjection
                                     locations[locNum].Rooms[roomNum].Items.Add(restOfItemArray.ToLower());
                                 }
                             }
-                            else if ((restOfArray == "beaker") && (workbench.ToolOnWorkBench == "bunsen burner"))
-                            {
-
-                            }
                             else if (restOfArray == "bunsen burner")
                             {
+                                workbench.ToolOnWorkBench = "";
+                                string[] temp2 = Inventory_Check(restOfArray).Split(' ');
+                                string itemInstruction = temp2[0];
+                                string restOfItemArray = "";
 
+                                for (int i = 1; i < temp2.Length; i++)
+                                {
+                                    restOfItemArray += temp2[i] + " ";
+                                }
+
+                                restOfItemArray = restOfItemArray.Trim();
+
+                                if (itemInstruction != "pickup")
+                                {
+                                    locations[locNum].Rooms[roomNum].Items.Add(restOfItemArray.ToLower());
+                                }
+                            }
+                            else if (restOfArray == "zombie flesh sample")
+                            {
+                                workbench.ToolOnWorkBench = "";
+                                string[] temp2 = Inventory_Check(restOfArray).Split(' ');
+                                string itemInstruction = temp2[0];
+                                string restOfItemArray = "";
+
+                                for (int i = 1; i < temp2.Length; i++)
+                                {
+                                    restOfItemArray += temp2[i] + " ";
+                                }
+
+                                restOfItemArray = restOfItemArray.Trim();
+
+                                if (itemInstruction != "pickup")
+                                {
+                                    locations[locNum].Rooms[roomNum].Items.Add(restOfItemArray.ToLower());
+                                }
                             }
                             else
                             {
@@ -1078,19 +1167,122 @@ namespace InfectionInjection
                                     if (restOfArray.Contains("chemical") || restOfArray.Contains("zombie flesh sample"))
                                     {
                                         workbench.ItemsInBeaker.Add(restOfArray);
-                                        if (restOfArray.Contains("N"))
+                                        if (restOfArray != "zombie flesh sample")
                                         {
-                                            locations[5].Rooms[5].Items.Add(restOfArray);
-                                        }
-                                        else
-                                        {
-                                            locations[5].Rooms[2].Items.Add(restOfArray);
+                                            if (restOfArray.Contains("N"))
+                                            {
+                                                locations[5].Rooms[5].Items.Add(restOfArray);
+                                            }
+                                            else
+                                            {
+                                                locations[5].Rooms[2].Items.Add(restOfArray);
+                                            }
                                         }
                                         workbench.BeakerVitality += WorkbenchClass.Drop(restOfArray, Inventory, workbench.ToolOnWorkBench);
                                     }
                                     else
                                     {
                                         Console.WriteLine("Invalid item.\nPlease drop in a chemical or zombie flesh sample.\n");
+                                    }
+                                }
+                                else if ((workbench.ToolOnWorkBench == "bunsen burner") && (restOfArray.Contains("beaker")))
+                                {
+                                    if (workbench.Viable && (restOfArray.Contains("beakerS") == false))
+                                    {
+                                        if (workbench.ItemsInBeaker.Count > 1)
+                                        {
+                                            Console.Clear();
+                                            Console.WriteLine($"Are you sure you want to finalise the mixture {restOfArray[0].ToString().ToUpper() + restOfArray.Substring(1)}? - [Y]es or [N]o\nThis can not be undone.");
+                                            string choice = Console.ReadLine();
+                                            Console.Clear();
+                                            if ((choice == "yes") || (choice == "y"))
+                                            {
+                                                Inventory[Array.IndexOf(Inventory, restOfArray)] = restOfArray.Replace("M", "S");
+                                                WorkbenchClass.MakeSolution(workbench.BeakerVitality, workbench.Viable, Inventory);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("You need more than one item in the mixture!\n");
+                                        }
+                                    }
+                                    else if (restOfArray.Contains("beakerS") == false)
+                                    {
+                                        if (workbench.ItemsInBeaker.Count > 1)
+                                        {
+                                            Console.Clear();
+                                            Console.WriteLine($"Are you sure you want to finalise the mixture {restOfArray[0].ToString().ToUpper() + restOfArray.Substring(1)}? - [Y]es or [N]o\nIt does NOT contain a zombie flesh sample.\nThis will make it an unviable solution.");
+                                            string choice = Console.ReadLine();
+                                            Console.Clear();
+                                            if ((choice == "yes") || (choice == "y"))
+                                            {
+                                                Inventory[Array.IndexOf(Inventory, restOfArray)] = restOfArray.Replace("M", "S");
+                                                WorkbenchClass.MakeSolution(workbench.BeakerVitality, workbench.Viable, Inventory);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("You need more than one item in the mixture!\n");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("That is already a solution.\nTry adding it to a zombie flesh sample on the work bench.\n");
+                                    }
+                                }
+                                else if (workbench.ToolOnWorkBench == "zombie flesh sample")
+                                {
+                                    if (restOfArray.Contains("beakerS"))
+                                    {
+                                        if (workbench.Viable)
+                                        {
+                                            if (workbench.BeakerVitality == 286)
+                                            {
+                                                Console.WriteLine("Test SUCCEEDED - You found the CURE!\n");
+                                                workbench.ToolOnWorkBench = "";
+                                                Inventory[Array.IndexOf(Inventory, "beakerS" + workbench.BeakerVitality.ToString())] = "cure";
+                                                workbench.BeakerVitality = 0;
+
+                                                int count = workbench.ItemsInBeaker.Count;
+
+                                                for (int i = 0; i < count; i++)
+                                                {
+                                                    workbench.ItemsInBeaker.Remove(workbench.ItemsInBeaker[0]);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("Test FAILED - Solution wrong vitality ratio.\nSolution destroyed.\nSample destroyed.\n");
+                                                workbench.ToolOnWorkBench = "";
+                                                Inventory[Array.IndexOf(Inventory, "beakerS" + workbench.BeakerVitality.ToString())] = "beaker";
+                                                workbench.BeakerVitality = 0;
+
+                                                int count = workbench.ItemsInBeaker.Count;
+
+                                                for (int i = 0; i < count; i++)
+                                                {
+                                                    workbench.ItemsInBeaker.Remove(workbench.ItemsInBeaker[0]);
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Test FAILED - Solution is missing zombie flesh sample.\nSolution destroyed.\nSample destroyed.\n");
+                                            workbench.ToolOnWorkBench = "";
+                                            Inventory[Array.IndexOf(Inventory, "beakerS" + workbench.BeakerVitality.ToString())] = "beaker";
+                                            workbench.BeakerVitality = 0;
+
+                                            int count = workbench.ItemsInBeaker.Count;
+
+                                            for (int i = 0; i < count; i++)
+                                            {
+                                                workbench.ItemsInBeaker.Remove(workbench.ItemsInBeaker[0]);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Can't use that.\n");
                                     }
                                 }
                                 else if (workbench.ToolOnWorkBench == "")
@@ -1115,7 +1307,7 @@ namespace InfectionInjection
                         case "place":
                             if (Array.IndexOf(Inventory, restOfArray) >= 0)
                             {
-                                if ((restOfArray.Contains("beaker")) || (restOfArray == "zombie flesh sample") || (restOfArray == "bunsen burner"))
+                                if ((restOfArray.Contains("beaker") && (restOfArray.Contains("beakerS") == false)) || (restOfArray == "zombie flesh sample") || (restOfArray == "bunsen burner"))
                                 {
                                     string returnString = "";
 
@@ -1123,10 +1315,15 @@ namespace InfectionInjection
                                     {
                                         returnString = WorkbenchClass.Place(Inventory, "beaker", workbench.ToolOnWorkBench);
                                     }
+                                    else if (restOfArray == "beaker")
+                                    {
+                                        returnString = WorkbenchClass.Place(Inventory, restOfArray, workbench.ToolOnWorkBench);
+                                    }
                                     else
                                     {
                                         returnString = WorkbenchClass.Place(Inventory, restOfArray, workbench.ToolOnWorkBench);
                                     }
+
                                     if (returnString != "Tool already on workbench.")
                                     {
                                         workbench.ToolOnWorkBench = returnString;
@@ -1139,6 +1336,14 @@ namespace InfectionInjection
                                         Inventory[Array.IndexOf(Inventory, returnString)] = null;
                                     }
                                 }
+                                else if (restOfArray.Contains("beaker") && restOfArray.Contains("beakerS"))
+                                {
+                                    Console.WriteLine("That mixture has already been finalised as a solution and can not be edited.\n");
+                                }
+                                else if (restOfArray == "zombie flesh sample")
+                                {
+                                    workbench.ToolOnWorkBench = "zombie flesh sample";
+                                }
                                 else
                                 {
                                     Console.WriteLine("You can't place that object.\n");
@@ -1146,7 +1351,24 @@ namespace InfectionInjection
                             }
                             else
                             {
-                                Console.WriteLine("You don't have this item.\n");
+                                bool solution = false;
+
+                                for (int i = 0; i < Inventory.Length; i++)
+                                {
+                                    if ((Inventory[i] != null) && Inventory[i].Contains("beakerS"))
+                                    {
+                                        solution = true;
+                                    }
+                                }
+
+                                if ((restOfArray == "zombie flesh sample") && solution)
+                                {
+                                    Console.WriteLine("You don't have a zombie flesh sample.\nFind a zombie flesh sample to test with,\nor test it on yourself using [Use] \"item name\".\n");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("You don't have this item.\n");
+                                }
                             }
                             break;
                         default:
@@ -1159,21 +1381,8 @@ namespace InfectionInjection
 
         static void Movement(string[,,] world, int[] playerCoor, int[] playerCoorLocation, int condition1, int condition2, int num, int index, List<Location> locations, int locIndex, ref string input, ref bool firstTime)
         {
-            if (Array.IndexOf(Inventory, "zombie flesh sample") >= 0)
-            {
-                if (ViralImmunity > 0)
-                {
-                    ViralImmunity -= 5;
-                }
-                else
-                {
-                    Health -= 5;
-                }
-                if (Health <= 0)
-                {
-                    Death(7, ref input);
-                }
-            }
+            bool moved = false;
+
             if (world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X")
             {
                 if (condition1 > condition2)
@@ -1181,6 +1390,7 @@ namespace InfectionInjection
                     if ((locations[locIndex].Name != "Sewer Entrance North") && (locations[locIndex].Name != "Sewer Entrance South") && (locations[locIndex].Name != "Sewer Entrance West") && (locations[locIndex].Name != "North Forest") && (locations[locIndex].Name != "West Forest") && (locations[locIndex].Name != "South Forest"))
                     {
                         playerCoorLocation[index] += num;
+                        moved = true;
 
                         if ((locations[locIndex].Name == "Infected Zone") && (ZombiePresent == false))
                         {
@@ -1231,6 +1441,7 @@ namespace InfectionInjection
                                     if (locations[locIndex].LocationMap[playerCoorLocation[0] + num, playerCoorLocation[1], playerCoorLocation[2]] != "wall")
                                     {
                                         playerCoorLocation[index] += num;
+                                        moved = true;
                                     }
                                     else
                                     {
@@ -1241,6 +1452,7 @@ namespace InfectionInjection
                                     if (locations[locIndex].LocationMap[playerCoorLocation[0], playerCoorLocation[1] + num, playerCoorLocation[2]] != "wall")
                                     {
                                         playerCoorLocation[index] += num;
+                                        moved = true;
                                     }
                                     else
                                     {
@@ -1340,6 +1552,7 @@ namespace InfectionInjection
                                 if (locations[locIndex].LocationMap[playerCoorLocation[0] + num, playerCoorLocation[1], playerCoorLocation[2]] != "wall")
                                 {
                                     playerCoorLocation[index] += num;
+                                    moved = true;
                                 }
                                 else
                                 {
@@ -1359,6 +1572,7 @@ namespace InfectionInjection
                                 if (locations[locIndex].LocationMap[playerCoorLocation[0], playerCoorLocation[1] + num, playerCoorLocation[2]] != "wall")
                                 {
                                     playerCoorLocation[index] += num;
+                                    moved = true;
                                 }
                                 else
                                 {
@@ -1407,6 +1621,7 @@ namespace InfectionInjection
                                     Death(0, ref input);
                                 }
                                 playerCoor[index] += num;
+                                moved = true;
                                 playerCoorLocation[2] = 0;
                                 for (int i = 0; i < playerCoorLocation.Length; i++)
                                 {
@@ -1432,6 +1647,7 @@ namespace InfectionInjection
                             if (((playerCoor[0] + num) == locations[6].Dimensions[0]) && (playerCoor[1] == locations[6].Dimensions[1]) && (playerCoor[2] == locations[6].Dimensions[2]) && PoliceStationUnlocked)
                             {
                                 playerCoor[index] += num;
+                                moved = true;
                             }
                             else if (((playerCoor[0] + num) == locations[6].Dimensions[0]) && (playerCoor[1] == locations[6].Dimensions[1]) && (playerCoor[2] == locations[6].Dimensions[2]) && (PoliceStationUnlocked == false))
                             {
@@ -1453,12 +1669,14 @@ namespace InfectionInjection
                             else
                             {
                                 playerCoor[index] += num;
+                                moved = true;
                             }
                             break;
                         case 1:
                             if (((playerCoor[1] + num) == locations[6].Dimensions[1]) && (playerCoor[0] == locations[6].Dimensions[0]) && (playerCoor[2] == locations[6].Dimensions[2]) && PoliceStationUnlocked)
                             {
                                 playerCoor[index] += num;
+                                moved = true;
                             }
                             else if (((playerCoor[1] + num) == locations[6].Dimensions[1]) && (playerCoor[0] == locations[6].Dimensions[0]) && (playerCoor[2] == locations[6].Dimensions[2]) && (PoliceStationUnlocked == false))
                             {
@@ -1480,12 +1698,14 @@ namespace InfectionInjection
                             else
                             {
                                 playerCoor[index] += num;
+                                moved = true;
                             }
                             break;
                         case 2:
                             if (((playerCoor[2] + num) == locations[6].Dimensions[2]) && (playerCoor[1] == locations[6].Dimensions[1]) && (playerCoor[0] == locations[6].Dimensions[0]) && PoliceStationUnlocked)
                             {
                                 playerCoor[index] += num;
+                                moved = true;
                             }
                             else if (((playerCoor[2] + num) == locations[6].Dimensions[2]) && (playerCoor[1] == locations[6].Dimensions[1]) && (playerCoor[0] == locations[6].Dimensions[0]) && (PoliceStationUnlocked == false))
                             {
@@ -1507,6 +1727,7 @@ namespace InfectionInjection
                             else
                             {
                                 playerCoor[index] += num;
+                                moved = true;
                             }
                             break;
                     }
@@ -1519,10 +1740,27 @@ namespace InfectionInjection
                     }
                 }
             }
+
+            if ((Array.IndexOf(Inventory, "zombie flesh sample") >= 0) && moved)
+            {
+                if (ViralImmunity > 0)
+                {
+                    ViralImmunity -= 5;
+                }
+                else
+                {
+                    Health -= 5;
+                }
+                if (Health <= 0)
+                {
+                    Death(7, ref input);
+                }
+            }
         }
 
         static void Death(int number, ref string input)
         {
+            DeathCount++;
             string[] deaths = { "You step in the direction you thought to be the door, soon realising that it was infact the window.\nYou try to stop yourself, but you've stepped with so much conviction that you can't.\nYou fly through the window, sending glass fragments everywhere.\nWith shards of glass embedded in your face and arms, you fall helplessly to the ground.\nAnd there your lifeless body stays, with humanity doomed due to a simple navigational error.",
                 "As you attempt to flee from the town, you hear a thumping through the ground.\nAs you turn in horror towards the vibrations, you see a horde of green shambling corpses running towards you at a speed you couldn't believe was possible.\nYou try desperately to run.\nYour last thoughts on how you failed this town and have doomed this world to a zombie apocalypse.",
                 "You enter the police station through the maintenance hatch.\nAs it closes behind you, you realise that it can only be opened from the sewer.\nYou soon discover that the police station is locked, with you, trapped inside.\nAfter many weeks of agonising pain you finaly starve to death on the cold tile floors.\nForgotten by the world of undead, hopelessly wandering for the rest of enternity.",
@@ -1530,7 +1768,9 @@ namespace InfectionInjection
                 "You foolishly entered the apartment complex infront of the horde of zombies lurking in the lobby.\nYou try to escape, inadvertently shutting the door.\nThe horde of decaying flesh forces you into the closed door,\nallowing you to get one last glimpse of the world before they break open your body with you blacking out on the lobby floor.",
                 "You tried to wander about the sewers in the pitch black darkness.\nYou managed to get a fair way through the sewer system,\nhowever at this point you could't see your hand in front of your face.\nThe floor stepped down, throwing you off balance.\nYour arms flying frantically through the air.\nYou fall forward, heart racing.\nThe next thing you felt was your head colliding with the cold concrete sewer wall.\nThere your body lay, face down in the murky water, with your blood streaming down your lifeless head.",
                 "You feel pressure on your neck as it's hands grasp around your throat.\nYou lose feeling in your body as it rips apart your neck,\nseperating your head from your now lifeless body.",
-                "You feel your sanity slowly slip as the world goes out of focus.\nYou collapse to the ground feeling the toxins raging through your veins.\nAs the infection rages stronger you start to lose muscle control.\nYour thoughts becoming empty and mindless, as you slip into an eternity of limbo.\nYourself, lost, to the hands of the undead.\nNever to be saved from the plague that consumes you.\nCursed to wander the Earth forever.\n" };
+                "You feel your sanity slowly slip as the world goes out of focus.\nYou collapse to the ground feeling the toxins raging through your veins.\nAs the infection rages stronger you start to lose muscle control.\nYour thoughts becoming empty and mindless, as you slip into an eternity of limbo.\nYourself, lost, to the hands of the undead.\nNever to be saved from the plague that consumes you.\nCursed to wander the Earth forever.",
+                "After using the solution on yourself you start to feel the bacteria inside you receeding.\nYou breath a sigh of relief, only to collapse to the floor in crippling pain.\nCoughing up blood on your side, as the infection and the solution rip apart your insides,\ndestroying everything inside you.\nA pink slime oozes out of your mouth as you splutter your last breath,\nsacraficing your life, only to doom humanity anyway.",
+                $"You take the cure to immunise yourself.\nYou then proceed to the Steelport apartment complex with the cure in hand.\nYou go back down into the sewer system, and up into the building through the maintenance hatch.\nOnce at the ground floor you proceed to the ventalation room, managing not to be spotted by any of the residents.\nYou use a bunsen burner from your inventory to vapourise the cure,\nsending it throughout the building.\nAfter cautiously waiting a few minutes, you emerge from hiding just in time to see the zombies reverting into people.\nCongratulations! You successfully saved humanity and you only died {DeathCount} times.\nHave fun cleaning up the mess. (;\n\nGame created by:\n* Clayton Davidson - Lead Programmer\n* Blake Chalmers - Lead Story Writer\n* Liam O Brien - Programmer" };
 
             Console.WriteLine(deaths[number] + "\n\nPress enter to continue.");
             input = "death";
