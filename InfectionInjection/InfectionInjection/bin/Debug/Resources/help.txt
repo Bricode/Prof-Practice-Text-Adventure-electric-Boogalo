@@ -9,6 +9,7 @@ When you want to use an item from your inventory type [Use] "item name".
 If you want to view the inventory, type [I]nventory.
 
 Objects in a room can be searched by typing [Search] if they are surrounded by "".
+If you are in the main lab, you can use the workbench by typing [Workbench].
 
 Whenever you want to quit just type [Quit].
  

@@ -21,7 +21,3 @@ N29, N52, 63, 156, 122,
 N29, 95, 156, 63, N35, N52, 122, 84, N39, N5
 
 total = 286
-
-You lose viral resistance when you choose not to leave a location
-Drop beaker breaks games
-You can't place the mixture back on the workbench
