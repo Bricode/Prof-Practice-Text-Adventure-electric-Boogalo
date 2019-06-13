@@ -7,7 +7,7 @@ using System.IO;
 
 namespace InfectionInjection
 {
-    class Game
+    public class Game
     {
         public static string[] Inventory = new string[10];
         public static int WrongCommand = 0;
@@ -16,9 +16,9 @@ namespace InfectionInjection
         public static bool PoliceStationUnlocked = false;
         public static bool TorchIsEnabled = false;
         public static bool ZombiePresent = false;
-        public static string ItemOnWorkBench = "";
         public static int ViralImmunity = 75;
         public static int Health = 100;
+        public static bool WorkbenchExists = false;
 
         public static void Inventory_Show()
         {
@@ -180,7 +180,9 @@ namespace InfectionInjection
                     }
                 }
             }
+
             List<Location> locations = new List<Location>();
+            WorkbenchClass workbench = new WorkbenchClass();
 
             do
             {
@@ -209,14 +211,17 @@ namespace InfectionInjection
                 Inventory[0] = "note";
                 Inventory[1] = "zombie flesh sample";
                 Inventory[2] = "zombie flesh sample";
+                Inventory[3] = "beaker";
+                Inventory[4] = "chemical63";
+                Inventory[5] = "chemicalN5";
                 //Inventory[0] = "surgical torch";
                 //Inventory[1] = "pistol";
                 //Inventory[2] = "magazine";
-                game = GameLoop(world, playerCoor, playerCoorLocation, locations);
+                game = GameLoop(world, playerCoor, playerCoorLocation, locations, workbench);
             } while (game != "quit");
         }
 
-        static string GameLoop(string[,,] world, int[] playerCoor, int[] playerCoorLocation, List<Location> locations)
+        static string GameLoop(string[,,] world, int[] playerCoor, int[] playerCoorLocation, List<Location> locations, WorkbenchClass workbench)
         {
             Console.ResetColor();
             int index = 0;
@@ -386,7 +391,7 @@ namespace InfectionInjection
                         case "workbench":
                             if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X") && (locations[index].Rooms[roomIndex].Name == "Main Labratory"))
                             {
-                                Workbench(locations, index, roomIndex, input, playerCoor, world);
+                                Workbench(locations, index, roomIndex, input, playerCoor, world, workbench);
                             }
                             break;
                         case "place":
@@ -465,6 +470,7 @@ namespace InfectionInjection
                                 {
                                     Console.WriteLine($"Are you sure you want to drop {restOfArray}? - [Y]es or [N]o");
                                     string choice = Console.ReadLine().ToLower();
+                                    Console.Clear();
                                     if ((choice == "yes") || (choice == "y"))
                                     {
                                         Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
@@ -475,6 +481,7 @@ namespace InfectionInjection
                                 {
                                     Console.WriteLine($"Are you sure you want to drop {restOfArray}? - [Y]es or [N]o\nYou are not in a building so it will be lost.");
                                     string choice = Console.ReadLine().ToLower();
+                                    Console.Clear();
                                     if ((choice == "yes") || (choice == "y"))
                                     {
                                         Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
@@ -887,54 +894,62 @@ namespace InfectionInjection
             } while (input != "back");
         }
 
-        static void Workbench(List<Location> locations, int locNum, int roomNum, string input, int[] playerCoor, string[,,] world)
+        public static void Workbench(List<Location> locations, int locNum, int roomNum, string input, int[] playerCoor, string[,,] world, WorkbenchClass workbench)
         {
             do
             {
-                if ((locations[locNum].Rooms[roomNum].Items.Count > 0) && (locations[locNum].Rooms[roomNum].Items[0] != null))
+                if (workbench.ToolOnWorkBench == "beaker")
                 {
-                    if (ItemOnWorkBench.Contains("beaker"))
+                    Console.WriteLine("Drop items into the beaker.\nWhen you're finished, type [Get] \"beaker\".\n");
+
+                    if (workbench.ItemsInBeaker.Count > 0)
                     {
                         Console.WriteLine("Items in the beaker:");
-                        if (locations[locNum].Rooms[roomNum].Items.Count == 1)
-                        {
-                            Console.WriteLine("Nothing.");
-                        }
-                        else
-                        {
-                            for (int i = 0; i < locations[locNum].Rooms[roomNum].Items.Count; i++)
-                            {
-                                if ((locations[locNum].Rooms[roomNum].Items[i] != "bunsen burner") && (locations[locNum].Rooms[roomNum].Items[i].Contains("beaker") == false))
-                                {
-                                    Console.Write($"* {locations[locNum].Rooms[roomNum].Items[i][0].ToString().ToUpper() + locations[locNum].Rooms[roomNum].Items[i].Substring(1)}\n");
-                                }
-                            }
 
-                            Console.Write("\nBeaker State: Beaker");
-                            if (ItemOnWorkBench[6] == 'M')
+                        for (int i = 0; i < workbench.ItemsInBeaker.Count; i++)
+                        {
+                            if (workbench.ItemsInBeaker[i].Contains("N"))
                             {
-                                Console.WriteLine(ItemOnWorkBench[6].ToString().ToUpper() + ItemOnWorkBench.Substring(7));
+                                Console.WriteLine($"* ChemicalN{workbench.ItemsInBeaker[i].Substring(9)}");
                             }
                             else
                             {
-                                Console.WriteLine(ItemOnWorkBench.Substring(6));
+                                Console.WriteLine($"* {workbench.ItemsInBeaker[i][0].ToString().ToUpper() + workbench.ItemsInBeaker[i].Substring(1)}");
                             }
                         }
+
+                        if (workbench.ItemsInBeaker.Count == 0)
+                        {
+                            Console.WriteLine($"\nBeaker State: Nothing.");
+                        }
+                        else if (workbench.ItemsInBeaker.Count == 1)
+                        {
+                            Console.WriteLine($"\nBeaker State: Single.");
+                        }
+                        else if (workbench.ItemsInBeaker.Count > 1)
+                        {
+                            Console.WriteLine($"\nBeaker State: Mixture.");
+                        }
+                        Console.WriteLine($"Beaker Vitality Ratio: {workbench.BeakerVitality}");
                     }
-                    else if (ItemOnWorkBench == "bunsen burner")
+                    else
                     {
-                        Console.WriteLine("Use mixture on bunsen burner to create solution.");
+                        Console.WriteLine("The beaker is empty.");
                     }
-                    else if (ItemOnWorkBench == "zombie flesh sample")
-                    {
-                        Console.WriteLine("Please add solution to zombie flesh sample.");
-                    }
+                }
+                else if (workbench.ToolOnWorkBench == "bunsen burner")
+                {
+                    Console.WriteLine("Use mixture on bunsen burner to create solution.");
+                }
+                else if (workbench.ToolOnWorkBench == "zombie flesh sample")
+                {
+                    Console.WriteLine("Please add solution to zombie flesh sample.");
                 }
                 else
                 {
                     Console.WriteLine("There is nothing on the workbench.");
                 }
-
+                
                 Console.WriteLine("\nWhat do you want to do next?");
                 input = Console.ReadLine().ToLower();
                 Console.Clear();
@@ -976,13 +991,21 @@ namespace InfectionInjection
                         restOfArray += temp[i] + " ";
                     }
 
+                    if (restOfArray.Contains("chemicaln"))
+                    {
+                        restOfArray = restOfArray.Replace("n", "N");
+                    }
+
                     restOfArray = restOfArray.Trim();
 
                     switch (command)
                     {
                         case "get":
-                            if ((world[playerCoor[0], playerCoor[1], playerCoor[2]] != "X") && (locations[locNum].Rooms[roomNum].Items.Contains(restOfArray.ToLower())))
+                            if ((restOfArray == "beaker") && (workbench.ToolOnWorkBench == "beaker"))
                             {
+                                workbench.ToolOnWorkBench = "";
+                                restOfArray = "beaker" + "M" + workbench.BeakerVitality;
+
                                 string[] temp2 = Inventory_Check(restOfArray).Split(' ');
                                 string itemInstruction = temp2[0];
                                 string restOfItemArray = "";
@@ -994,89 +1017,73 @@ namespace InfectionInjection
 
                                 restOfItemArray = restOfItemArray.Trim();
 
-                                if (itemInstruction == "pickup")
+                                if (itemInstruction != "pickup")
                                 {
-                                    locations[locNum].Rooms[roomNum].Items.Remove(restOfArray.ToLower());
+                                    locations[locNum].Rooms[roomNum].Items.Add(restOfItemArray.ToLower());
                                 }
-                                else
-                                {
-                                    Console.WriteLine("You can't pick this up because your inventory is full.\n");
-                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Can't get that.\n");
                             }
                             break;
                         case "drop":
                             if (Array.IndexOf(Inventory, restOfArray) >= 0)
                             {
-                                if (ItemOnWorkBench.Contains("beaker"))
+                                if ((workbench.ToolOnWorkBench == "beaker") && (restOfArray != "beaker"))
                                 {
-                                    if (restOfArray.Contains("chemical") || (restOfArray == "zombie flesh sample"))
+                                    if (restOfArray.Contains("chemical") || restOfArray.Contains("zombie flesh sample"))
                                     {
-                                        Console.WriteLine($"Are you sure you want to drop {restOfArray} into the beaker? - [Y]es or [N]o");
-                                        string choice = Console.ReadLine().ToLower();
-                                        Console.Clear();
-                                        if ((choice == "yes") || (choice == "y"))
+                                        workbench.ItemsInBeaker.Add(restOfArray);
+                                        if (restOfArray.Contains("N"))
                                         {
-                                            if (restOfArray.Contains("N"))
-                                            {
-                                                try
-                                                {
-                                                    if (ItemOnWorkBench.Contains("M")) ItemOnWorkBench.Replace("M", "");
-                                                    int number = Convert.ToInt32(ItemOnWorkBench.Replace("beaker", ""));
-                                                    number += Convert.ToInt32(restOfArray.Replace("chemical", ""));
-                                                    ItemOnWorkBench = "beakerM" + number;
-                                                }
-                                                catch
-                                                {
-                                                    ItemOnWorkBench += "-" + restOfArray.Replace("chemical", "");
-                                                }
-                                            }
-                                            else
-                                            {
-                                                try
-                                                {
-                                                    if (ItemOnWorkBench.Contains("M")) ItemOnWorkBench.Replace("M", "");
-                                                    int number = Convert.ToInt32(ItemOnWorkBench.Replace("beaker", ""));
-                                                    number += Convert.ToInt32(restOfArray.Replace("chemical", ""));
-                                                    ItemOnWorkBench = "beakerM" + number;
-                                                }
-                                                catch
-                                                {
-                                                    ItemOnWorkBench += restOfArray.Replace("chemical", "");
-                                                }
-                                            }
-
-                                            Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
-                                            locations[locNum].Rooms[roomNum].Items.Add(restOfArray);
+                                            locations[5].Rooms[5].Items.Add(restOfArray);
                                         }
+                                        else
+                                        {
+                                            locations[5].Rooms[2].Items.Add(restOfArray);
+                                        }
+                                        workbench.BeakerVitality += WorkbenchClass.Drop(restOfArray, Inventory, workbench.ToolOnWorkBench);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Invalid item.\nPlease drop in a chemical or zombie flesh sample.\n");
                                     }
                                 }
-                                else if (ItemOnWorkBench == "bunsen burner")
+                                else if (workbench.ToolOnWorkBench == "")
                                 {
-
-                                }
-                                else if (ItemOnWorkBench == "zombie flesh sample")
-                                {
-
+                                    Console.WriteLine("Please [Place] something on the workbench.\n");
                                 }
                                 else
                                 {
-                                    Console.WriteLine("There is nothing on the workbench.\nPlease [Place] something there to continue.\n");
+                                    Console.WriteLine("Can't do that.\n");
                                 }
                             }
                             else
                             {
-                                Console.WriteLine("You don't have that item.\n");
+                                Console.WriteLine("You don't have this item.\n");
                             }
                             break;
                         case "place":
                             if (Array.IndexOf(Inventory, restOfArray) >= 0)
                             {
-                                if (restOfArray.Contains("beaker"))
+                                if ((restOfArray.Contains("beaker")) || (restOfArray == "zombie flesh sample") || (restOfArray == "bunsen burner"))
                                 {
-                                    ItemOnWorkBench = restOfArray;
-                                    Inventory[Array.IndexOf(Inventory, restOfArray)] = null;
-                                    locations[locNum].Rooms[roomNum].Items.Add(restOfArray);
+                                    string returnString = WorkbenchClass.Place(Inventory, restOfArray, workbench.ToolOnWorkBench);
+                                    if (returnString != "Tool already on workbench.")
+                                    {
+                                        workbench.ToolOnWorkBench = returnString;
+                                        Inventory[Array.IndexOf(Inventory, returnString)] = null;
+                                    }
                                 }
+                                else
+                                {
+                                    Console.WriteLine("You can't place that object.\n");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("You don't have this item.\n");
                             }
                             break;
                         default:
