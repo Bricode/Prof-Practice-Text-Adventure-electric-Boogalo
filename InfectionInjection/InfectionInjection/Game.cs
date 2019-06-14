@@ -187,7 +187,7 @@ namespace InfectionInjection
 
             do
             {
-                int[] playerCoor = { 3, 3, 0 };
+                int[] playerCoor = { 0, 0, 0 };
                 int[] playerCoorLocation = { 0, 0, 0 };
                 
                 Console.Clear();
@@ -208,7 +208,6 @@ namespace InfectionInjection
                 {
                     Console.WriteLine("You somehow managed to respawn back at the start with all your things.\nThanks to someone watching over you, humanity now has a second chance.\n");
                 }
-                Inventory[0] = "note";
                 game = GameLoop(world, playerCoor, playerCoorLocation, locations, workbench);
             } while (game != "quit");
         }
@@ -1760,6 +1759,14 @@ namespace InfectionInjection
 
         static void Death(int number, ref string input)
         {
+            if (Health <= 0)
+            {
+                Health = 100;
+            }
+            if (ViralImmunity <= 0)
+            {
+                ViralImmunity = 75;
+            }
             DeathCount++;
             string[] deaths = { "You step in the direction you thought to be the door, soon realising that it was infact the window.\nYou try to stop yourself, but you've stepped with so much conviction that you can't.\nYou fly through the window, sending glass fragments everywhere.\nWith shards of glass embedded in your face and arms, you fall helplessly to the ground.\nAnd there your lifeless body stays, with humanity doomed due to a simple navigational error.",
                 "As you attempt to flee from the town, you hear a thumping through the ground.\nAs you turn in horror towards the vibrations, you see a horde of green shambling corpses running towards you at a speed you couldn't believe was possible.\nYou try desperately to run.\nYour last thoughts on how you failed this town and have doomed this world to a zombie apocalypse.",

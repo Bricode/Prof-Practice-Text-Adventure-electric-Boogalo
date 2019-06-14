@@ -1,7 +1,7 @@
 Reception
 An empty welcome desk invites in solitude and despair.
 0,0,0
-
+note
 Waiting Room
 A room full of chairs. Maybe one day, visitors will again use this space.
 0,1,0
