@@ -1,0 +1,10 @@
+To get whatever is on the workbench, type [Get] "item name".
+To place a container or tool on the workbench, type [Place] "item name".
+If you want to add items to the tool or container, type [Drop] "item name".
+
+N - Negative Vitality
+M - Mixture
+S - Solution
+
+You can still view your inventory by typing [I]nventory.
+If you want to leave the workbench type [Back].

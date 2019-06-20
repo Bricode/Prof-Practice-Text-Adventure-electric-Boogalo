@@ -1,63 +1,255 @@
+wall
+n/a
 0,0,0
-Description
-0,0,0
 
-0,1,0
-Description
+wall
+Forrest Fire
 0,1,0
 
+e
+West exit
 0,2,0
-Description
-0,2,0
 
-0,3,0
-Description
+wall
+Thick Bush
 0,3,0
 
+wall
+n/a
+0,4,0
+
+wall
+Big rockface, too difficult to climb
+0,5,0
+
+wall
+Very big rockface, too difficult to climb
+0,6,0
+
+wall
+Scary sounds
+0,7,0
+
+wall
+Raging rapids
 1,0,0
-Description
-1,0,0
 
-1,1,0
-Description
+path
+A nice gravel trail
 1,1,0
 
+Path
+A worn gravel trail
 1,2,0
-Description
-1,2,0
 
-1,3,0
-Description
+Path
+A dirt path
 1,3,0
 
+wall
+Zombies
+1,4,0
+
+path
+Ankle hight prickles, ouch 
+1,5,0
+
+path
+A field of cannabis
+1,6,0
+
+e
+South exit
+1,7,0
+
+wall
+Sleeping bear, better not go near
 2,0,0
-Description
-2,0,0
 
-2,1,0
-Description
+path
+An old, overgrown path
 2,1,0
 
+wall
+The Killer Rabbit of Caerbannog
 2,2,0
-Description
-2,2,0
 
-2,3,0
-Description
+path
+Slightly grassy path
 2,3,0
 
+wall
+Slightly dangerous cliff
+2,4,0
+
+wall
+Very dangerous cliff
+2,5,0
+
+path
+The rubble of a factory 
+2,6,0
+
+wall
+Crevice
+2,7,0
+
+wall
+Minefield
 3,0,0
-Description
-3,0,0
 
-3,1,0
-Description
+path
+Yellow brick road
 3,1,0
 
-3,2,0
-Description
+wall
+Toxic waste
 3,2,0
 
+path
+A bed of pebbles
 3,3,0
-Description
-3,3,0
+
+path
+A patch of sand
+3,4,0
+
+path
+Fallen leaves
+3,5,0
+
+path
+Dead grass
+3,6,0
+
+wall
+A damaged old stone wall, but to slippery to climb through the damage
+3,7,0
+
+wall
+Some old stone wall
+4,0,0
+
+path
+Wild potato patch
+4,1,0
+
+wall
+Rockface
+4,2,0
+
+wall
+Large boulders
+4,3,0
+
+wall
+Crumbly sandstone cliff
+4,4,0
+
+path
+Dried out river bed
+4,5,0
+
+wall
+Collapsed foot-bridge
+4,6,0
+
+wall
+n/a
+4,7,0
+
+wall
+Extremely hot thermal pools
+5,0,0
+
+path
+Cave
+5,1,0
+
+path
+Dimly lit cave
+5,2,0
+
+path
+Barely lit cave
+5,3,0
+
+path
+Cave wall
+5,4,0
+
+path
+Soggy river bed
+5,5,0
+
+wall
+Repaired barbed wire fence
+5,6,0
+
+wall
+n/a
+5,7,0
+
+wall
+n/a
+6,0,0
+
+wall
+Sharp granite
+6,1,0
+
+path
+Moist cave
+6,2,0
+
+path
+Well lit cave
+6,3,0
+
+path
+Asphalt road in extreme disrepair
+6,4,0
+
+path
+Concrete slab
+6,5,0
+
+path
+Mossy ground
+6,6,0
+
+wall
+Rusted barbed wire fence
+6,7,0
+
+wall
+n/a
+7,0,0
+
+wall
+n/a
+7,1,0
+
+wall
+Slippery stone
+7,2,0
+
+wall
+Lose debris
+7,3,0
+
+e
+East exit
+7,4,0
+
+wall
+Tar pit
+7,5,0
+
+wall
+Barbed wire fence
+7,6,0
+
+wall
+n/a
+7,7,0

@@ -1,63 +1,68 @@
 wall
-Impassable flora
+Impassable flora.
 0,0,0
 
 wall
-Thick forrest undergrowth
+Thick forrest undergrowth.
 0,1,0
 
 e
-Entrance/Exit
+The maze opens up towards the West.
 0,2,0
 
 wall
-Many, many prickle bushes
+Many, many prickle bushes.
 0,3,0
 
 e
-Entrance/Exit
+There is an opening in the maze towards the North.
 1,0,0
 
 path
-Muddy, but crossable
+Muddy, but crossable.
 1,1,0
 
 path
-Small grass field
+A lovely small grass field.
 1,2,0
 
 wall
-Sleeping pack of wolves, not worth the risk
+Sleeping pack of wolves, would be suicide.
 1,3,0
 
 wall
-Quicksand, not worth the risk
+Quicksand.
 2,0,0
 
 path
-A small lake, small enough to swim accross
+A small lake, small enough to swim accross.
 2,1,0
 
-path
-Shallow water
+Frank in a puddle
+Shallow water. There is a dead police officer with "Frank" written on his name tag; lying in the water.
 2,2,0
 
 e
-Entrance/Exit
+There seems to be an exit out to the South.
 2,3,0
 
 wall
-Big hole, to deep and wide to pass
+Big hole, to deep and wide to pass.
 3,0,0
 
 e
-Entrance/Exit
+You can leave this maze through the opening to the East.
 3,1,0
 
 wall
-Slippery and sharp rocks, not worth the risk
+Slippery and sharp rocks, far too hazardous.
 3,2,0
 
 wall
-Toxic plant life, not worth the risk
+Toxic plant life, nothing left to say.
 3,3,0
+
+Frank's Body
+Description
+0,0,1
+building key

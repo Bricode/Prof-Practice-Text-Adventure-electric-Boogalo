@@ -1,32 +1,36 @@
 Waiting Room
-Description
+An eerily dark waiting room filled with chairs scattered about.
 0,0,0
-bandage,book
+book,bandage
 Emergency Room
-Description
+A huge room with stretched beds a plenty, with the words EMERGENCY plastered on the wall.
 1,0,0
 scissors,bandage,first aid kit
 Pharmacy
-Description
+A heavily looted pharmacy with empty antibiotic capsules everywhere.
 1,1,0
 antibiotics,vitamins,paper
 ICU
-Description
+This room is small and filled with some generic hospital items.
 0,1,0
 surgical kit,bandage,blood bag
 Operating Room
-Description
+The creepy operating room, gives you a sense of uncomfort.
 0,0,1
-scalpel,scissors,face mask
+scalpel,scissors,face mask,surgical torch
 Sick Ward
-Description
+The sick ward, you do not want to linger here long, the sense of death and decay looms in the air.
 1,0,1
 vaccine
 Ward 1
 Description
 0,1,1
-hospital food,sheet
+old clothes,sheet,hospital food
 Ward 2
-Description
+In ward 2 lies the "Commissioner"'s slowly decaying body, surrounded by the dead.
 1,1,1
 hospital food,sheet
+Commissioner's Body
+Description
+0,0,2
+small key,baton,whisky

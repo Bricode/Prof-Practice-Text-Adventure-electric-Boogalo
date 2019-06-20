@@ -1,15 +1,20 @@
-0,0,0
+Waiting Room
 Description
 0,0,0
 
-0,1,0
+Staff Lounge
 Description
 0,1,0
 
-1,0,0
+Chief Officer's Office
 Description
 1,0,0
 
+Armory
+A shower of cobwebs hang from the empty shelves, with light shining in through the barred window onto a "Gun Locker".
 1,1,0
+
+Gun Locker
 Description
-1,1,0
+1,1,1
+pistol,magazine

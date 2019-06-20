@@ -1,4 +1,4 @@
-Fix unable to pick up object when swapped out of inventory
-Add story objectives
-Add sewer system
-Add tree maze
+Test that the zombie samples drop on the ground floor of the Steelport tower
+Make lab synthesis possible
+Make book work
+Make sure all locations - buildings, maze, rooms, world, have adequite descriptions
